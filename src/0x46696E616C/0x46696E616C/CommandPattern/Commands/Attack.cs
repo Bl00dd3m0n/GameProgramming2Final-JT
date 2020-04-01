@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace _0x46696E616C.CommandPattern.Commands
 {
-    class Attack
+    class Attack : Command
     {
     }
 }
