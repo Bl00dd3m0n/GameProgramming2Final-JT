@@ -5,6 +5,12 @@ VisualStudioVersion = 15.0.28307.852
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "0x46696E616C", "0x46696E616C\0x46696E616C.csproj", "{2539FC5C-0792-48C5-AEA3-0A249645C22C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorldManager", "WorldManager\WorldManager.csproj", "{BA0E7F18-A814-4281-94EB-248FFB4D7DDA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Util", "Util\Util.csproj", "{6886967C-A6EC-4D4F-BA21-19010E58A6A6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MobHandler", "MobHandler\MobHandler.csproj", "{0C6BE75C-F563-468F-AEC7-06558A77E7A8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -15,6 +21,18 @@ Global
 		{2539FC5C-0792-48C5-AEA3-0A249645C22C}.Debug|x86.Build.0 = Debug|x86
 		{2539FC5C-0792-48C5-AEA3-0A249645C22C}.Release|x86.ActiveCfg = Release|x86
 		{2539FC5C-0792-48C5-AEA3-0A249645C22C}.Release|x86.Build.0 = Release|x86
+		{BA0E7F18-A814-4281-94EB-248FFB4D7DDA}.Debug|x86.ActiveCfg = Debug|x86
+		{BA0E7F18-A814-4281-94EB-248FFB4D7DDA}.Debug|x86.Build.0 = Debug|x86
+		{BA0E7F18-A814-4281-94EB-248FFB4D7DDA}.Release|x86.ActiveCfg = Release|x86
+		{BA0E7F18-A814-4281-94EB-248FFB4D7DDA}.Release|x86.Build.0 = Release|x86
+		{6886967C-A6EC-4D4F-BA21-19010E58A6A6}.Debug|x86.ActiveCfg = Debug|x86
+		{6886967C-A6EC-4D4F-BA21-19010E58A6A6}.Debug|x86.Build.0 = Debug|x86
+		{6886967C-A6EC-4D4F-BA21-19010E58A6A6}.Release|x86.ActiveCfg = Release|x86
+		{6886967C-A6EC-4D4F-BA21-19010E58A6A6}.Release|x86.Build.0 = Release|x86
+		{0C6BE75C-F563-468F-AEC7-06558A77E7A8}.Debug|x86.ActiveCfg = Debug|x86
+		{0C6BE75C-F563-468F-AEC7-06558A77E7A8}.Debug|x86.Build.0 = Debug|x86
+		{0C6BE75C-F563-468F-AEC7-06558A77E7A8}.Release|x86.ActiveCfg = Release|x86
+		{0C6BE75C-F563-468F-AEC7-06558A77E7A8}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

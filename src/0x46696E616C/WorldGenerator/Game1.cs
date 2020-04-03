@@ -1,14 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using NationBuilder.DataHandlerLibrary;
-using NationBuilder.TileHandlerLibrary;
-using NationBuilder.WorldHandlerLibrary;
-using System.Collections.Generic;
-using Util;
-using WorldManager;
 
-namespace _0x46696E616C
+namespace WorldGenerator
 {
     /// <summary>
     /// This is the main type for your game.
@@ -17,6 +11,7 @@ namespace _0x46696E616C
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -44,11 +39,6 @@ namespace _0x46696E616C
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            WorldHandler world = new WorldHandler(this, "HelloWorld");
-            Camera cam = new Camera(this);
-            cam.Initialize();
-            this.Components.Add(cam);
-            ContentHandler.LoadContent(this);
 
             // TODO: use this.Content to load your game content here
         }
@@ -84,10 +74,9 @@ namespace _0x46696E616C
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
+
             // TODO: Add your drawing code here
-            spriteBatch.Begin();
-            
-            spriteBatch.End();
+
             base.Draw(gameTime);
         }
     }

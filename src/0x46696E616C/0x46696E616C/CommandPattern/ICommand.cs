@@ -8,6 +8,6 @@ namespace _0x46696E616C.CommandPattern
 {
     interface ICommand
     {
-        void Execute()
+        void Execute();
     }
 }

@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace _0x46696E616C.CommandPattern.Commands
+namespace NationBuilder.TileHandlerLibrary
 {
-    class Move : Command
+    class TileHandler
     {
 
     }
