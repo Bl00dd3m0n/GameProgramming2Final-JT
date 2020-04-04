@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using _0x46696E616C.Buildings;
+using Microsoft.Xna.Framework;
 using NationBuilder.TileHandlerLibrary;
 using NationBuilder.WorldHandlerLibrary;
 using System;
@@ -13,6 +14,7 @@ namespace WorldManager
     public class WorldHandler
     {
         List<Region> regions;
+        Map.Map map;
         WorldGeneration wg;
         Game game;
         Save save;
@@ -21,30 +23,55 @@ namespace WorldManager
         {
             Seed = 14153456352343;
             regions = new List<Region>();
-            wg = new WorldGeneration(game, WorldName);
+            wg = new WorldGeneration(game, WorldName, Seed);
             save = Save.save;
             this.game = game;
-            if(regions.Count <= 0)
+            if (regions.Count <= 0)
             {
-                regions.Add(wg.GenerateRegion(new NationBuilder.TileHandlerLibrary.Vector2(0,0), new NationBuilder.TileHandlerLibrary.Vector2(game.GraphicsDevice.Viewport.Width, game.GraphicsDevice.Viewport.Height), 14153456352343));
+                regions.Add(wg.GenerateRegion(new Vector2(0, 0), new Vector2(game.GraphicsDevice.Viewport.Width, game.GraphicsDevice.Viewport.Height), 14153456352343));
             }
         }
-        public void LoadArea()
+
+        public void Place(Building building)
         {
-            
+
         }
 
-        public Tile GetTile(NationBuilder.TileHandlerLibrary.Vector2 position)
+        public bool CheckPlacement(Vector2 position, Microsoft.Xna.Framework.Vector2 size)
         {
-            int index = regions.FindIndex(l => l.bounds.Left <= position.x && l.bounds.Right >= position.x && l.bounds.Top <= position.y && l.bounds.Bottom > position.y);
+            return false;
+        }
+
+        public void LoadArea()
+        {
+
+        }
+
+        public Tile GetTile(Vector2 position)
+        {
+            int index = regions.FindIndex(l => l.bounds.Left <= position.X && l.bounds.Right >= position.X && l.bounds.Top <= position.Y && l.bounds.Bottom > position.Y);
             if (index < 0) index = 0;
-            Tile returnTile = regions[index].tiles[(int)(position.x + (regions[index].bounds.Width * position.y))];
-            if(returnTile != null)
+            Tile returnTile = regions[index].GetTilesAtPosition(position)[0];
+            if (returnTile != null)
                 return returnTile;
             else
             {
-                return new Tile(TextureValue.Grass, position);
+                return null;
             }
+            //wg.Get
+        }
+        public Tile GetBackgroundTile(Vector2 position)
+        {
+            int index = regions.FindIndex(l => l.bounds.Left <= position.X && l.bounds.Right >= position.X && l.bounds.Top <= position.Y && l.bounds.Bottom > position.Y);
+            if (index < 0) index = 0;
+            Tile returnTile = regions[index].GetTilesAtPosition(position)[1];
+            if (returnTile != null)
+                return returnTile;
+            //else
+            //{
+            //    return new Tile(game, TextureValue.Grass, position);
+            //}
+            return null;
             //wg.Get
         }
     }

@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vector2 = Microsoft.Xna.Framework.Vector2;
-using MyVector2 = NationBuilder.TileHandlerLibrary.Vector2;
+//using MyVector2 = NationBuilder.TileHandlerLibrary.Vector2;
 using _0x46696E616C.MobHandler.Units;
 
 namespace WorldManager.TileHandlerLibrary
@@ -26,12 +26,12 @@ namespace WorldManager.TileHandlerLibrary
         public float CurrentHealth { get; protected set; }
 
 
-        public ModifiableTile(TextureValue texture, MyVector2 position) : base(texture, position)
+        public ModifiableTile(Game game, TextureValue texture, Vector2 position) : base(game, texture, position)
         {
 
         }
 
-        public virtual void Damage(int value)
+        public virtual void Damage(float value)
         {
             throw new NotImplementedException();
         }

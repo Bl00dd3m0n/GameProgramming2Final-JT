@@ -1,4 +1,5 @@
-﻿using NationBuilder.TileHandlerLibrary;
+﻿using Microsoft.Xna.Framework;
+using NationBuilder.TileHandlerLibrary;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace WorldManager.TileHandlerLibrary
 {
-    class BackGroundTile : Tile
+    public class BackGroundTile : Tile
     {
-        public BackGroundTile(TextureValue texture, Vector2 position) : base(texture, position)
+        public BackGroundTile(Game game, TextureValue texture, Vector2 position) : base(game, texture, position)
         {
 
         }

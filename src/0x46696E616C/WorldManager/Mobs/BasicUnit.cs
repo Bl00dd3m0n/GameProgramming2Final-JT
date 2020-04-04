@@ -6,42 +6,39 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WorldManager.TileHandlerLibrary;
 
 namespace _0x46696E616C.CommandPattern.Commands
 {
-    class BasicUnit : IUnit
+    public class BasicUnit : ModifiableTile, IUnit
     {
-        enum UnitState { Build, Attack, Flee, }
+        enum UnitState { Build, Attack, Flee, Idle }
 
-        public string name { get; private set; }
+        public string name { get; protected set; }
 
-        public Vector2 Size { get; private set; }
+        public Vector2 Size { get; protected set; }
 
-        public float TotalHealth { get; private set; }
+        public float TotalHealth { get; protected set; }
 
-        public float CurrentHealth { get; private set; }
+        public float CurrentHealth { get; protected set; }
 
-        public Vector2 Position { get; private set; }
+        public Vector2 Position { get; protected set; }
 
-        public BaseUnitState State { get; private set; }
+        public BaseUnitState State { get; protected set; }
+        protected Vector2 Direction { get; set; }
+        protected float speed { get; set; }
+        //TODO List of commands needed to be implemented for the units
 
-        public void Damage(float amount)
+        public BasicUnit(Game game, string name, Vector2 size, float totalHealth, float currentHealth, Vector2 position, BaseUnitState state, NationBuilder.TileHandlerLibrary.TextureValue texture) : base(game, texture, position)
         {
-            CurrentHealth -= amount;
-            if(CurrentHealth <= 0)
-            {
-                Die();
-            }
-        }
-
-        public void Die()
-        {
-            
-        }
-
-        public void QueueBuild()
-        {
-            throw new NotImplementedException();
+            this.name = name;
+            this.Size = size;
+            this.TotalHealth = totalHealth;
+            this.CurrentHealth = currentHealth;
+            this.Position = position;
+            this.State = state;
+            Direction = new Vector2(0, 0);
+            speed = 0;
         }
     }
 }

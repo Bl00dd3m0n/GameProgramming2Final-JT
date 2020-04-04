@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace NationBuilder.TileHandlerLibrary
 {
-    [Serializable]
+    /*[Serializable]
     public class Vector2 : IEquatable<Vector2>
     {
         internal float x;
@@ -33,13 +34,21 @@ namespace NationBuilder.TileHandlerLibrary
         {
             return new Microsoft.Xna.Framework.Vector2(this.x, this.y);
         }
-    }
+        public static Vector2 Add(Vector2 vector1, Vector2 vector2)
+        {
+            return vector1 + vector2;
+        }
+        public static implicit operator Vector2(Microsoft.Xna.Framework.Vector2 v)
+        {
+            return new Vector2(v.X, v.Y);
+        }
+    }*/
     [Serializable]
-    public class Tile
+    public class Tile : GameComponent
     {
         public BlockData block;
         public Vector2 position;
-        public Tile(TextureValue texture, Vector2 position)
+        public Tile(Game game, TextureValue texture, Vector2 position) : base(game)
         {
             block.texture = texture;
             this.position = position;

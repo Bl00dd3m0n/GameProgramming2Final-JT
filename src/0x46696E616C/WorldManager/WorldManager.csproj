@@ -53,6 +53,7 @@
     <Compile Include="Buildings\SolarPanel.cs" />
     <Compile Include="Buildings\SteelFactory.cs" />
     <Compile Include="ContentHandler.cs" />
+    <Compile Include="Map\Map.cs" />
     <Compile Include="Map\WorldClock.cs" />
     <Compile Include="Mobs\BasicUnit.cs" />
     <Compile Include="Mobs\HarvestableUnits\HarvestableUnit.cs" />

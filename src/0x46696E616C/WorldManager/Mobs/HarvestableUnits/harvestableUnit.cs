@@ -2,16 +2,21 @@
 using _0x46696E616C.MobHandler;
 using _0x46696E616C.WorldManager.Resources;
 using Microsoft.Xna.Framework;
+using NationBuilder.TileHandlerLibrary;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WorldManager.TileHandlerLibrary;
+using Vector2 = Microsoft.Xna.Framework.Vector2;
 
 namespace WorldManager.Mobs.HarvestableUnits
 {
-    class HarvestableUnit : IHarvestable
+    abstract class HarvestableUnit : ModifiableTile, IHarvestable
     {
+
+
         public IResource type { get; private set; }
         public string name { get; private set; }
 
@@ -22,6 +27,17 @@ namespace WorldManager.Mobs.HarvestableUnits
         public float CurrentHealth { get; private set; }
 
         public Vector2 Position { get; private set; }
+
+        protected HarvestableUnit(Game game, TextureValue texture, IResource type, string name, Vector2 size, float totalHealth, float currentHealth, Vector2 position) : base(game, texture, position)
+        {
+            this.type = type;
+            this.name = name;
+            this.Size = size;
+            this.TotalHealth = totalHealth;
+            this.CurrentHealth = currentHealth;
+            this.Position = position;
+        }
+
 
         public void Damage(float damage)
         {

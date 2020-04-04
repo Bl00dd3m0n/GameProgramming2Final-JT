@@ -10,7 +10,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WorldManager;
-using MonoVector2 = Microsoft.Xna.Framework.Vector2;
 namespace Util
 {
     public class Camera : DrawableGameComponent
@@ -53,14 +52,14 @@ namespace Util
         Matrix transform;
         SpriteBatch sb;
         MouseKeyboard input;
-        MonoVector2 Dir;
+        Vector2 Dir;
         public Camera(Game game) : base(game)
         {
             zoom = 20f;
             MoveSpeed = 20f;
-            this.ViewPort = new Rectangle(position.ToPoint(),new Point(game.GraphicsDevice.Viewport.Width,game.GraphicsDevice.Viewport.Height));
+            this.ViewPort = new Rectangle(position.ToPoint(), new Point(game.GraphicsDevice.Viewport.Width, game.GraphicsDevice.Viewport.Height));
             input = new MouseKeyboard(game);
-            Dir = new MonoVector2(0, 0);
+            Dir = new Vector2(0, 0);
         }
         public override void Initialize()
         {
@@ -97,15 +96,15 @@ namespace Util
                 Dir.X = -1;
             position += Dir * MoveSpeed * timer / 100;
             timer = gameTime.ElapsedGameTime.Milliseconds;
-            sb.Begin(SpriteSortMode.Deferred, null, null, null, null, null, Matrix.CreateTranslation(position.X, position.Y, 0) * Matrix.CreateScale(zoom) * timer/1000);
+            sb.Begin(SpriteSortMode.Deferred, null, null, null, null, null, Matrix.CreateTranslation(position.X, position.Y, 0) * Matrix.CreateScale(zoom) * timer / 1000);
             for (int y = ViewPort.Top; y < ViewPort.Bottom; y++)
                 for (int x = ViewPort.Left; x < ViewPort.Right; x++)
                 {
-                    Tile tile = world.GetTile(new NationBuilder.TileHandlerLibrary.Vector2(x, y));
-                    //if (tile.block.texture == TextureValue.Water || tile.block.texture == TextureValue.Tree)
-                    //{
-                        sb.Draw(ContentHandler.DrawnTexture(tile.block.texture), tile.position.ToMonoGameVector2()*16, Color.White);
-                    //}
+                    //Tile decorTile = world.GetTile(new Vector2(x, y));
+                    Tile backtile = world.GetBackgroundTile(new Vector2(x,y));
+                    if(backtile != null)
+                        sb.Draw(ContentHandler.DrawnTexture(backtile.block.texture), backtile.position * 16, Color.White);
+                    //sb.Draw(ContentHandler.DrawnTexture(decorTile.block.texture), decorTile.position * 16, Color.White);
                 }
             sb.End();
             base.Draw(gameTime);

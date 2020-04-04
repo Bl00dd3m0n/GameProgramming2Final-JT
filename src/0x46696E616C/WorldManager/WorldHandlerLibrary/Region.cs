@@ -5,19 +5,47 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WorldManager.TileHandlerLibrary;
 
 namespace NationBuilder.WorldHandlerLibrary
 {
     [Serializable]
     public class Region
     {
-        public List<Tile> tiles;
+        public List<BackGroundTile> backTiles;
         public List<Tile> decorTiles;
         public Rectangle bounds;
-        public Region(TileHandlerLibrary.Vector2 startPos, TileHandlerLibrary.Vector2 size)
+        public Region(Vector2 startPos, Vector2 size)
         {
-            bounds = new Rectangle(startPos.ToMonoGameVector2().ToPoint(), size.ToMonoGameVector2().ToPoint());
-            tiles = new List<Tile>();
+            bounds = new Rectangle(startPos.ToPoint(), size.ToPoint());
+            backTiles = new List<BackGroundTile>();
+            decorTiles = new List<Tile>();
+        }
+        public Tile[] GetTilesAtPosition(Vector2 position)
+        {
+            Tile[] decorAndBack = new Tile[2];
+            bool decorCheck = false;
+            try
+            {
+                //decorAndBack[0] = decorTiles.First(l => l.position == position);
+                decorCheck = true;
+                decorAndBack[1] = backTiles.First(l => l.position == position);
+            } catch(InvalidOperationException e)
+            {
+                if (decorCheck)
+                {
+                    try
+                    {
+                        decorAndBack[0] = null;
+                        decorAndBack[1] = backTiles.First(l => l.position == position);
+                    }
+                    catch (InvalidOperationException ex)
+                    {
+                        decorAndBack[1] = null;
+                    }
+                }
+            }
+            return decorAndBack;
         }
     }
 }

@@ -2,9 +2,9 @@
 using NationBuilder.TileHandlerLibrary;
 using WorldManager.TileHandlerLibrary;
 using Vector2 = Microsoft.Xna.Framework.Vector2;
-using MyVector2 = NationBuilder.TileHandlerLibrary.Vector2;
 using _0x46696E616C.MobHandler.Units;
 using _0x46696E616C.WorldManager.Resources;
+using Microsoft.Xna.Framework;
 
 namespace _0x46696E616C.Buildings
 {
@@ -15,7 +15,7 @@ namespace _0x46696E616C.Buildings
         /// </summary>
         public Wallet<IResource> Cost { get; protected set; }
 
-        public Building(TextureValue texture, MyVector2 position) : base(texture, position)
+        public Building(Game game, TextureValue texture, Vector2 position) : base(game, texture, position)
         {
             Cost = new Wallet<IResource>();
             name = "Building";
@@ -25,7 +25,7 @@ namespace _0x46696E616C.Buildings
             CurrentHealth = 0;
         }
 
-        public override void Damage(int amount)
+        public override void Damage(float amount)
         {
             CurrentHealth -= amount;
         }
