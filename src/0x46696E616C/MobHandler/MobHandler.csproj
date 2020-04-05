@@ -47,7 +47,6 @@
     <Compile Include="Units\IEntity.cs" />
     <Compile Include="Units\IronVein.cs" />
     <Compile Include="Units\IUnit.cs" />
-    <Compile Include="Wallet.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

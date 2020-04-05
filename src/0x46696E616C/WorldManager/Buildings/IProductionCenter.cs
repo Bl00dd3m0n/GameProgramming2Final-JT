@@ -5,10 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace _0x46696E616C.WorldManager.Resources
+namespace _0x46696E616C.Buildings
 {
-    public class Money : IResource
+    public interface IProductionCenter
     {
-        public float Count { get; set; }
+        int ProductionAMinute { get; }
+        List<IResource> productionTypes { get; }
     }
 }

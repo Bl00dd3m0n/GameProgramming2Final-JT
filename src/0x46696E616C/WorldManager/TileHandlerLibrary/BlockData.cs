@@ -9,11 +9,25 @@ namespace NationBuilder.TileHandlerLibrary
     [Serializable]
     public enum TextureValue
     {
-        Grass,
+        //ResourceTextures
         Tree,
+        IronVein,
+        //Background Textures
+        Grass,
         Water,
         Sand,
-        Stone
+        Stone,
+        //Building Textures
+        Center,
+        FireWall,
+        InternetCafe,
+        Lab,MediaCenter,
+        Mines,
+        ServerFarm,
+        SolarPanel,
+        SteelFactory,
+        None,
+        Cursor
     }
     [Serializable]
     public struct BlockData

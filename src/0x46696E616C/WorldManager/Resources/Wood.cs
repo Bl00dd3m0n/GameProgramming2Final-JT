@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace _0x46696E616C.CommandPattern.Commands
+namespace _0x46696E616C.WorldManager.Resources
 {
-    class BuildCommand : Command
+    class Wood : IResource
     {
-
+        public float Count { get; set; }
     }
 }

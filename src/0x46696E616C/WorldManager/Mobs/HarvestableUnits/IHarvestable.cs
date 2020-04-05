@@ -11,6 +11,6 @@ namespace _0x46696E616C.MobHandler
     public interface IHarvestable : IEntity
     {
         IResource type { get; }
-        Wallet<IResource> Harvest(float efficiency);
+        Wallet Harvest(float efficiency);
     }
 }

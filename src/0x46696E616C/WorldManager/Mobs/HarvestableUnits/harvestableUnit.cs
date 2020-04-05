@@ -53,9 +53,9 @@ namespace WorldManager.Mobs.HarvestableUnits
             throw new NotImplementedException();
         }
 
-        public Wallet<IResource> Harvest(float efficiency)
+        public Wallet Harvest(float efficiency)
         {
-            Wallet<IResource> Harvest = new Wallet<IResource>();
+            Wallet Harvest = new Wallet();
             Harvest.Deposit(type, (int)(1 * efficiency));
             Damage(1 * efficiency);
             return Harvest;

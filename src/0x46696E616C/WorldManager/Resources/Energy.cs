@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace _0x46696E616C.WorldManager.Resources
 {
-    class Energy : IResource
+    public class Energy : IResource
     {
+        public float Count { get; set; }
     }
 }

@@ -17,8 +17,9 @@ namespace NationBuilder.DataHandlerLibrary
         public static Texture2D water;
         public static Texture2D rock;
         public static Texture2D tree;
-        private const int Width = 16;
-        private const int Height = 16;
+        public static Texture2D solarPanel;
+        public static Texture2D cursor;
+        public static SpriteFont font;
         public static bool LoadContent(Game game)
         {
             try
@@ -28,7 +29,9 @@ namespace NationBuilder.DataHandlerLibrary
                 water = SetTexture(TextureValue.Water,game);
                 rock = SetTexture(TextureValue.Stone,game);
                 tree = SetTexture(TextureValue.Tree,game);
-
+                solarPanel = SetTexture(TextureValue.SolarPanel, game);
+                cursor = SetTexture(TextureValue.Cursor, game);
+                font = game.Content.Load<SpriteFont>("Ariel");
                 return true;
             } catch(Exception ex)
             {
@@ -48,6 +51,10 @@ namespace NationBuilder.DataHandlerLibrary
                     return rock;
                 case TextureValue.Tree:
                     return tree;
+                case TextureValue.SolarPanel:
+                    return solarPanel;
+                case TextureValue.Cursor:
+                    return cursor;
                 default:
                     return grass;
             }

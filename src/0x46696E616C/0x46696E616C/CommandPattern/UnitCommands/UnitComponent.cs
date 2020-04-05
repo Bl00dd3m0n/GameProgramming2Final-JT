@@ -1,4 +1,5 @@
 ﻿using _0x46696E616C.CommandPattern.Commands;
+using _0x46696E616C.MobHandler;
 using _0x46696E616C.MobHandler.Units;
 using Microsoft.Xna.Framework;
 using NationBuilder.TileHandlerLibrary;
@@ -22,7 +23,7 @@ namespace _0x46696E616C.CommandPattern
 
         public void Build(IEntity target)
         {
-            
+            State = BaseUnitState.build;
         }
 
         public void Move(Vector2 Position)
@@ -31,7 +32,8 @@ namespace _0x46696E616C.CommandPattern
         }
         public void Attack(IEntity target)
         {
-            
+            if (target is IHarvestable) State = BaseUnitState.harvest;
+            else State = BaseUnitState.attack;
         }
         public override void Update(GameTime gameTime)
         {
@@ -50,6 +52,9 @@ namespace _0x46696E616C.CommandPattern
             throw new NotImplementedException();
         }
 
-
+        public void Move(IEntity Target)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -46,6 +46,7 @@
     <Compile Include="Buildings\Center.cs" />
     <Compile Include="Buildings\FireWall.cs" />
     <Compile Include="Buildings\InternetCafe.cs" />
+    <Compile Include="Buildings\IProductionCenter.cs" />
     <Compile Include="Buildings\Lab.cs" />
     <Compile Include="Buildings\MediaCenter.cs" />
     <Compile Include="Buildings\Mines.cs" />
@@ -53,8 +54,8 @@
     <Compile Include="Buildings\SolarPanel.cs" />
     <Compile Include="Buildings\SteelFactory.cs" />
     <Compile Include="ContentHandler.cs" />
-    <Compile Include="Map\Map.cs" />
-    <Compile Include="Map\WorldClock.cs" />
+    <Compile Include="MapData\Map.cs" />
+    <Compile Include="MapData\WorldClock.cs" />
     <Compile Include="Mobs\BasicUnit.cs" />
     <Compile Include="Mobs\HarvestableUnits\HarvestableUnit.cs" />
     <Compile Include="Mobs\HarvestableUnits\IHarvestable.cs" />
@@ -68,12 +69,15 @@
     <Compile Include="Resources\Likes.cs" />
     <Compile Include="Resources\Money.cs" />
     <Compile Include="Resources\Steel.cs" />
+    <Compile Include="Resources\Wood.cs" />
     <Compile Include="Save.cs" />
     <Compile Include="TileHandlerLibrary\BackGroundTile.cs" />
     <Compile Include="TileHandlerLibrary\BlockData.cs" />
     <Compile Include="TileHandlerLibrary\ModifiableTile.cs" />
+    <Compile Include="TileHandlerLibrary\ReferenceTile.cs" />
     <Compile Include="TileHandlerLibrary\Tile.cs" />
     <Compile Include="TileHandlerLibrary\TileHandler.cs" />
+    <Compile Include="Wallet.cs" />
     <Compile Include="WindowsSave.cs" />
     <Compile Include="WorldHandlerLibrary\WorldHandler.cs" />
     <Compile Include="WorldHandlerLibrary\Region.cs" />
@@ -93,6 +97,7 @@
   <ItemGroup>
     <MonoGameContentReference Include="Content\Content.mgcb" />
     <None Include="app.manifest" />
+    <None Include="ClassDiagram1.cd" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MobHandler\MobHandler.csproj">

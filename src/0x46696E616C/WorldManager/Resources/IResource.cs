@@ -8,5 +8,6 @@ namespace _0x46696E616C.WorldManager.Resources
 {
     public interface IResource
     {
+        float Count { get; set; }
     }
 }

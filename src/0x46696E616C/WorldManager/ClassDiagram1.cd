@@ -1,0 +1,277 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="_0x46696E616C.WorldManager.Resources.Energy" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="3.25" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Resources\Energy.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="_0x46696E616C.WorldManager.Resources.Iron" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="5" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Resources\Iron.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="_0x46696E616C.WorldManager.Resources.Likes" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="6.75" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Resources\Likes.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="_0x46696E616C.WorldManager.Resources.Money" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="3.25" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Resources\Money.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="_0x46696E616C.WorldManager.Resources.Steel" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="5" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Resources\Steel.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="_0x46696E616C.Buildings.Building" Collapsed="true">
+    <Position X="17" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACAAAAAAAAgAAAAABAAAABAAAAAAAAAAAAAEAA=</HashCode>
+      <FileName>Buildings\Building.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="_0x46696E616C.Buildings.Center" Collapsed="true">
+    <Position X="12.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Buildings\Center.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="_0x46696E616C.Buildings.FireWall" Collapsed="true">
+    <Position X="19.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Buildings\FireWall.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="_0x46696E616C.Buildings.InternetCafe" Collapsed="true">
+    <Position X="23.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAIAAAAAA=</HashCode>
+      <FileName>Buildings\InternetCafe.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="_0x46696E616C.Buildings.Lab" Collapsed="true">
+    <Position X="8" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Buildings\Lab.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="_0x46696E616C.Buildings.MediaCenter" Collapsed="true">
+    <Position X="14.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Buildings\MediaCenter.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="_0x46696E616C.Buildings.Mines" Collapsed="true">
+    <Position X="21.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAIAAAAAA=</HashCode>
+      <FileName>Buildings\Mines.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="_0x46696E616C.Buildings.ServerFarm" Collapsed="true">
+    <Position X="26" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Buildings\ServerFarm.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="_0x46696E616C.Buildings.SolarPanel" Collapsed="true">
+    <Position X="10.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAIAAAAAA=</HashCode>
+      <FileName>Buildings\SolarPanel.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="_0x46696E616C.Buildings.SteelFactory" Collapsed="true">
+    <Position X="17" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Buildings\SteelFactory.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WorldManager.MapData.Map" Collapsed="true">
+    <Position X="15.75" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAAAAAAAAAAQAEIAAAEgIgACAAAAAAEAAAAAAAA=</HashCode>
+      <FileName>MapData\Map.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="_0x46696E616C.WorldManager.MapData.WorldClock" Collapsed="true">
+    <Position X="17.5" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>MapData\WorldClock.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WorldManager.Mobs.HarvestableUnits.HarvestableUnit" Collapsed="true">
+    <Position X="10" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACAAAAAgAAgAAAAAAQAAAAFAAAAABAAAAAQAAA=</HashCode>
+      <FileName>Mobs\HarvestableUnits\HarvestableUnit.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="WorldManager.Mobs.HarvestableUnits.IronVein" Collapsed="true">
+    <Position X="11" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Mobs\HarvestableUnits\IronVein.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="WorldManager.Mobs.HarvestableUnits.Tree" Collapsed="true">
+    <Position X="8.75" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Mobs\HarvestableUnits\Tree.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="_0x46696E616C.CommandPattern.Commands.BasicUnit" Collapsed="true">
+    <Position X="9.75" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAgAAgACAAAAQAAAAEAQAAAAAABAAQAAA=</HashCode>
+      <FileName>Mobs\BasicUnit.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="WorldManager.TileHandlerLibrary.BackGroundTile" Collapsed="true">
+    <Position X="26.5" Y="10" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>TileHandlerLibrary\BackGroundTile.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WorldManager.TileHandlerLibrary.ModifiableTile" Collapsed="true">
+    <Position X="31.25" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACAAAAAgAAwAAAAAAQAAAAEAAAAAAAAAAAQAAA=</HashCode>
+      <FileName>TileHandlerLibrary\ModifiableTile.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="WorldManager.TileHandlerLibrary.ReferenceTile" Collapsed="true">
+    <Position X="29.75" Y="9.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>TileHandlerLibrary\ReferenceTile.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NationBuilder.TileHandlerLibrary.Tile" Collapsed="true">
+    <Position X="32.25" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAABAA=</HashCode>
+      <FileName>TileHandlerLibrary\Tile.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NationBuilder.TileHandlerLibrary.TileHandler" Collapsed="true">
+    <Position X="34.75" Y="7" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>TileHandlerLibrary\TileHandler.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NationBuilder.WorldHandlerLibrary.Region" Collapsed="true">
+    <Position X="19.75" Y="10.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAgAAAAAAAIAAAAAAAAAAAAQCAAAAAAA=</HashCode>
+      <FileName>WorldHandlerLibrary\Region.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NationBuilder.WorldHandlerLibrary.WorldGeneration" Collapsed="true">
+    <Position X="21.5" Y="10.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAIAgKAAAIAAAAAAAAAAAAAAAAAAAIAkAAIAAAAAA=</HashCode>
+      <FileName>WorldHandlerLibrary\WorldGeneration.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WorldManager.WorldHandler" Collapsed="true">
+    <Position X="19.75" Y="11.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAEAAAAACAAQCAAEAAAAAAAAAAAAAIAEQAAEAAAAA=</HashCode>
+      <FileName>WorldHandlerLibrary\WorldHandler.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NationBuilder.DataHandlerLibrary.ContentHandler" Collapsed="true">
+    <Position X="23.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAAAlAAAEAgAAAAABAACAAAAAAIAAAAAAAAAw=</HashCode>
+      <FileName>ContentHandler.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="OpenSimplexNoise" Collapsed="true">
+    <Position X="17" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAkwgEBAEAQAAhAAAAAAEAAAAAAAAAAAAAAAgAAAAA=</HashCode>
+      <FileName>OpenSimplex.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WorldManager.Save" Collapsed="true">
+    <Position X="14.5" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAACAMAAAAAAAABAAAAAAAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>Save.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WorldManager.WindowsSave" Collapsed="true">
+    <Position X="14.5" Y="10" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAEAAAAAAAABAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>WindowsSave.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="NationBuilder.TileHandlerLibrary.BlockData" Collapsed="true">
+    <Position X="34.75" Y="8.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAA=</HashCode>
+      <FileName>TileHandlerLibrary\BlockData.cs</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Interface Name="_0x46696E616C.WorldManager.Resources.IResource" Collapsed="true">
+    <Position X="5" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Resources\IResource.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="_0x46696E616C.MobHandler.IHarvestable" Collapsed="true">
+    <Position X="13.5" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAABAAAAAAAAA=</HashCode>
+      <FileName>Mobs\HarvestableUnits\IHarvestable.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Enum Name="NationBuilder.TileHandlerLibrary.TextureValue" Collapsed="true">
+    <Position X="34.75" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAASCAAACJCAAAAAAAAAMgAAAAEAAAAAEIRAA=</HashCode>
+      <FileName>TileHandlerLibrary\BlockData.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

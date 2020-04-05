@@ -17,7 +17,7 @@ namespace WorldManager.TileHandlerLibrary
     {
         public string name { get; protected set; }
 
-        public Vector2 Position { get; protected set; }
+        public Vector2 Position { get { return position; } protected set { position = value; } }
 
         public Vector2 Size { get; protected set; }
 

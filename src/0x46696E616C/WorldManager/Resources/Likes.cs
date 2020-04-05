@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace _0x46696E616C.WorldManager.Resources
 {
-    class Likes : IResource
+    public class Likes : IResource
     {
+        public float Count { get; set; }
+
     }
 }

@@ -42,17 +42,16 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="CommandPattern\Command.cs" />
+    <Compile Include="CommandPattern\GameCommands\CommandComponent.cs" />
     <Compile Include="CommandPattern\CommandProccesor.cs" />
-    <Compile Include="CommandPattern\Commands\Attack.cs" />
-    <Compile Include="CommandPattern\Commands\AttackCommand.cs" />
-    <Compile Include="CommandPattern\Commands\BuildCommand.cs" />
-    <Compile Include="CommandPattern\Commands\Move.cs" />
-    <Compile Include="CommandPattern\Commands\Movecommand.cs" />
+    <Compile Include="CommandPattern\GameCommands\AttackCommand.cs" />
+    <Compile Include="CommandPattern\GameCommands\BuildCommand.cs" />
+    <Compile Include="CommandPattern\GameCommands\Movecommand.cs" />
     <Compile Include="CommandPattern\CommandWithUndo.cs" />
     <Compile Include="CommandPattern\ICommand.cs" />
     <Compile Include="CommandPattern\ICommandComponent.cs" />
     <Compile Include="CommandPattern\ICommandWithUndo.cs" />
-    <Compile Include="CommandPattern\UnitComponent.cs" />
+    <Compile Include="CommandPattern\UnitCommands\UnitComponent.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -86,6 +85,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="CommandPattern\Commands\" />
     <Folder Include="Technologies\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

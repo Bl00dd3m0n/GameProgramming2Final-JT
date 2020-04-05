@@ -5,11 +5,15 @@ using Microsoft.Xna.Framework;
 
 namespace _0x46696E616C.Buildings
 {
-    class ServerFarm : Building
+    public class ServerFarm : Building
     {
         public ServerFarm(Game game, TextureValue texture, Vector2 position) : base(game, texture, position)
         {
-            Cost = new Wallet<IResource>();
+            Cost = new Wallet();
+            Cost.Deposit(new Steel(), 1000);
+            Cost.Deposit(new Wood(), 200);
+            Cost.Deposit(new Money(), 100);
+            energyCost = 5;
             name = "Server Farm";
             Position = position;
             Size = new Vector2(0, 0);

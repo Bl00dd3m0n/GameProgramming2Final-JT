@@ -5,11 +5,11 @@ using Microsoft.Xna.Framework;
 
 namespace _0x46696E616C.Buildings
 {
-    class SteelFactory : Building
+    public class SteelFactory : Building
     {
         public SteelFactory(Game game, TextureValue texture, Vector2 position) : base(game, texture, position)
         {
-            Cost = new Wallet<IResource>();
+            Cost = new Wallet();
             name = "Steel Factory";
             Position = position;
             Size = new Vector2(0, 0);

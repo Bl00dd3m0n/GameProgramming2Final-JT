@@ -6,15 +6,18 @@ using System.Threading.Tasks;
 
 namespace _0x46696E616C.CommandPattern
 {
-    class Command
+    class Command : ICommand
     {
-        public void Execute()
+        public string CommandName;
+        public virtual void Execute(CommandComponent uc)
         {
-            this.Log();
+            this.Log(uc);
         }
-        private void Log()
-        {
 
+        protected virtual string Log(CommandComponent uc)
+        {
+            string LogString = string.Format($"{CommandName} executed.");
+            return LogString;
         }
     }
 }
