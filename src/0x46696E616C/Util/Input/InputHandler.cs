@@ -38,6 +38,7 @@ namespace _0x46696E616C.Input
         List<Keys> PressedKeys;
         public float scrollVal { get { return mouse.ScrollWheelValue; } }
         public float prevScrollVal { get; private set;  }
+        bool leftButtonPressed, rightButtonPressed;
         public MouseKeyboard(Game game, SpriteBatch sb) : base(game, sb)
         {
 
@@ -46,13 +47,13 @@ namespace _0x46696E616C.Input
             mouse = Mouse.GetState();
             prevMouseState = mouse;
             PressedKeys = new List<Keys>();
+            leftButtonPressed = rightButtonPressed = false;
         }
 
         public override void Update(GameTime gameTime)
         {
             if (Game.IsActive)//Stops updating inputs if the player is outside the game
             {
-                CheckMouseDown();
                 UpdateKeyBoardState();
                 UpdateMouseState();
                 UpdateCursorPosition(mouse.Position.ToVector2());
@@ -60,6 +61,7 @@ namespace _0x46696E616C.Input
             Pressed = false;
             base.Update(gameTime);
         }
+
 
         public bool Scrolling()
         {
@@ -73,6 +75,16 @@ namespace _0x46696E616C.Input
         private void UpdateMouseState()
         {
             mouse = Mouse.GetState();
+            leftButtonPressed = rightButtonPressed = false;
+            if (mouse != prevMouseState)
+            {
+                prevMouseState = mouse;
+                if (mouse.LeftButton == ButtonState.Pressed)
+                    leftButtonPressed = true;
+                if (mouse.RightButton == ButtonState.Pressed)
+                    rightButtonPressed = true;
+            }
+
         }
 
         private void UpdateKeyBoardState()
@@ -100,33 +112,12 @@ namespace _0x46696E616C.Input
 
         public bool RightClick()
         {
-            if (mouse.RightButton == ButtonState.Pressed && mouse != prevMouseState)
-            {
-                mouse = Mouse.GetState();
-                return true;
-            }
-            //Key commands will be put here
-            return false;
+            return rightButtonPressed;
         }
 
         public bool LeftClick()
         {
-
-            if (mouse.LeftButton == ButtonState.Pressed && mouse != prevMouseState)
-            {
-                return true;
-            }
-            //Key commands will be put here
-            return false;
-        }
-
-        public void CheckMouseDown()
-        {
-
-            if (mouse != prevMouseState)
-            {
-                
-            }
+            return leftButtonPressed;
         }
     }
 }

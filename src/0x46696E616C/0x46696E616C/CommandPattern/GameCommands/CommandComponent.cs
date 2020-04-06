@@ -16,12 +16,14 @@ namespace _0x46696E616C.CommandPattern
         Wallet resources;
         List<IUnit> SelectedUnits;
         List<Building> Buildings;
+        List<Building> toBuild;
         Energy energy;
         float timer;
         public CommandComponent(Game game, Wallet startingResources) : base(game)
         {
             energy = new Energy();
             Buildings = new List<Building>();
+            toBuild = new List<Building>();
             resources = startingResources;
         }
         public void Select(List<IUnit> units)
@@ -51,7 +53,7 @@ namespace _0x46696E616C.CommandPattern
             {
                 if (wh.Place(building, Position))
                 {
-                    Buildings.Add(building);
+                    toBuild.Add(building);
                     if (SelectedUnits != null)
                     {
                         foreach (IUnit unit in SelectedUnits)
@@ -89,7 +91,7 @@ namespace _0x46696E616C.CommandPattern
                 minutes %= 60;
                 hours /= 60;
             }
-            if(hours > 0)
+            if (hours > 0)
                 return $"{hours}:{minutes}:{seconds}";
             return $"0:{minutes}:{seconds}";
         }
@@ -101,20 +103,30 @@ namespace _0x46696E616C.CommandPattern
             {
                 ProduceResources();
                 ChargeEnergy();
+                Construction();
             }
             base.Update(gameTime);
         }
+
+        private void Construction()
+        {
+            for (int i = 0; i < toBuild.Count; i++)
+            {
+                toBuild[i].Construct(20/60f); //TODO implement worker proficiency at repairing/building here(More workers/better tech should speed this process up)
+                if (toBuild[i].CurrentHealth >= toBuild[i].TotalHealth)
+                {
+                    Buildings.Add(toBuild[i]);
+                    toBuild.RemoveAt(i);
+                }
+            }
+
+        }
+
         public void ChargeEnergy()
         {
             foreach (Building building in Buildings)
             {
-                if (building.energyCost < 0)
-                    resources.Deposit(energy, -building.energyCost);
-                else
-                {
-                    
-                    resources.Withdraw(energy, building.energyCost/60f); // TODO implement an building shutoff if the player runs out of energy
-                }
+                resources.Withdraw(energy, building.energyCost / 60f); // TODO implement an building shutoff if the player runs out of energy
             }
         }
 
@@ -126,7 +138,7 @@ namespace _0x46696E616C.CommandPattern
                 {
                     for (int i = 0; i < ((IProductionCenter)building).productionTypes.Count; i++)
                     {
-                        resources.Deposit(((IProductionCenter)building).productionTypes[i], ((IProductionCenter)building).ProductionAMinute/60f);
+                        resources.Deposit(((IProductionCenter)building).productionTypes[i], ((IProductionCenter)building).ProductionAMinute / 60f);
                     }
                 }
             }

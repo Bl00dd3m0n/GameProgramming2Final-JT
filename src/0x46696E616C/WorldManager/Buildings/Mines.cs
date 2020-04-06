@@ -25,7 +25,7 @@ namespace _0x46696E616C.Buildings
             name = "Mines";
             Position = position;
             Size = new Vector2(0, 0);
-            TotalHealth = 0;
+            TotalHealth = 200;
             CurrentHealth = 0;
         }
     }

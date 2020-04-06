@@ -33,7 +33,6 @@ namespace WorldManager
             if(CheckPlacement(position, building.Size))
             {
                 map.PlaceBlock(building, position);
-                Tile tile = map.GetTile(position-new Vector2(0,1));
                 return true;
             } else
             {
@@ -51,16 +50,11 @@ namespace WorldManager
             
             int StartX = 0;
             int StartY = 0;
-            if(size.X%2 == 0) StartX = -((int)(size.X/2)-1);
-            else StartX = -(int)(size.X / 2);
-
-            if (size.Y%2 == 0) StartY = -((int)(size.Y/2)-1);
-            else StartY = -(int)(size.Y / 2);
-            if (position.X + StartX > 0 && position.Y + StartY > 0)
+            if (position.X + StartX >= 0 && position.Y + StartY >= 0)
             {
-                for (int y = StartY; y < (int)(size.Y / 2); y++)
+                for (int y = 0; y < size.Y; y++)
                 {
-                    for (int x = StartX; x < (int)(size.X / 2); x++)
+                    for (int x = 0; x < size.X; x++)
                     {
                         if (GetTile(new Vector2(position.X + x, position.Y + y)) != null)
                             return false;

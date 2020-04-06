@@ -17,8 +17,7 @@ namespace _0x46696E616C.Buildings
             name = "Server Farm";
             Position = position;
             Size = new Vector2(0, 0);
-            TotalHealth = 0;
-            CurrentHealth = 0;
+            TotalHealth = 2000;
         }
     }
 }

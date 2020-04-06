@@ -27,6 +27,7 @@ namespace _0x46696E616C
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
+            //this.graphics.IsFullScreen = true;
             Content.RootDirectory = "Content";
         }
 
@@ -110,7 +111,7 @@ namespace _0x46696E616C
             spriteBatch.Begin();
             spriteBatch.DrawString(ContentHandler.font, cc.Resources(), new Vector2(100, 0), Color.Black);
             spriteBatch.DrawString(ContentHandler.font, cc.Time(), new Vector2(700,0), Color.Black);
-            spriteBatch.DrawString(ContentHandler.font, $"{(input.inputPos / 16).ToPoint()}", new Vector2(0, 0), Color.Black);
+            spriteBatch.DrawString(ContentHandler.font, $"{cam.Position.ToPoint()+(input.inputPos / 16).ToPoint()}", new Vector2(0, 0), Color.Black);
             spriteBatch.Draw(ContentHandler.DrawnTexture(TextureValue.Cursor), Mouse.GetState().Position.ToVector2(), null, Color.Red, 0, new Vector2(0, 0), 0.25f, SpriteEffects.None, 0);
             spriteBatch.End();
             base.Draw(gameTime);

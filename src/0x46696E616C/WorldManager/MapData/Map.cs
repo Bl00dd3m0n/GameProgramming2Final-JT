@@ -38,28 +38,21 @@ namespace WorldManager.MapData
 
         internal void PlaceBlock(ModifiableTile building, Vector2 position)
         {
-            
-            int StartX = 0;
-            int StartY = 0;
-            if (building.Size.X % 2 == 0) StartX = -((int)(building.Size.X / 2) - 1);
-            else StartX = -(int)(building.Size.X / 2);
+           
 
-            if (building.Size.Y % 2 == 0) StartY = -((int)(building.Size.Y / 2) - 1);
-            else StartY = -(int)(building.Size.Y / 2);
-
-            for (int y = StartY; y <= (int)(building.Size.Y / 2); y++)
+            for (int y = 0; y <= building.Size.Y ; y++)
             {
-                for (int x = StartX; x <= (int)(building.Size.X / 2); x++)
+                for (int x = 0; x <= building.Size.X; x++)
                 {
                     try
                     {
-                        if (y == StartY && x == StartX)
+                        if (y == 0 && x == 0)
                         {
                             tiles[(int)position.X + x, (int)position.Y + y, 1] = building;
                         }
                         else
                         {
-                            tiles[(int)position.X + x, (int)position.Y + y, 1] = new ReferenceTile((ModifiableTile)tiles[StartX + (int)position.X, StartY + (int)position.Y, 1]);
+                            tiles[(int)position.X + x, (int)position.Y + y, 1] = new ReferenceTile((ModifiableTile)tiles[(int)position.X, (int)position.Y, 1]);
                         }
                     } catch(IndexOutOfRangeException ex)
                     {

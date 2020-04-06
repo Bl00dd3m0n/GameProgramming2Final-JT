@@ -28,6 +28,12 @@ namespace _0x46696E616C.Buildings
             energyCost = 0;
         }
 
+        public void Construct(float amount)
+        {
+            CurrentHealth += amount;
+            if(CurrentHealth > TotalHealth) CurrentHealth = TotalHealth;
+        }
+
         public override void Damage(float amount)
         {
             CurrentHealth -= amount;

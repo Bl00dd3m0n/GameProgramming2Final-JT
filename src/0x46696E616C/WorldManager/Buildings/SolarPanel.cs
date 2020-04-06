@@ -24,7 +24,7 @@ namespace _0x46696E616C.Buildings
             name = "Solar Panel";
             Position = position;
             Size = new Vector2(2, 4);
-            TotalHealth = 0;
+            TotalHealth = 200;
             CurrentHealth = 0;
         }
     }

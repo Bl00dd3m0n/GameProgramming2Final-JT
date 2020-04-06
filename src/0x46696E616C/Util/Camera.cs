@@ -37,7 +37,7 @@ namespace Util
         {
             zoom = 1.75f;
             MoveSpeed = 19f;
-            this.ViewPort = new Rectangle(position.ToPoint(), new Point(50, 30));
+            this.ViewPort = new Rectangle(position.ToPoint(), new Point(30, 16));
             this.input = (MouseKeyboard)input;
             Dir = new Vector2(0, 0);
             this.world = worldHandler;
@@ -67,7 +67,7 @@ namespace Util
             {
                 zoom += 0.05f;
             }
-            else if (input.scrollVal < input.prevScrollVal && zoom > 0.75f)
+            else if (input.scrollVal < input.prevScrollVal && zoom > 1.5f)
             {
                 zoom -= 0.05f;
             }
@@ -80,22 +80,22 @@ namespace Util
             Dir.Y = 0;
             if (input.CheckKeyDown(Keys.W) && bounds.Top < ViewPort.Top)
                 Dir.Y = -1;
-            if (input.CheckKeyDown(Keys.S) && bounds.Bottom > ViewPort.Bottom / 1.85f)
+            if (input.CheckKeyDown(Keys.S) && bounds.Bottom > ViewPort.Bottom+16)
                 Dir.Y = 1;
             if (input.CheckKeyDown(Keys.A) && bounds.Left < ViewPort.Left)
                 Dir.X = -1;
-            if (input.CheckKeyDown(Keys.D) && bounds.Right > ViewPort.Right / 1.83f)
+            if (input.CheckKeyDown(Keys.D) && bounds.Right > ViewPort.Right+16)
                 Dir.X = 1;
             position += Dir * MoveSpeed * timer / 100;
+            if(!bounds.Contains(position)) position -= Dir * MoveSpeed * timer / 100;
             position = position.ToPoint().ToVector2();//Truncates the position to interger values
             ViewPort.Location = position.ToPoint();
         }
 
         public override void Draw(GameTime gameTime)
         {
-            Matrix transform = Matrix.CreateTranslation(position.X, position.Y, 0) * Matrix.CreateScale(zoom) /** Matrix.CreateTranslation(new Vector3(world.GetSize(),0))*/;
+            Matrix transform = Matrix.CreateScale(zoom);
             sb.Begin(SpriteSortMode.Deferred, null, null, null, null, null, transform);
-            //sb.Begin();
             for (int i = 0; i < 2; i++)
             {
                 for (int y = ViewPort.Top; y < ViewPort.Bottom; y++)
@@ -122,7 +122,39 @@ namespace Util
                 }
             }
             sb.End();
+            sb.Begin();
+            DrawMap();//Overlay shouldn't be affected by the camera
+            sb.End();
             base.Draw(gameTime);
+        }
+
+        private void DrawMap()
+        {
+            for (int i = 0; i < 2; i++)
+            {
+                for (int y = 0; y < bounds.Height; y++)
+                {
+                    for (int x = 0; x < bounds.Width; x++)
+                    {
+                        if (i == 0)
+                        {
+                            Tile backtile = world.GetBackgroundTile(new Vector2(x, y));
+                            sb.Draw(ContentHandler.DrawnTexture(backtile.block.texture), new Vector2(x,y)*.25f+ new Vector2(0,bounds.Height*3f*0.25f), null, Color.White, 0,new Vector2(0,0), 0.25f, SpriteEffects.None, 0);
+                        }
+                        else
+                        {
+                            ModifiableTile decorTile = world.GetTile(new Vector2(x, y));
+                            if (decorTile != null && decorTile.block.texture != TextureValue.None)
+                            {
+
+                                Texture2D texture = ContentHandler.DrawnTexture(decorTile.block.texture);
+                                decorTile.position = decorTile.position.ToPoint().ToVector2();
+                                sb.Draw(ContentHandler.DrawnTexture(decorTile.block.texture), new Vector2(x, y), null, Color.White, 0, new Vector2(0, 0), 0.5f, SpriteEffects.None, 0);
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }

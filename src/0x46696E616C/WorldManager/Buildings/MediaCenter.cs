@@ -17,7 +17,7 @@ namespace _0x46696E616C.Buildings
             name = "Media Center";
             Position = position;
             Size = new Vector2(0, 0);
-            TotalHealth = 0;
+            TotalHealth = 2000;
             CurrentHealth = 0;
         }
     }

@@ -17,8 +17,8 @@ namespace _0x46696E616C.Buildings
             name = "Center";
             Position = position;
             Size = new Vector2(0, 0);
-            TotalHealth = 0;
-            CurrentHealth = 500;
+            TotalHealth = 5000;
+            CurrentHealth = 0;
         }
     }
 }
