@@ -46,6 +46,7 @@
     <Compile Include="CommandPattern\CommandProccesor.cs" />
     <Compile Include="CommandPattern\GameCommands\AttackCommand.cs" />
     <Compile Include="CommandPattern\GameCommands\BuildCommand.cs" />
+    <Compile Include="CommandPattern\GameCommands\IObserver.cs" />
     <Compile Include="CommandPattern\GameCommands\Movecommand.cs" />
     <Compile Include="CommandPattern\CommandWithUndo.cs" />
     <Compile Include="CommandPattern\ICommand.cs" />

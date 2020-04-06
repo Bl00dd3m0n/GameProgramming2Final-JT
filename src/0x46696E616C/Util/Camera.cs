@@ -149,7 +149,7 @@ namespace Util
 
                                 Texture2D texture = ContentHandler.DrawnTexture(decorTile.block.texture);
                                 decorTile.position = decorTile.position.ToPoint().ToVector2();
-                                sb.Draw(ContentHandler.DrawnTexture(decorTile.block.texture), new Vector2(x, y), null, Color.White, 0, new Vector2(0, 0), 0.5f, SpriteEffects.None, 0);
+                                sb.Draw(ContentHandler.DrawnTexture(decorTile.block.texture), new Vector2(x, y) * .25f + new Vector2(0, bounds.Height * 3f * 0.25f), null, Color.White, 0, new Vector2(0, 0) * .25f, 0.5f, SpriteEffects.None, 0);
                             }
                         }
                     }

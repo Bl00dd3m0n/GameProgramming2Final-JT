@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using _0x46696E616C.WorldManager.Resources;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using NationBuilder.DataHandlerLibrary;
 using NationBuilder.TileHandlerLibrary;
@@ -8,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WorldManager;
+using WorldManager.Mobs.HarvestableUnits;
 using WorldManager.TileHandlerLibrary;
 //using MyVector2 = NationBuilder.TileHandlerLibrary.Vector2;
 
@@ -63,12 +65,12 @@ namespace NationBuilder.WorldHandlerLibrary
             }
         }
 
-        public Tile AddDecor(BlockData Biome, float x, float y)
+        public ModifiableTile AddDecor(BlockData Biome, float x, float y)
         {
             float treeFrequency = 0;
             if (Biome.texture == TextureValue.Grass)
             {
-                treeFrequency = .2f;
+                treeFrequency = 1f;
             }
             else if (Biome.texture == TextureValue.Grass)
             {
@@ -77,7 +79,7 @@ namespace NationBuilder.WorldHandlerLibrary
             bool placetree = (treeFrequency * noise(1 * x, 1 * y, ElevationNoise)) > 0.75;
             if (placetree)
             {
-                return new Tile(game, TextureValue.Tree, new Vector2(x, y));
+                return new Tree(game, TextureValue.Tree, new Wood(), this.GetType().Name, new Vector2(1,1), 100, 100, new Vector2(x, y));
             }
             return null;
         }

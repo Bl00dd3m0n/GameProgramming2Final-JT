@@ -15,6 +15,7 @@ namespace _0x46696E616C.CommandPattern
     {
         Wallet resources;
         List<IUnit> SelectedUnits;
+        internal List<IUnit> units;
         List<Building> Buildings;
         List<Building> toBuild;
         Energy energy;

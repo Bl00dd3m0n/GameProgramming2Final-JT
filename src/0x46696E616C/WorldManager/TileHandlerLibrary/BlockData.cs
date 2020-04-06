@@ -26,6 +26,7 @@ namespace NationBuilder.TileHandlerLibrary
         ServerFarm,
         SolarPanel,
         SteelFactory,
+
         None,
         Cursor
     }
