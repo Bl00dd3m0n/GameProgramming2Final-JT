@@ -1,0 +1,17 @@
+Known Bugs:
+- Mouse position and map position do not match up at all.
+To do:
+- Implement units into the game
+
+- Implement Build Selection
+  - Build already works as well as resource production...need to implement for all buildings
+- Implement Combat
+
+- Implement resource harvesting
+
+- Set up UI for map, building data, and resource values
+
+Back Burner:
+- Add a tutorial
+- Add sound
+- Add a main page
