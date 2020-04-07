@@ -126,7 +126,7 @@ namespace Util
             }
             sb.End();
             sb.Begin();
-            DrawMap();//Overlay shouldn't be affected by the camera
+            //DrawMap();//Overlay shouldn't be affected by the camera
             sb.End();
             base.Draw(gameTime);
         }

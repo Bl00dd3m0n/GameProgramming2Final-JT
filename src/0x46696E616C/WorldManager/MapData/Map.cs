@@ -39,7 +39,7 @@ namespace WorldManager.MapData
                     tiles[x, y, 1] = GenerateDecor(new Vector2(x, y));
                 }
             }
-            for (int y = 0; y < mapSize.Y/2; y++)
+            /*for (int y = 0; y < mapSize.Y/2; y++)
             {
                 for (int x = 0; x < mapSize.X/2; x++)
                 {
@@ -49,7 +49,7 @@ namespace WorldManager.MapData
                 }
             }
             mapTexture = new Texture2D(gd, (int)mapSize.X/2, (int)mapSize.Y/2);
-            mapTexture.SetData(colors, 0, (int)((mapSize.X * mapSize.Y)/4));
+            mapTexture.SetData(colors, 0, (int)((mapSize.X * mapSize.Y)/4));*/
         }
 
         internal void PlaceBlock(ModifiableTile building, Vector2 position)

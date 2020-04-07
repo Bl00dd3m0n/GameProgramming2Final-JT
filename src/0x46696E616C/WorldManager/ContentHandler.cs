@@ -19,6 +19,7 @@ namespace NationBuilder.DataHandlerLibrary
         public static Texture2D rock;
         //ResourceTextures
         public static Texture2D tree;
+        public static Texture2D iron;
         //Building Textures
         public static Texture2D Center;
         public static Texture2D FireWall;
@@ -42,8 +43,9 @@ namespace NationBuilder.DataHandlerLibrary
                 rock = SetTexture(TextureValue.Stone,game);
                 //ResourceTextures
                 tree = SetTexture(TextureValue.Tree, game);
+                iron = SetTexture(TextureValue.IronVein, game);
                 //Building Textures
-                //Center = SetTexture(TextureValue.Center, game);
+                Center = SetTexture(TextureValue.Center, game);
                 //FireWall = SetTexture(TextureValue.FireWall, game);
                 //InternetCafe = SetTexture(TextureValue.InternetCafe, game);
                 //Lab = SetTexture(TextureValue.Lab, game);
@@ -65,15 +67,19 @@ namespace NationBuilder.DataHandlerLibrary
         {
             switch(value)
             {
+                //BackgroundBlocks
                 case TextureValue.Sand:
                     return sand;
                 case TextureValue.Water:
                     return water;
                 case TextureValue.Stone:
                     return rock;
+                //Resources
                 case TextureValue.Tree:
                     return tree;
-
+                case TextureValue.IronVein:
+                    return iron;
+                    //Buildings
                 case TextureValue.Center:
                     return SolarPanel;
                 case TextureValue.FireWall:
@@ -89,9 +95,7 @@ namespace NationBuilder.DataHandlerLibrary
                 case TextureValue.ServerFarm:
                     return SolarPanel;
                 case TextureValue.SolarPanel:
-                    return solarPanel;
-                case TextureValue.IronVein:
-                    return iron;
+                    return SolarPanel;
                 case TextureValue.Cursor:
                     return cursor;
                 default:
