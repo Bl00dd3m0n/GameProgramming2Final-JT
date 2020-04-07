@@ -15,3 +15,7 @@ Back Burner:
 - Add a tutorial
 - Add sound
 - Add a main page
+
+Controls:
+- WASD Keys to move camera
+Left click to place building

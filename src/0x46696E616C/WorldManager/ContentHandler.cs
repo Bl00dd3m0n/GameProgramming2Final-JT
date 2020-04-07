@@ -89,7 +89,9 @@ namespace NationBuilder.DataHandlerLibrary
                 case TextureValue.ServerFarm:
                     return SolarPanel;
                 case TextureValue.SolarPanel:
-                    return SolarPanel;
+                    return solarPanel;
+                case TextureValue.IronVein:
+                    return iron;
                 case TextureValue.Cursor:
                     return cursor;
                 default:

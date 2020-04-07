@@ -55,8 +55,11 @@ namespace Util
         public override void Update(GameTime gameTime)
         {
             timer = gameTime.ElapsedGameTime.Milliseconds;
-            AdjustCamera();
-            CameraPosition();
+            if (input.Updated)
+            {
+                AdjustCamera();
+                CameraPosition();
+            }
             //zoom += timer / 100000;
             base.Update(gameTime);
         }
@@ -130,29 +133,11 @@ namespace Util
 
         private void DrawMap()
         {
-            for (int i = 0; i < 2; i++)
+            for (int y = 0; y < bounds.Height; y++)
             {
-                for (int y = 0; y < bounds.Height; y++)
+                for (int x = 0; x < bounds.Width; x++)
                 {
-                    for (int x = 0; x < bounds.Width; x++)
-                    {
-                        if (i == 0)
-                        {
-                            Tile backtile = world.GetBackgroundTile(new Vector2(x, y));
-                            sb.Draw(ContentHandler.DrawnTexture(backtile.block.texture), new Vector2(x,y)*.25f+ new Vector2(0,bounds.Height*3f*0.25f), null, Color.White, 0,new Vector2(0,0), 0.25f, SpriteEffects.None, 0);
-                        }
-                        else
-                        {
-                            ModifiableTile decorTile = world.GetTile(new Vector2(x, y));
-                            if (decorTile != null && decorTile.block.texture != TextureValue.None)
-                            {
-
-                                Texture2D texture = ContentHandler.DrawnTexture(decorTile.block.texture);
-                                decorTile.position = decorTile.position.ToPoint().ToVector2();
-                                sb.Draw(ContentHandler.DrawnTexture(decorTile.block.texture), new Vector2(x, y) * .25f + new Vector2(0, bounds.Height * 3f * 0.25f), null, Color.White, 0, new Vector2(0, 0) * .25f, 0.5f, SpriteEffects.None, 0);
-                            }
-                        }
-                    }
+                    sb.Draw(world.getMap(), new Vector2(x, y) * .25f + new Vector2(0, bounds.Height * 14.5f * 0.05f), null, Color.White, 0, new Vector2(0, 0), 0.05f, SpriteEffects.None, 0);
                 }
             }
         }

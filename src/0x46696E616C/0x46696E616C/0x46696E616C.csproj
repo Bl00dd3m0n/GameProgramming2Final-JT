@@ -76,6 +76,10 @@
       <Project>{0c6be75c-f563-468f-aec7-06558a77e7a8}</Project>
       <Name>MobHandler</Name>
     </ProjectReference>
+    <ProjectReference Include="..\UIProject\UIProject\UIProject.csproj">
+      <Project>{33fae10a-3e13-43fb-a6c5-2914b7699e08}</Project>
+      <Name>UIProject</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Util\Util.csproj">
       <Project>{6886967c-a6ec-4d4f-ba21-19010e58a6a6}</Project>
       <Name>Util</Name>

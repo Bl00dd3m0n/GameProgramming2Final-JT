@@ -6,11 +6,11 @@
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{0C6BE75C-F563-468F-AEC7-06558A77E7A8}</ProjectGuid>
+    <ProjectGuid>{33FAE10A-3E13-43FB-A6C5-2914B7699E08}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MobHandler</RootNamespace>
-    <AssemblyName>MobHandler</AssemblyName>
+    <RootNamespace>UIProject</RootNamespace>
+    <AssemblyName>UIProject</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MonoGamePlatform>Windows</MonoGamePlatform>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
@@ -35,19 +35,25 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Icon.ico</ApplicationIcon>
+    <ApplicationIcon>
+    </ApplicationIcon>
   </PropertyGroup>
-  <PropertyGroup />
+  <PropertyGroup>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
   <PropertyGroup>
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="HealthBar.cs" />
+    <Compile Include="Button.cs" />
+    <Compile Include="Canvas.cs" />
+    <Compile Include="Component.cs" />
+    <Compile Include="Game1.cs" />
+    <Compile Include="IComponent.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Units\IDamagable.cs" />
-    <Compile Include="Units\IEntity.cs" />
-    <Compile Include="Units\IronVein.cs" />
-    <Compile Include="Units\IUnit.cs" />
+    <Compile Include="StyleSheet.cs" />
+    <Compile Include="UnitButton.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">
@@ -55,9 +61,6 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Icon.ico" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.manifest" />
