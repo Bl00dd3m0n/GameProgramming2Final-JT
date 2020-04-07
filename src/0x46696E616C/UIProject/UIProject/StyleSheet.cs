@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -13,45 +14,36 @@ namespace UIProject
     {
         private string FilePath;
         List<Component> page;
+        Type[] componentTypes;
         public StyleSheet(string FilePath)
         {
-            page = new List<Component>();
             this.FilePath = FilePath;
-            if(!File.Exists(FilePath)) //TODO Implement Non-Windows based system
-            {
-                XmlSerializer xml = new XmlSerializer(page.GetType());
-                using(StreamWriter wr = new StreamWriter(File.Create(FilePath)))
-                {
-                    xml.Serialize(wr, page);
-                }
-            }
         }
 
-        public bool SaveStyleSheet(List<Component> components)
+        public List<IComponent> GetStyleSheet(GraphicsDevice gd)
         {
-            return SaveStyleSheet(components, FilePath);
+            List<Component> components = new List<Component>();
+            componentTypes = new Type[] { typeof(Button) };
+            XmlSerializer xml = new XmlSerializer(components.GetType(), componentTypes);
+            using (StreamReader r = new StreamReader(File.Open(FilePath, FileMode.Open, FileAccess.Read)))
+            {
+                components = (List<Component>)xml.Deserialize(r);
+            }
+            foreach(Component component in components)
+            {
+                component.Draw(gd);
+            }
+            return components.Cast<IComponent>().ToList();
         }
 
-        public bool SaveStyleSheet(List<Component> components, string filePath)
+        public void SaveStyleSheet(List<IComponent> list)
         {
-            XmlDocument doc = new XmlDocument();
-            doc.Load
-            try
+            List<Component> page = list.Cast<Component>().ToList();
+            componentTypes = new Type[] { typeof(Button) };
+            XmlSerializer xml = new XmlSerializer(page.GetType(), componentTypes);
+            using (StreamWriter wr = new StreamWriter(File.Create(FilePath)))
             {
-                this.page = ((List<Component>)components);
-                if (File.Exists(FilePath)) //TODO Implement Non-Windows based system
-                {
-                    XmlSerializer xml = new XmlSerializer(page.GetType());
-                    using (StreamWriter wr = new StreamWriter(File.Create(FilePath)))
-                    {
-                        xml.Serialize(wr, page);
-                    }
-                }
-                return true;
-            }
-            catch (IOException)
-            {
-                return false;
+                xml.Serialize(wr, page);
             }
         }
     }

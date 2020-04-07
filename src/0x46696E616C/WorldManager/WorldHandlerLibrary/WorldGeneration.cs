@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using _0x46696E616C.WorldManager.Resources;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using NationBuilder.DataHandlerLibrary;
 using NationBuilder.TileHandlerLibrary;
@@ -8,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WorldManager;
+using WorldManager.Mobs.HarvestableUnits;
 using WorldManager.TileHandlerLibrary;
 //using MyVector2 = NationBuilder.TileHandlerLibrary.Vector2;
 
@@ -66,18 +68,23 @@ namespace NationBuilder.WorldHandlerLibrary
         public Tile AddDecor(BlockData Biome, float x, float y)
         {
             float treeFrequency = 0;
+            float ironFrequency = 0;
             if (Biome.texture == TextureValue.Grass)
             {
-                treeFrequency = .2f;
+                treeFrequency = 3f;
             }
-            else if (Biome.texture == TextureValue.Grass)
+            else if (Biome.texture == TextureValue.Stone)
             {
-                treeFrequency = 0;
+                ironFrequency = 1.8f;
             }
-            bool placetree = (treeFrequency * noise(1 * x, 1 * y, ElevationNoise)) > 0.75;
+            bool placetree = (treeFrequency * noise(x, y, ElevationNoise)) > 0.75;
+            bool placeIron = (ironFrequency * noise(x, y, ElevationNoise)) > 0.75;
             if (placetree)
             {
-                return new Tile(game, TextureValue.Tree, new Vector2(x, y));
+                return new Tree(game, TextureValue.Tree, new Wood(), this.GetType().Name, new Vector2(1), 100,100, new Vector2(x,y));
+            } if(placeIron)
+            {
+                return new IronVein(game, TextureValue.IronVein, new Iron(), this.GetType().Name, new Vector2(1), 100, 100, new Vector2(x, y));
             }
             return null;
         }

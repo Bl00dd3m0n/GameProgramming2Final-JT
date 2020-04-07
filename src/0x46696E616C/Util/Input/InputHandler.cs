@@ -38,6 +38,8 @@ namespace _0x46696E616C.Input
         List<Keys> PressedKeys;
         public float scrollVal { get { return mouse.ScrollWheelValue; } }
         public float prevScrollVal { get; private set;  }
+        public bool Updated { get; private set; }
+
         bool leftButtonPressed, rightButtonPressed;
         public MouseKeyboard(Game game, SpriteBatch sb) : base(game, sb)
         {
@@ -79,6 +81,7 @@ namespace _0x46696E616C.Input
             if (mouse != prevMouseState)
             {
                 prevMouseState = mouse;
+                Updated = true;
                 if (mouse.LeftButton == ButtonState.Pressed)
                     leftButtonPressed = true;
                 if (mouse.RightButton == ButtonState.Pressed)
@@ -95,6 +98,7 @@ namespace _0x46696E616C.Input
             if (keyBoard != prevKeyState)
             {
                 prevKeyState = keyBoard;
+                Updated = true;
                 Pressed = true;
             }
         }

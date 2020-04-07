@@ -1,5 +1,6 @@
 ﻿using _0x46696E616C.Buildings;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using NationBuilder.TileHandlerLibrary;
 using NationBuilder.WorldHandlerLibrary;
 using System;
@@ -23,7 +24,7 @@ namespace WorldManager
         {
             Seed = 14153456352343;
             map = new Map(game, new Vector2(game.GraphicsDevice.Viewport.Width, game.GraphicsDevice.Viewport.Height), 14153456352343);
-            map.GenerateMap();
+            map.GenerateMap(game.GraphicsDevice);
             save = Save.save;
             this.game = game;
         }
@@ -43,6 +44,11 @@ namespace WorldManager
         public Vector2 GetSize()
         {
             return map.mapSize;
+        }
+
+        public Texture2D getMap()
+        {
+            return map.mapTexture;
         }
 
         public bool CheckPlacement(Vector2 position, Vector2 size)

@@ -42,6 +42,7 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="HealthBar.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Units\IDamagable.cs" />
     <Compile Include="Units\IEntity.cs" />
@@ -59,7 +60,6 @@
     <Content Include="Icon.ico" />
   </ItemGroup>
   <ItemGroup>
-    <MonoGameContentReference Include="Content\Content.mgcb" />
     <None Include="app.manifest" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

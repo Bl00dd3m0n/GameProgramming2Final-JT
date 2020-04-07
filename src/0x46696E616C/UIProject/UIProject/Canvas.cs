@@ -11,27 +11,29 @@ namespace UIProject
     public class Canvas : DrawableGameComponent
     {
         SpriteBatch spriteBatch;
-        public List<Component> Components { get { return components.ToList(); } }
-        List<Component> components;
-        Texture2D componentTexture;
+        public IComponent[] Components { get { return components; } }
+        IComponent[] components;
         SpriteFont font;
         public Canvas(Game game) : base(game)
         {
-            components = new List<Component>();
+            components = new IComponent[0];
         }
+
+        public void LoadCanvas(IComponent[] components)
+        {
+            this.components = components;
+        }
+
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            font = Game.Content.Load<SpriteFont>("Arial");
+            font = Game.Content.Load<SpriteFont>("Ariel");
             base.LoadContent();
         }
 
         public override void Update(GameTime gameTime)
         {
-            if (((Button)components[0]).Clicked)
-            {
-                ((Button)components[0]).Clicked = false;
-            }
+
             base.Update(gameTime);
         }
 
@@ -39,44 +41,38 @@ namespace UIProject
         {
             spriteBatch.Begin();
 
-            foreach (IComponent component in components)
+            for (int i = 0; i < components.Length; i++)
             {
-                component.Draw(ref componentTexture, GraphicsDevice);
-                if (componentTexture != null)
+                if (((Button)components[i]).Clicked)
                 {
-                    if (((Button)component).Clicked)
-                    {
-                        spriteBatch.Draw(componentTexture, component.Position, Color.LightGray);
-                    }
-                    else
-                    {
-                        spriteBatch.Draw(componentTexture, component.Position, Color.White);
-                    }
-
-                    if (component.Text != string.Empty)
-                    {
-                        Vector2 position = component.Position + (component.Size.ToVector2() / 2) - (font.MeasureString(component.Text) / 2);
-                        spriteBatch.DrawString(font, component.Text, position, Color.Black);
-                    }
-                    spriteBatch.DrawString(font, Button.value.ToString(), new Vector2(0), Color.Black);
+                    spriteBatch.Draw(components[i].picture, components[i].Position, Color.LightGray);
                 }
-
+                else
+                {
+                    spriteBatch.Draw(components[i].picture, components[i].Position, components[i].color);
+                }
+                if (components[i].Text != string.Empty)
+                {
+                    Vector2 position = components[i].Position + (components[i].Size.ToVector2() / 2) - (font.MeasureString(components[i].Text) / 2);
+                    spriteBatch.DrawString(font, components[i].Text, position, Color.Black);
+                }
             }
             spriteBatch.End();
             base.Draw(gameTime);
         }
         public void AddComponent(Component component)
         {
-            components.Add(component);
+            Array.Resize(ref components, components.Length + 1);
+            components[components.Length] = component;
         }
         public void RemoveComponent(int value)
         {
-            components.RemoveAt(value);
+            Array.Resize(ref components, components.Length - 1);
         }
 
         public void RemoveAllComponents()
         {
-            components.Clear();
+            Array.Clear(components, 0, components.Length);
         }
 
     }

@@ -14,6 +14,7 @@ namespace UIProject
         Point Size { get; }
         Color color { get; }
         string Text { get; }
-        void Draw(ref Texture2D tex, GraphicsDevice device);
+        Texture2D picture { get; }
+        void Draw(GraphicsDevice gd);
     }
 }

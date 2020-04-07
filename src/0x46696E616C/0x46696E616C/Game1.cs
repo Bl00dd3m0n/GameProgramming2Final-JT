@@ -26,6 +26,7 @@ namespace _0x46696E616C
         CommandProccesor process;
         MouseKeyboard input;
         Canvas canvas;
+        StyleSheet sheet;
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -52,8 +53,12 @@ namespace _0x46696E616C
         /// </summary>
         protected override void LoadContent()
         {
+
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+            // TODO: use this.Content to load your game content here
+            ContentHandler.LoadContent(this);
+
             WorldHandler world = new WorldHandler(this, "TempWorld");
 
             Wallet startingResources = new Wallet();
@@ -64,10 +69,8 @@ namespace _0x46696E616C
             startingResources.Deposit(new Energy(), 500);
 
             canvas = new Canvas(this);
-            canvas.AddComponent(new Button(GraphicsDevice, new Vector2(100, 100), new Point(100,100), Color.White,"Text"));
-
-            StyleSheet sheet = new StyleSheet("Page.xml");
-            sheet.SaveStyleSheet(canvas.Components);
+            sheet = new StyleSheet("Page.xml");
+            canvas.LoadCanvas(sheet.GetStyleSheet(GraphicsDevice).ToArray());
 
             input = new MouseKeyboard(this, spriteBatch);
             cam = new Camera(this, input, world);
@@ -78,8 +81,7 @@ namespace _0x46696E616C
             process.Initialize();
             input.Initialize();
             canvas.Initialize();
-            ContentHandler.LoadContent(this);
-            // TODO: use this.Content to load your game content here
+
         }
 
         /// <summary>
@@ -100,6 +102,7 @@ namespace _0x46696E616C
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
+
             cam.Update(gameTime);
             process.Update(gameTime);
             input.Update(gameTime);

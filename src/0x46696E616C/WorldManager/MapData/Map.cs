@@ -1,5 +1,7 @@
 ﻿using _0x46696E616C.Buildings;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using NationBuilder.DataHandlerLibrary;
 using NationBuilder.TileHandlerLibrary;
 using NationBuilder.WorldHandlerLibrary;
 using System;
@@ -15,6 +17,7 @@ namespace WorldManager.MapData
     {
         public Vector2 mapSize { get; private set; }
         Tile[,,] tiles;
+        public Texture2D mapTexture { get; private set; }
         long Seed;
         WorldGeneration wg;
         public Map(Game game, Vector2 mapSize, long Seed)
@@ -24,22 +27,33 @@ namespace WorldManager.MapData
             this.Seed = Seed;
             wg = new WorldGeneration(game, this.GetType().Name.ToString(), Seed, mapSize);
         }
-        public void GenerateMap()
+        public void GenerateMap(GraphicsDevice gd)
         {
+            Color[] colors = new Color[(int)((mapSize.X * mapSize.Y)/4)];
+            Color[] tileImage = new Color[16*16]; 
             for (int y = 0; y < mapSize.Y; y++)
             {
                 for (int x = 0; x < mapSize.X; x++)
                 {
-                    tiles[x, y, 0] = GenerateTerrain(new Vector2(x,y));
+                    tiles[x, y, 0] = GenerateTerrain(new Vector2(x, y));
                     tiles[x, y, 1] = GenerateDecor(new Vector2(x, y));
                 }
             }
+            for (int y = 0; y < mapSize.Y/2; y++)
+            {
+                for (int x = 0; x < mapSize.X/2; x++)
+                {
+                    if (tiles[x, y, 1] != null) ContentHandler.DrawnTexture(tiles[x * 2, y * 2, 0].block.texture).GetData(tileImage);
+                    else ContentHandler.DrawnTexture(tiles[x * 2, y * 2, 0].block.texture).GetData(tileImage);
+                    colors[(int)((x) + (y) * (mapSize.X / 2))] = tileImage[(int)(tileImage.Length / 2)];
+                }
+            }
+            mapTexture = new Texture2D(gd, (int)mapSize.X/2, (int)mapSize.Y/2);
+            mapTexture.SetData(colors, 0, (int)((mapSize.X * mapSize.Y)/4));
         }
 
         internal void PlaceBlock(ModifiableTile building, Vector2 position)
         {
-           
-
             for (int y = 0; y <= building.Size.Y ; y++)
             {
                 for (int x = 0; x <= building.Size.X; x++)

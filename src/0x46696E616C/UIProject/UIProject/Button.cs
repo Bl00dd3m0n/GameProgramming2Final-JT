@@ -18,25 +18,27 @@ namespace UIProject
             value++;
             Clicked = true;
         }
-        public Button()
-        {
+        #region constructors
+        public Button(GraphicsDevice gd) : this() { graphics = gd; }
+        public Button(GraphicsDevice gd, Vector2 position, Point size) : this(position, size) { graphics = gd; }
+        public Button(GraphicsDevice gd, Vector2 position, Point size, Color color) : this(position, size, color) { graphics = gd; }
+        public Button(GraphicsDevice gd, Vector2 position, Point size, Color color, string text) : this(position, size, color, text) { graphics = gd; }
 
-        }
-        public Button(Vector2 position) : base(position, new Point(0,0))
-        {
-            this.Position = position;
-        }
-        public Button(GraphicsDevice gd, Vector2 position, Point Size) : this(gd, position, Size, Color.White) { }
+        protected Button() : this(new Vector2(0, 0), new Point(0, 0)) { }
 
-        public Button(GraphicsDevice gd, Vector2 position, Point size, Color color) : this(position)
+        protected Button(Vector2 position, Point Size) : this(position, Size, Color.White) { }
+
+        protected Button(Vector2 position, Point size, Color color)
         {
             this.Size = size;
             this.color = color;
+            this.Position = position;
         }
 
-        public Button(GraphicsDevice gd, Vector2 position, Point size, Color color, string Text) : this(gd, position, size, color)
+        protected Button(Vector2 position, Point size, Color color, string Text) : this(position, size, color)
         {
             this.Text = Text;
         }
+        #endregion
     }
 }

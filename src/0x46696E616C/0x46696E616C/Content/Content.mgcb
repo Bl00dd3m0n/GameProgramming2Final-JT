@@ -37,6 +37,18 @@
 /processorParam:TextureFormat=Color
 /build:../../../../assets/Grass.png;Grass.png
 
+#begin ../../../../assets/IronOre.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:../../../../assets/IronOre.png;IronOre.png
+
 #begin ../../../../assets/PlayerTest.png
 /importer:TextureImporter
 /processor:TextureProcessor

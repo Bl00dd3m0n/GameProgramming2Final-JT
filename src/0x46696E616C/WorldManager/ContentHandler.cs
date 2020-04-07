@@ -53,6 +53,8 @@ namespace NationBuilder.DataHandlerLibrary
                     return tree;
                 case TextureValue.SolarPanel:
                     return solarPanel;
+                case TextureValue.IronVein:
+                    return iron;
                 case TextureValue.Cursor:
                     return cursor;
                 default:
