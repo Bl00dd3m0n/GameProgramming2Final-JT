@@ -1,18 +1,8 @@
-﻿using _0x46696E616C.CommandPattern;
-using _0x46696E616C.Input;
-using _0x46696E616C.WorldManager.Resources;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using NationBuilder.DataHandlerLibrary;
-using NationBuilder.TileHandlerLibrary;
-using NationBuilder.WorldHandlerLibrary;
-using System.Collections.Generic;
-using UIProject;
-using Util;
-using WorldManager;
 
-namespace _0x46696E616C
+namespace UIProject
 {
     /// <summary>
     /// This is the main type for your game.
@@ -21,15 +11,10 @@ namespace _0x46696E616C
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        CommandComponent cc;
-        Camera cam;
-        CommandProccesor process;
-        MouseKeyboard input;
-        Canvas canvas;
+        SpriteFont font;
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
-            //this.graphics.IsFullScreen = true;
             Content.RootDirectory = "Content";
         }
 
@@ -54,31 +39,11 @@ namespace _0x46696E616C
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            WorldHandler world = new WorldHandler(this, "TempWorld");
-
-            Wallet startingResources = new Wallet();
-            startingResources.Deposit(new Steel(), 500);
-            startingResources.Deposit(new Money(), 500);
-            startingResources.Deposit(new Likes(), 500);
-            startingResources.Deposit(new Iron(), 500);
-            startingResources.Deposit(new Energy(), 500);
-
-            canvas = new Canvas(this);
-            canvas.AddComponent(new Button(GraphicsDevice, new Vector2(100, 100), new Point(100,100), Color.White,"Text"));
-
-            StyleSheet sheet = new StyleSheet("Page.xml");
-            sheet.SaveStyleSheet(canvas.Components);
-
-            input = new MouseKeyboard(this, spriteBatch);
-            cam = new Camera(this, input, world);
-            cc = new CommandComponent(this, startingResources);
-            process = new CommandProccesor(this, new List<MobHandler.Units.IUnit>(), world, input, cc, cam);
-
-            cam.Initialize();
-            process.Initialize();
-            input.Initialize();
+            Canvas canvas = new Canvas(this);
+            canvas.AddComponent(new Button(GraphicsDevice, new Vector2(250,170), new Point(200,100), Color.White, "Add"));
+            font = this.Content.Load<SpriteFont>("Arial");
             canvas.Initialize();
-            ContentHandler.LoadContent(this);
+            this.Components.Add(canvas);
             // TODO: use this.Content to load your game content here
         }
 
@@ -100,10 +65,6 @@ namespace _0x46696E616C
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-            cam.Update(gameTime);
-            process.Update(gameTime);
-            input.Update(gameTime);
-            cc.Update(gameTime);
             // TODO: Add your update logic here
 
             base.Update(gameTime);
@@ -116,14 +77,8 @@ namespace _0x46696E616C
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-            // TODO: Add your drawing code here
-            cam.Draw(gameTime);
             spriteBatch.Begin();
-            spriteBatch.DrawString(ContentHandler.font, cc.Resources(), new Vector2(100, 0), Color.Black);
-            spriteBatch.DrawString(ContentHandler.font, cc.Time(), new Vector2(700,0), Color.Black);
-            spriteBatch.DrawString(ContentHandler.font, $"{cam.Position.ToPoint()+(input.inputPos / 16).ToPoint()}", new Vector2(0, 0), Color.Black);
-            spriteBatch.Draw(ContentHandler.DrawnTexture(TextureValue.Cursor), Mouse.GetState().Position.ToVector2(), null, Color.Red, 0, new Vector2(0, 0), 0.25f, SpriteEffects.None, 0);
-            canvas.Draw(gameTime);
+            // TODO: Add your drawing code here
             spriteBatch.End();
             base.Draw(gameTime);
         }

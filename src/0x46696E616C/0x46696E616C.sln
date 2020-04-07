@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Util", "Util\Util.csproj", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MobHandler", "MobHandler\MobHandler.csproj", "{0C6BE75C-F563-468F-AEC7-06558A77E7A8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UIProject", "UIProject\UIProject\UIProject.csproj", "{33FAE10A-3E13-43FB-A6C5-2914B7699E08}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -33,6 +35,10 @@ Global
 		{0C6BE75C-F563-468F-AEC7-06558A77E7A8}.Debug|x86.Build.0 = Debug|x86
 		{0C6BE75C-F563-468F-AEC7-06558A77E7A8}.Release|x86.ActiveCfg = Release|x86
 		{0C6BE75C-F563-468F-AEC7-06558A77E7A8}.Release|x86.Build.0 = Release|x86
+		{33FAE10A-3E13-43FB-A6C5-2914B7699E08}.Debug|x86.ActiveCfg = Debug|x86
+		{33FAE10A-3E13-43FB-A6C5-2914B7699E08}.Debug|x86.Build.0 = Debug|x86
+		{33FAE10A-3E13-43FB-A6C5-2914B7699E08}.Release|x86.ActiveCfg = Release|x86
+		{33FAE10A-3E13-43FB-A6C5-2914B7699E08}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
