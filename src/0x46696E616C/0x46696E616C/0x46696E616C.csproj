@@ -41,6 +41,8 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="AstarAlgorithm\A_Star.cs" />
+    <Compile Include="AstarAlgorithm\Node.cs" />
     <Compile Include="CommandPattern\Command.cs" />
     <Compile Include="CommandPattern\GameCommands\CommandComponent.cs" />
     <Compile Include="CommandPattern\CommandProccesor.cs" />

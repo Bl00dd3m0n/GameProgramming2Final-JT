@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WorldManager;
 using Vector2 = Microsoft.Xna.Framework.Vector2;
 
 namespace _0x46696E616C.CommandPattern
@@ -16,10 +17,18 @@ namespace _0x46696E616C.CommandPattern
     {
         IEntity Target;
         Vector2 TargetPosition;
-
-        public UnitComponent(Game game, string name, Vector2 size, float totalHealth, float currentHealth, Vector2 position, BaseUnitState state, TextureValue texture) : base(game, name, size, totalHealth, currentHealth, position, state, texture)
+        Vector2 zero;
+        Vector2 xOne;
+        Vector2 yOne;
+        List<Vector2> waypoints;
+        WorldHandler world;
+        public UnitComponent(Game game, string name, Vector2 size, float totalHealth, float currentHealth, Vector2 position, BaseUnitState state, TextureValue texture, WorldHandler world) : base(game, name, size, totalHealth, currentHealth, position, state, texture)
         {
+            zero = Vector2.Zero;
+            xOne = new Vector2(1, 0);
+            yOne = new Vector2(0, 1);
             speed = 50;
+            this.world = world;
         }
 
         public void Build(IEntity target)
@@ -48,15 +57,16 @@ namespace _0x46696E616C.CommandPattern
         ///<see cref="Probably implement some sort of A* and flocking ai either here or in the Command Component"/>>
         private void UpdateMove(GameTime gameTime)
         {
-            if (TargetPosition != position/(Tile.Zoom * 16))
-            {
-                Vector2 ActualTargetPos = TargetPosition / (Tile.Zoom * 16);
-                Vector2 ActualPos = position / (Tile.Zoom * 16);
-                float Distance = (float)Math.Sqrt(Math.Pow((ActualPos.X-ActualTargetPos.X),2)+ Math.Pow((ActualPos.Y - ActualTargetPos.Y), 2));
-
-                Direction = new Vector2(Distance, 1);
+            Direction = zero;
+            if (position.X < TargetPosition.X-0.5f)
+                Direction += xOne;
+            if (position.X > TargetPosition.X+0.5f)
+                Direction -= xOne;
+            if (position.Y < TargetPosition.Y-0.5f)
+                Direction += yOne;
+            if (position.Y > TargetPosition.Y+0.5f)
+                Direction -= yOne;
                 position += Direction * 5 * gameTime.ElapsedGameTime.Milliseconds/1000;
-            }
         }
 
         public void Garrison(IEntity Target)

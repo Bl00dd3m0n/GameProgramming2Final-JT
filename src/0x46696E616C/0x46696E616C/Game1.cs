@@ -77,7 +77,7 @@ namespace _0x46696E616C
             input = new MouseKeyboard(this, spriteBatch);
             cam = new Camera(this, input, world);
             List<IUnit> units = new List<IUnit>();
-            units.Add(new UnitComponent(this,"Base unit",new Vector2(1,1),100,100,new Vector2(4,4),BaseUnitState.Idle, TextureValue.Civilian));
+            units.Add(new UnitComponent(this,"Base unit",new Vector2(1,1),100,100,new Vector2(4,4),BaseUnitState.Idle, TextureValue.Civilian, world));
             cc = new CommandComponent(this, startingResources, units);
             process = new CommandProccesor(this, new List<IUnit>(), world, input, cc, cam);
 
@@ -138,7 +138,7 @@ namespace _0x46696E616C
                 spriteBatch.Draw(ContentHandler.DrawnTexture(TextureValue.Cursor), Mouse.GetState().Position.ToVector2(), null, Color.Red, 0, new Vector2(0, 0), 0.25f, SpriteEffects.None, 0);
                 foreach (IUnit unit in cc.units)
                 {
-                    spriteBatch.Draw(ContentHandler.DrawnTexture(((BasicUnit)unit).block.texture), (unit.Position*16), null, Color.White, 0, new Vector2(0), Tile.Zoom, SpriteEffects.None, 0);
+                    spriteBatch.Draw(ContentHandler.DrawnTexture(((BasicUnit)unit).block.texture), (unit.Position * Tile.Zoom * 16) - (cam.Position * Tile.Zoom * 16), null, Color.White, 0, new Vector2(0), Tile.Zoom, SpriteEffects.None, 0);
                 }
                 //canvas.Draw(gameTime);
                 spriteBatch.End();

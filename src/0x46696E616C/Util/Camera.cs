@@ -108,31 +108,7 @@ namespace Util
                 {
                     for (int x = ViewPort.Left; x < ViewPort.Right * (Tile.Zoom*scale)+OverX; x++)
                     {
-                        if (x>=0 && x < bounds.Width && y >= 0 && y < bounds.Height)
-                        {
-                            if (i == 0)
-                            {
-                                Tile backtile = world.GetBackgroundTile(new Vector2(x, y));
-                                sb.Draw(ContentHandler.DrawnTexture(backtile.block.texture), (backtile.position * Tile.Zoom*16) - (position * Tile.Zoom*16), null, Color.White, 0, new Vector2(0), Tile.Zoom, SpriteEffects.None,0);
-                            }
-                            else
-                            {
-                                ModifiableTile decorTile = world.GetTile(new Vector2(x, y));
-                                if (decorTile != null && decorTile.block.texture != TextureValue.None)
-                                {
-                                    Texture2D texture = ContentHandler.DrawnTexture(decorTile.block.texture);
-                                    decorTile.position = decorTile.position.ToPoint().ToVector2();
-                                    sb.Draw(ContentHandler.DrawnTexture(decorTile.block.texture), (decorTile.position * Tile.Zoom * 16) - (position * Tile.Zoom * 16), null, Color.White, 0, new Vector2(0), Tile.Zoom, SpriteEffects.None, 0);
-                                    if (decorTile.healthBar != null)
-                                    {
-                                        if (decorTile.healthBar.Health != null)
-                                        {
-                                            sb.Draw(decorTile.healthBar.Health, (decorTile.healthBar.Bounds.Location.ToVector2() * Tile.Zoom * 16) - (position * Tile.Zoom * 16), null, Color.White, 0, new Vector2(0), Tile.Zoom, SpriteEffects.None, 0);
-                                        }
-                                    }
-                                }
-                            }
-                        }
+                        DrawScreen(x, y, i);
                     }
                 }
             }
@@ -141,6 +117,35 @@ namespace Util
             //DrawMap();//Overlay shouldn't be affected by the camera
             sb.End();
             base.Draw(gameTime);
+        }
+
+        private void DrawScreen(int x, int y,int i)
+        {
+            if (x >= 0 && x < bounds.Width && y >= 0 && y < bounds.Height)
+            {
+                if (i == 0)
+                {
+                    Tile backtile = world.GetBackgroundTile(new Vector2(x, y));
+                    sb.Draw(ContentHandler.DrawnTexture(backtile.block.texture), (backtile.position * Tile.Zoom * 16) - (position * Tile.Zoom * 16), null, Color.White, 0, new Vector2(0), Tile.Zoom, SpriteEffects.None, 0);
+                }
+                else
+                {
+                    ModifiableTile decorTile = world.GetTile(new Vector2(x, y));
+                    if (decorTile != null && decorTile.block.texture != TextureValue.None)
+                    {
+                        Texture2D texture = ContentHandler.DrawnTexture(decorTile.block.texture);
+                        decorTile.position = decorTile.position.ToPoint().ToVector2();
+                        sb.Draw(ContentHandler.DrawnTexture(decorTile.block.texture), (decorTile.position * Tile.Zoom * 16) - (position * Tile.Zoom * 16), null, Color.White, 0, new Vector2(0), Tile.Zoom, SpriteEffects.None, 0);
+                        if (decorTile.healthBar != null)
+                        {
+                            if (decorTile.healthBar.Health != null)
+                            {
+                                sb.Draw(decorTile.healthBar.Health, (decorTile.healthBar.Bounds.Location.ToVector2() * Tile.Zoom * 16) - (position * Tile.Zoom * 16), null, Color.White, 0, new Vector2(0), Tile.Zoom, SpriteEffects.None, 0);
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         private void DrawMap()
