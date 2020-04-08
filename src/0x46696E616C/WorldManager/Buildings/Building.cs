@@ -5,6 +5,8 @@ using Vector2 = Microsoft.Xna.Framework.Vector2;
 using _0x46696E616C.MobHandler.Units;
 using _0x46696E616C.WorldManager.Resources;
 using Microsoft.Xna.Framework;
+using MobHandler;
+using _0x46696E616C.MobHandler;
 
 namespace _0x46696E616C.Buildings
 {
@@ -26,6 +28,7 @@ namespace _0x46696E616C.Buildings
             TotalHealth = 0;
             CurrentHealth = 0;
             energyCost = 0;
+            healthBar = new HealthBar(new Rectangle(this.position.ToPoint() - new Point(0, (int)(this.Size.Y * 16 + 1)), Size.ToPoint()));
         }
 
         public void Construct(float amount)

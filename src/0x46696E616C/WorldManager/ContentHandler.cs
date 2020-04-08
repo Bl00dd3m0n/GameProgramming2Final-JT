@@ -13,13 +13,13 @@ namespace NationBuilder.DataHandlerLibrary
     public static class ContentHandler
     {
         //Background Textures
-        public static Texture2D grass;
-        public static Texture2D sand;
-        public static Texture2D water;
-        public static Texture2D rock;
+        public static Texture2D Grass;
+        public static Texture2D Sand;
+        public static Texture2D Water;
+        public static Texture2D Rock;
         //ResourceTextures
-        public static Texture2D tree;
-        public static Texture2D iron;
+        public static Texture2D Tree;
+        public static Texture2D Iron;
         //Building Textures
         public static Texture2D Center;
         public static Texture2D FireWall;
@@ -29,21 +29,23 @@ namespace NationBuilder.DataHandlerLibrary
         public static Texture2D Mines;
         public static Texture2D ServerFarm;
         public static Texture2D SolarPanel;
+        //Unit Textures
+        public static Texture2D Civilian;
         //Util Content
-        public static Texture2D cursor;
-        public static SpriteFont font;
+        public static Texture2D Cursor;
+        public static SpriteFont Font;
         public static bool LoadContent(Game game)
         {
             try
             {
                 //Background Textures
-                grass = SetTexture(TextureValue.Grass,game);
-                sand = SetTexture(TextureValue.Sand,game);
-                water = SetTexture(TextureValue.Water,game);
-                rock = SetTexture(TextureValue.Stone,game);
+                Grass = SetTexture(TextureValue.Grass,game);
+                Sand = SetTexture(TextureValue.Sand,game);
+                Water = SetTexture(TextureValue.Water,game);
+                Rock = SetTexture(TextureValue.Stone,game);
                 //ResourceTextures
-                tree = SetTexture(TextureValue.Tree, game);
-                iron = SetTexture(TextureValue.IronVein, game);
+                Tree = SetTexture(TextureValue.Tree, game);
+                Iron = SetTexture(TextureValue.IronVein, game);
                 //Building Textures
                 Center = SetTexture(TextureValue.Center, game);
                 //FireWall = SetTexture(TextureValue.FireWall, game);
@@ -53,9 +55,11 @@ namespace NationBuilder.DataHandlerLibrary
                // Mines = SetTexture(TextureValue.Mines, game);
                 //ServerFarm = SetTexture(TextureValue.ServerFarm, game);
                 SolarPanel = SetTexture(TextureValue.SolarPanel, game);
-
-                cursor = SetTexture(TextureValue.Cursor, game);
-                font = game.Content.Load<SpriteFont>("Ariel");
+                //Unit Textures
+                Civilian = SetTexture(TextureValue.Civilian, game);
+                //Util Content
+                Cursor = SetTexture(TextureValue.Cursor, game);
+                Font = game.Content.Load<SpriteFont>("Ariel");
                 return true;
             } catch(Exception ex)
             {
@@ -69,16 +73,16 @@ namespace NationBuilder.DataHandlerLibrary
             {
                 //BackgroundBlocks
                 case TextureValue.Sand:
-                    return sand;
+                    return Sand;
                 case TextureValue.Water:
-                    return water;
+                    return Water;
                 case TextureValue.Stone:
-                    return rock;
+                    return Rock;
                 //Resources
                 case TextureValue.Tree:
-                    return tree;
+                    return Tree;
                 case TextureValue.IronVein:
-                    return iron;
+                    return Iron;
                     //Buildings
                 case TextureValue.Center:
                     return SolarPanel;
@@ -96,13 +100,16 @@ namespace NationBuilder.DataHandlerLibrary
                     return SolarPanel;
                 case TextureValue.SolarPanel:
                     return SolarPanel;
+                case TextureValue.Civilian:
+                    return Civilian;
+                    //Util
                 case TextureValue.Cursor:
-                    return cursor;
+                    return Cursor;
                 default:
-                    return grass;
+                    return Grass;
             }
         }
-        private static Texture2D SetTexture(TextureValue texture,Game game)
+        private static Texture2D SetTexture(TextureValue texture, Game game)
         {
             return game.Content.Load<Texture2D>(texture.ToString());
         }

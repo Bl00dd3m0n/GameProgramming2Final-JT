@@ -59,6 +59,10 @@
     <None Include="app.manifest" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MobHandler\MobHandler.csproj">
+      <Project>{0c6be75c-f563-468f-aec7-06558a77e7a8}</Project>
+      <Name>MobHandler</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WorldManager\WorldManager.csproj">
       <Project>{ba0e7f18-a814-4281-94eb-248ffb4d7dda}</Project>
       <Name>WorldManager</Name>

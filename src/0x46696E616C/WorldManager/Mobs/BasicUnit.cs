@@ -14,16 +14,6 @@ namespace _0x46696E616C.CommandPattern.Commands
     {
         enum UnitState { Build, Attack, Flee, Idle }
 
-        public string name { get; protected set; }
-
-        public Vector2 Size { get; protected set; }
-
-        public float TotalHealth { get; protected set; }
-
-        public float CurrentHealth { get; protected set; }
-
-        public Vector2 Position { get; protected set; }
-
         public BaseUnitState State { get; protected set; }
         protected Vector2 Direction { get; set; }
         protected float speed { get; set; }

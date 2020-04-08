@@ -56,7 +56,6 @@
     <Compile Include="Buildings\SteelFactory.cs" />
     <Compile Include="ContentHandler.cs" />
     <Compile Include="MapData\Map.cs" />
-    <Compile Include="MapData\WorldClock.cs" />
     <Compile Include="Mobs\BasicUnit.cs" />
     <Compile Include="Mobs\HarvestableUnits\HarvestableUnit.cs" />
     <Compile Include="Mobs\HarvestableUnits\IHarvestable.cs" />

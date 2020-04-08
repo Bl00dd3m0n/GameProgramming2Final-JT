@@ -23,7 +23,7 @@ namespace WorldManager
         public WorldHandler(Game game, string WorldName)
         {
             Seed = 14153456352343;
-            map = new Map(game, new Vector2(game.GraphicsDevice.Viewport.Width, game.GraphicsDevice.Viewport.Height), 14153456352343);
+            map = new Map(game, new Vector2(game.GraphicsDevice.Viewport.Width, game.GraphicsDevice.Viewport.Height), Seed);
             map.GenerateMap(game.GraphicsDevice);
             save = Save.save;
             this.game = game;

@@ -27,8 +27,12 @@ namespace NationBuilder.TileHandlerLibrary
         SolarPanel,
         SteelFactory,
 
+        //Units
+        Civilian,
+
         None,
-        Cursor
+        Cursor,
+
     }
     [Serializable]
     public struct BlockData

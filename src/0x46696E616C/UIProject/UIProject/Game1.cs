@@ -1,6 +1,8 @@
-﻿using Microsoft.Xna.Framework;
+﻿using _0x46696E616C.MobHandler;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MobHandler.Units;
 
 namespace UIProject
 {
@@ -12,6 +14,7 @@ namespace UIProject
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         SpriteFont font;
+        HealthBar hb;
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -39,11 +42,10 @@ namespace UIProject
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            Canvas canvas = new Canvas(this);
-            canvas.AddComponent(new Button(GraphicsDevice, new Vector2(250,170), new Point(200,100), Color.White, "Add"));
-            font = this.Content.Load<SpriteFont>("Arial");
-            canvas.Initialize();
-            this.Components.Add(canvas);
+            Dummy testDummy = new Dummy("Dumb", new Vector2(400, 240), new Vector2(20, 20), hb, 100, 75);
+            hb = new HealthBar(new Rectangle(testDummy.Position.ToPoint()-new Point(0,10), new Point((int)testDummy.Size.X,10)));
+            testDummy.healthBar = hb;
+            hb.UpdateHealth(testDummy, GraphicsDevice);
             // TODO: use this.Content to load your game content here
         }
 
@@ -78,7 +80,7 @@ namespace UIProject
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
             spriteBatch.Begin();
-            // TODO: Add your drawing code here
+            spriteBatch.Draw(hb.Health, hb.Bounds, Color.White);
             spriteBatch.End();
             base.Draw(gameTime);
         }

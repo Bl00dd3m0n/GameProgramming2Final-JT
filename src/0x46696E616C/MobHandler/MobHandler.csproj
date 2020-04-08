@@ -44,6 +44,7 @@
   <ItemGroup>
     <Compile Include="HealthBar.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Units\Dummy.cs" />
     <Compile Include="Units\IDamagable.cs" />
     <Compile Include="Units\IEntity.cs" />
     <Compile Include="Units\IronVein.cs" />

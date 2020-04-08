@@ -1,5 +1,7 @@
 ﻿using _0x46696E616C.CommandPattern;
+using _0x46696E616C.CommandPattern.Commands;
 using _0x46696E616C.Input;
+using _0x46696E616C.MobHandler.Units;
 using _0x46696E616C.WorldManager.Resources;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -74,8 +76,10 @@ namespace _0x46696E616C
 
             input = new MouseKeyboard(this, spriteBatch);
             cam = new Camera(this, input, world);
-            cc = new CommandComponent(this, startingResources);
-            process = new CommandProccesor(this, new List<MobHandler.Units.IUnit>(), world, input, cc, cam);
+            List<IUnit> units = new List<IUnit>();
+            units.Add(new UnitComponent(this,"Base unit",new Vector2(1,1),100,100,new Vector2(4,4),BaseUnitState.Idle, TextureValue.Civilian));
+            cc = new CommandComponent(this, startingResources, units);
+            process = new CommandProccesor(this, new List<IUnit>(), world, input, cc, cam);
 
             cam.Initialize();
             process.Initialize();
@@ -102,11 +106,13 @@ namespace _0x46696E616C
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-
-            cam.Update(gameTime);
-            process.Update(gameTime);
-            input.Update(gameTime);
-            cc.Update(gameTime);
+            if (this.IsActive)
+            {
+                cam.Update(gameTime);
+                process.Update(gameTime);
+                input.Update(gameTime);
+                cc.Update(gameTime);
+            }
             // TODO: Add your update logic here
 
             base.Update(gameTime);
@@ -118,16 +124,25 @@ namespace _0x46696E616C
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
-            // TODO: Add your drawing code here
-            cam.Draw(gameTime);
-            spriteBatch.Begin();
-            spriteBatch.DrawString(ContentHandler.font, cc.Resources(), new Vector2(100, 0), Color.Black);
-            spriteBatch.DrawString(ContentHandler.font, cc.Time(), new Vector2(700,0), Color.Black);
-            spriteBatch.DrawString(ContentHandler.font, $"{cam.Position.ToPoint()+(input.inputPos / 16).ToPoint()}", new Vector2(0, 0), Color.Black);
-            spriteBatch.Draw(ContentHandler.DrawnTexture(TextureValue.Cursor), Mouse.GetState().Position.ToVector2(), null, Color.Red, 0, new Vector2(0, 0), 0.25f, SpriteEffects.None, 0);
-            canvas.Draw(gameTime);
-            spriteBatch.End();
+            if (this.IsActive)
+            {
+                GraphicsDevice.Clear(Color.Black);
+                // TODO: Add your drawing code here
+                cam.Draw(gameTime);
+                spriteBatch.Begin();
+                spriteBatch.DrawString(ContentHandler.Font, cc.Resources(), new Vector2(100, 0), Color.White);
+                spriteBatch.DrawString(ContentHandler.Font, cc.Time(), new Vector2(700, 0), Color.White);
+                spriteBatch.DrawString(ContentHandler.Font, $"{cam.Position.ToPoint() + (input.inputPos / (Tile.Zoom*16)).ToPoint()}", new Vector2(0, 0), Color.White);
+                spriteBatch.DrawString(ContentHandler.Font, $"{cam.Position.ToPoint()} {Tile.Zoom}", new Vector2(0, 40), Color.White);
+                spriteBatch.DrawString(ContentHandler.Font, $"{2f / Tile.Zoom}", new Vector2(0, 60), Color.White);
+                spriteBatch.Draw(ContentHandler.DrawnTexture(TextureValue.Cursor), Mouse.GetState().Position.ToVector2(), null, Color.Red, 0, new Vector2(0, 0), 0.25f, SpriteEffects.None, 0);
+                foreach (IUnit unit in cc.units)
+                {
+                    spriteBatch.Draw(ContentHandler.DrawnTexture(((BasicUnit)unit).block.texture), (unit.Position*16), null, Color.White, 0, new Vector2(0), Tile.Zoom, SpriteEffects.None, 0);
+                }
+                //canvas.Draw(gameTime);
+                spriteBatch.End();
+            }
             base.Draw(gameTime);
         }
     }

@@ -2,6 +2,7 @@
 using _0x46696E616C.MobHandler;
 using _0x46696E616C.WorldManager.Resources;
 using Microsoft.Xna.Framework;
+using MobHandler;
 using NationBuilder.TileHandlerLibrary;
 using System;
 using System.Collections.Generic;
@@ -28,6 +29,8 @@ namespace WorldManager.Mobs.HarvestableUnits
 
         public Vector2 Position { get; private set; }
 
+        public HealthBar healthBar { get; protected set; }
+
         protected HarvestableUnit(Game game, TextureValue texture, IResource type, string name, Vector2 size, float totalHealth, float currentHealth, Vector2 position) : base(game, texture, position)
         {
             this.type = type;
@@ -36,6 +39,7 @@ namespace WorldManager.Mobs.HarvestableUnits
             this.TotalHealth = totalHealth;
             this.CurrentHealth = currentHealth;
             this.Position = position;
+            healthBar = new HealthBar(new Rectangle(position.ToPoint()-new Point(0, (int)(size.Y*16+1)), size.ToPoint()));
         }
 
 

@@ -18,8 +18,6 @@ namespace _0x46696E616C.CommandPattern
 {
     class CommandProccesor : GameComponent
     {
-        List<IUnit> units;
-        List<IUnit> selectedUnits;
         WorldHandler wh;
         MouseKeyboard input;
         CommandComponent cc;
@@ -28,8 +26,6 @@ namespace _0x46696E616C.CommandPattern
         public CommandProccesor(Game game, List<IUnit> startingUnits, WorldHandler wh, MouseKeyboard input, CommandComponent command, Camera camera) : base(game)
         {
             this.cc = command;
-            this.units = new List<IUnit>(startingUnits);
-            this.selectedUnits = new List<IUnit>();
             this.wh = wh;
             this.input = input;
             this.camera = camera;
@@ -42,8 +38,12 @@ namespace _0x46696E616C.CommandPattern
             {
                 if (input.LeftClick())
                 {
-                    command = new BuildCommand(new SolarPanel(Game, TextureValue.SolarPanel, ((camera.Position + input.inputPos) / 16).ToPoint().ToVector2()),wh, ((camera.Position + input.inputPos) / 16).ToPoint().ToVector2());
-                } 
+                    command = new BuildCommand(new SolarPanel(Game, TextureValue.SolarPanel, (camera.Position + (input.inputPos / (Tile.Zoom * 16))).ToPoint().ToVector2()), wh, (camera.Position + (input.inputPos / (Tile.Zoom * 16))).ToPoint().ToVector2());
+                }
+                else if (input.RightClick())
+                {
+                    command = new Movecommand((camera.Position + (input.inputPos / (Tile.Zoom * 16))).ToPoint().ToVector2());
+                }
             }
             if(command != null)
             {

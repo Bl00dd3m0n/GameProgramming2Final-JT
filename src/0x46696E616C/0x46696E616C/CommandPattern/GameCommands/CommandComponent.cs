@@ -27,6 +27,20 @@ namespace _0x46696E616C.CommandPattern
             toBuild = new List<Building>();
             resources = startingResources;
         }
+        /// <summary>
+        /// Test Constructor to easily get units
+        /// </summary>
+        /// <param name="game"></param>
+        /// <param name="startingResources"></param>
+        public CommandComponent(Game game, Wallet startingResources, List<IUnit> units) : base(game)
+        {
+            energy = new Energy();
+            Buildings = new List<Building>();
+            toBuild = new List<Building>();
+            resources = startingResources;
+            SelectedUnits = this.units = units;
+        }
+
         public void Select(List<IUnit> units)
         {
             SelectedUnits = units;
@@ -36,14 +50,15 @@ namespace _0x46696E616C.CommandPattern
             throw new NotImplementedException();
         }
 
-        public void Build(Building target)
-        {
-            throw new NotImplementedException();
-        }
-
         public void Move(Vector2 Position)
         {
-            throw new NotImplementedException();
+            foreach (IUnit unit in units)
+            {
+                if (unit is UnitComponent)
+                {
+                    ((UnitComponent)unit).Move(Position);
+                }
+            }
         }
 
 
@@ -99,6 +114,13 @@ namespace _0x46696E616C.CommandPattern
 
         public override void Update(GameTime gameTime)
         {
+            foreach(IUnit unit in units)
+            {
+                if(unit is UnitComponent)
+                {
+                    ((UnitComponent)unit).Update(gameTime);
+                }
+            }
             timer += gameTime.ElapsedGameTime.Milliseconds;
             if (timer / 1000 >= 1)
             {
@@ -113,6 +135,7 @@ namespace _0x46696E616C.CommandPattern
         {
             for (int i = 0; i < toBuild.Count; i++)
             {
+                toBuild[i].healthBar.UpdateHealth(toBuild[i], Game.GraphicsDevice);
                 toBuild[i].Construct(20/60f); //TODO implement worker proficiency at repairing/building here(More workers/better tech should speed this process up)
                 if (toBuild[i].CurrentHealth >= toBuild[i].TotalHealth)
                 {

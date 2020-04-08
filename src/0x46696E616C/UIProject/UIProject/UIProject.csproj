@@ -7,7 +7,7 @@
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{33FAE10A-3E13-43FB-A6C5-2914B7699E08}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>UIProject</RootNamespace>
     <AssemblyName>UIProject</AssemblyName>
@@ -38,9 +38,7 @@
     <ApplicationIcon>
     </ApplicationIcon>
   </PropertyGroup>
-  <PropertyGroup>
-    <ApplicationManifest>app.manifest</ApplicationManifest>
-  </PropertyGroup>
+  <PropertyGroup />
   <PropertyGroup>
     <StartupObject />
   </PropertyGroup>
@@ -64,6 +62,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.manifest" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\MobHandler\MobHandler.csproj">
+      <Project>{0c6be75c-f563-468f-aec7-06558a77e7a8}</Project>
+      <Name>MobHandler</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />

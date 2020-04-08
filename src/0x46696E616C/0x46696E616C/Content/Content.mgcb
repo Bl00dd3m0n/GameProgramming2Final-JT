@@ -59,7 +59,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../../../assets/IronOre.png;IronOre.png
+/build:../../../../assets/IronOre.png;IronVein.png
 
 #begin ../../../../assets/PlayerTest.png
 /importer:TextureImporter
@@ -71,7 +71,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../../../assets/PlayerTest.png;PlayerTest.png
+/build:../../../../assets/PlayerTest.png;Civilian.png
 
 #begin ../../../../assets/Sand.png
 /importer:TextureImporter

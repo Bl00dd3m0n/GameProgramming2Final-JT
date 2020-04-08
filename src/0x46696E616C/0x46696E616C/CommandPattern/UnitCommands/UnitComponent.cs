@@ -15,6 +15,7 @@ namespace _0x46696E616C.CommandPattern
     internal class UnitComponent : BasicUnit, ICommandComponent
     {
         IEntity Target;
+        Vector2 TargetPosition;
 
         public UnitComponent(Game game, string name, Vector2 size, float totalHealth, float currentHealth, Vector2 position, BaseUnitState state, TextureValue texture) : base(game, name, size, totalHealth, currentHealth, position, state, texture)
         {
@@ -28,7 +29,7 @@ namespace _0x46696E616C.CommandPattern
 
         public void Move(Vector2 Position)
         {
-            
+            TargetPosition = Position;
         }
         public void Attack(IEntity target)
         {
@@ -37,14 +38,25 @@ namespace _0x46696E616C.CommandPattern
         }
         public override void Update(GameTime gameTime)
         {
-            UpdateMove();
+            UpdateMove(gameTime);
             base.Update(gameTime);
         }
 
-        private void UpdateMove()
+        /// <summary>
+        /// Probably implement some sort of A* and flocking ai either here or 
+        /// </summary>
+        ///<see cref="Probably implement some sort of A* and flocking ai either here or in the Command Component"/>>
+        private void UpdateMove(GameTime gameTime)
         {
-            position += Direction * 2;
-            throw new NotImplementedException();
+            if (TargetPosition != position/(Tile.Zoom * 16))
+            {
+                Vector2 ActualTargetPos = TargetPosition / (Tile.Zoom * 16);
+                Vector2 ActualPos = position / (Tile.Zoom * 16);
+                float Distance = (float)Math.Sqrt(Math.Pow((ActualPos.X-ActualTargetPos.X),2)+ Math.Pow((ActualPos.Y - ActualTargetPos.Y), 2));
+
+                Direction = new Vector2(Distance, 1);
+                position += Direction * 5 * gameTime.ElapsedGameTime.Milliseconds/1000;
+            }
         }
 
         public void Garrison(IEntity Target)
@@ -53,6 +65,10 @@ namespace _0x46696E616C.CommandPattern
         }
 
         public void Move(IEntity Target)
+        {
+            throw new NotImplementedException();
+        }
+        public void Harvest()
         {
             throw new NotImplementedException();
         }

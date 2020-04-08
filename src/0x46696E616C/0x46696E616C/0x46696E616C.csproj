@@ -76,6 +76,10 @@
       <Project>{0c6be75c-f563-468f-aec7-06558a77e7a8}</Project>
       <Name>MobHandler</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TechHandler\TechHandler.csproj">
+      <Project>{d48ffcae-bf88-45d1-82dc-a453aaa3f8a7}</Project>
+      <Name>TechHandler</Name>
+    </ProjectReference>
     <ProjectReference Include="..\UIProject\UIProject\UIProject.csproj">
       <Project>{33fae10a-3e13-43fb-a6c5-2914b7699e08}</Project>
       <Name>UIProject</Name>
