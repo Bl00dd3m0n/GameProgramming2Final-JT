@@ -12,20 +12,18 @@ namespace _0x46696E616C.CommandPattern.Commands
 {
     class BuildCommand : Command
     {
-        Building building;
         private WorldHandler wh;
         private Vector2 position;
         public BuildCommand(Building building, WorldHandler wh, Vector2 position)
         {
-            this.CommandName = "Add";
-            this.building = building;
+            this.CommandName = "Build";
             this.wh = wh;
             this.position = position;
         }
 
         public override void Execute(CommandComponent uc)
         {
-            uc.Build(building, wh, position);
+            uc.Build(wh, position);
             base.Execute(uc);
         }
     }

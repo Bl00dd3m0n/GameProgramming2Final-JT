@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace NationBuilder.DataHandlerLibrary
 {
-    
+
     public static class ContentHandler
     {
         //Background Textures
@@ -34,15 +34,17 @@ namespace NationBuilder.DataHandlerLibrary
         //Util Content
         public static Texture2D Cursor;
         public static SpriteFont Font;
+        private static Texture2D CenterIcon;
+
         public static bool LoadContent(Game game)
         {
             try
             {
                 //Background Textures
-                Grass = SetTexture(TextureValue.Grass,game);
-                Sand = SetTexture(TextureValue.Sand,game);
-                Water = SetTexture(TextureValue.Water,game);
-                Rock = SetTexture(TextureValue.Stone,game);
+                Grass = SetTexture(TextureValue.Grass, game);
+                Sand = SetTexture(TextureValue.Sand, game);
+                Water = SetTexture(TextureValue.Water, game);
+                Rock = SetTexture(TextureValue.Stone, game);
                 //ResourceTextures
                 Tree = SetTexture(TextureValue.Tree, game);
                 Iron = SetTexture(TextureValue.IronVein, game);
@@ -51,17 +53,26 @@ namespace NationBuilder.DataHandlerLibrary
                 //FireWall = SetTexture(TextureValue.FireWall, game);
                 //InternetCafe = SetTexture(TextureValue.InternetCafe, game);
                 //Lab = SetTexture(TextureValue.Lab, game);
-               // MediaCenter = SetTexture(TextureValue.MediaCenter, game);
-               // Mines = SetTexture(TextureValue.Mines, game);
+                // MediaCenter = SetTexture(TextureValue.MediaCenter, game);
+                // Mines = SetTexture(TextureValue.Mines, game);
                 //ServerFarm = SetTexture(TextureValue.ServerFarm, game);
                 SolarPanel = SetTexture(TextureValue.SolarPanel, game);
                 //Unit Textures
                 Civilian = SetTexture(TextureValue.Civilian, game);
+                //Icon Textures
+                CenterIcon = SetTexture(TextureValue.CenterIcon, game);
+                //FireWall = SetTexture(TextureValue.FireWall, game);
+                //InternetCafe = SetTexture(TextureValue.InternetCafe, game);
+                //Lab = SetTexture(TextureValue.Lab, game);
+                // MediaCenter = SetTexture(TextureValue.MediaCenter, game);
+                // Mines = SetTexture(TextureValue.Mines, game);
+                //ServerFarm = SetTexture(TextureValue.ServerFarm, game);
                 //Util Content
                 Cursor = SetTexture(TextureValue.Cursor, game);
                 Font = game.Content.Load<SpriteFont>("Ariel");
                 return true;
-            } catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 string ErrorMessage = ex.GetType().Name;
                 return false;
@@ -69,7 +80,7 @@ namespace NationBuilder.DataHandlerLibrary
         }
         public static Texture2D DrawnTexture(TextureValue value)
         {
-            switch(value)
+            switch (value)
             {
                 //BackgroundBlocks
                 case TextureValue.Sand:
@@ -83,9 +94,9 @@ namespace NationBuilder.DataHandlerLibrary
                     return Tree;
                 case TextureValue.IronVein:
                     return Iron;
-                    //Buildings
+                //Buildings
                 case TextureValue.Center:
-                    return SolarPanel;
+                    return Center;
                 case TextureValue.FireWall:
                     return SolarPanel;
                 case TextureValue.InternetCafe:
@@ -100,9 +111,29 @@ namespace NationBuilder.DataHandlerLibrary
                     return SolarPanel;
                 case TextureValue.SolarPanel:
                     return SolarPanel;
+                //Units
                 case TextureValue.Civilian:
                     return Civilian;
-                    //Util
+                //Icons
+                case TextureValue.CenterIcon:
+                    return CenterIcon;
+                case TextureValue.FireWallIcon:
+                    return SolarPanel;
+                case TextureValue.InternetCafeIcon:
+                    return SolarPanel;
+                case TextureValue.LabIcon:
+                    return SolarPanel;
+                case TextureValue.MediaCenterIcon:
+                    return SolarPanel;
+                case TextureValue.MinesIcon:
+                    return SolarPanel;
+                case TextureValue.ServerFarmIcon:
+                    return SolarPanel;
+                case TextureValue.SolarPanelIcon:
+                    return SolarPanel;
+                case TextureValue.SteelFactory:
+                    return SolarPanel;
+                //Util
                 case TextureValue.Cursor:
                     return Cursor;
                 default:

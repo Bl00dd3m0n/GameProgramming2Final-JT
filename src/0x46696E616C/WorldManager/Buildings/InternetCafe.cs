@@ -23,7 +23,7 @@ namespace _0x46696E616C.Buildings
             energyCost = 25;
             name = "InternetCafe";
             Position = position;
-            Size = new Vector2(0, 0);
+            Size = new Vector2(2, 2);
             TotalHealth = 500;
             CurrentHealth = 0;
         }

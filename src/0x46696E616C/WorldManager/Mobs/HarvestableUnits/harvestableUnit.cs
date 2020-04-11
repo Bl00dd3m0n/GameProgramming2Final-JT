@@ -14,7 +14,7 @@ using Vector2 = Microsoft.Xna.Framework.Vector2;
 
 namespace WorldManager.Mobs.HarvestableUnits
 {
-    abstract class HarvestableUnit : ModifiableTile, IHarvestable
+    public abstract class HarvestableUnit : ModifiableTile, IHarvestable
     {
 
 
@@ -31,7 +31,7 @@ namespace WorldManager.Mobs.HarvestableUnits
 
         public HealthBar healthBar { get; protected set; }
 
-        protected HarvestableUnit(Game game, TextureValue texture, IResource type, string name, Vector2 size, float totalHealth, float currentHealth, Vector2 position) : base(game, texture, position)
+        protected HarvestableUnit(Game game, TextureValue texture, IResource type, string name, Vector2 size, float totalHealth, float currentHealth, Vector2 position, Color color) : base(game, texture, position, color)
         {
             this.type = type;
             this.name = name;
@@ -43,7 +43,7 @@ namespace WorldManager.Mobs.HarvestableUnits
         }
 
 
-        public void Damage(float damage)
+        public virtual void Damage(float damage)
         {
             CurrentHealth -= damage;
             if(CurrentHealth <=0)
@@ -52,9 +52,9 @@ namespace WorldManager.Mobs.HarvestableUnits
             }
         }
 
-        public void Die()
+        public virtual void Die()
         {
-            throw new NotImplementedException();
+            base.Die();
         }
 
         public Wallet Harvest(float efficiency)

@@ -1,18 +1,25 @@
 ﻿using _0x46696E616C.Buildings;
 using _0x46696E616C.CommandPattern.Commands;
+using _0x46696E616C.CommandPattern.GameCommands;
 using _0x46696E616C.Input;
+using _0x46696E616C.MobHandler;
 using _0x46696E616C.MobHandler.Units;
+using _0x46696E616C.UIComponents;
 using _0x46696E616C.WorldManager.Resources;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using NationBuilder.DataHandlerLibrary;
 using NationBuilder.TileHandlerLibrary;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TechHandler;
+using UIProject;
 using Util;
 using WorldManager;
+using WorldManager.TileHandlerLibrary;
 
 namespace _0x46696E616C.CommandPattern
 {
@@ -20,9 +27,12 @@ namespace _0x46696E616C.CommandPattern
     {
         WorldHandler wh;
         MouseKeyboard input;
-        CommandComponent cc;
-        Camera camera;
+        internal CommandComponent cc { get; private set; }
+        public Camera camera { get; private set; }
         List<ICommand> commands;
+        List<CommandButton> buttons;
+        public Vector2 CurrentPos { get; private set; }
+        public Overlay overlay { get; set; }
         public CommandProccesor(Game game, List<IUnit> startingUnits, WorldHandler wh, MouseKeyboard input, CommandComponent command, Camera camera) : base(game)
         {
             this.cc = command;
@@ -30,27 +40,122 @@ namespace _0x46696E616C.CommandPattern
             this.input = input;
             this.camera = camera;
             commands = new List<ICommand>();
+            buttons = new List<CommandButton>();
         }
         public override void Update(GameTime gameTime)
-        {   
+        {
+            CurrentPos = (camera.Position + (input.inputPos / (Tile.Zoom * 16)));
             Command command = null;
-            if (input is MouseKeyboard && Game.IsActive)//TODO make input more dynamic instead of hard coding this
+            if (input is MouseKeyboard && Game.IsActive)
             {
-                if (input.LeftClick())
+                if (input.GetKeyDown(Keys.Escape))
                 {
-                    command = new BuildCommand(new SolarPanel(Game, TextureValue.SolarPanel, (camera.Position + (input.inputPos / (Tile.Zoom * 16))).ToPoint().ToVector2()), wh, (camera.Position + (input.inputPos / (Tile.Zoom * 16))).ToPoint().ToVector2());
+                    cc.selectedBuild = null;
                 }
-                else if (input.RightClick())
+                if (input.inputPos.Y >= 33 && input.inputPos.Y <= 345) // Overlay positioning - this should probably be more dynamic
                 {
-                    command = new Movecommand((camera.Position + (input.inputPos / (Tile.Zoom * 16))).ToPoint().ToVector2());
+                    command = OnMapAction(CurrentPos);
+                }
+                else
+                {
+                    command = overlay.ClickCheck();
                 }
             }
-            if(command != null)
+            if (command != null)
             {
                 commands.Add(command);
                 command.Execute(cc);
             }
             base.Update(gameTime);
+        }
+
+        private Command OnMapAction(Vector2 currentPos)
+        {
+            if (input.LeftClick())
+            {
+
+                if (cc.selectedBuild != null)
+                {
+                    return new BuildCommand(cc.selectedBuild, wh, (CurrentPos).ToPoint().ToVector2());
+                }
+                else
+                {
+                    ModifiableTile tile = null;
+                    for (int i = 0; i < cc.Units.Count; i++)
+                    {
+                        bool XLessThan = cc.Units[0].Position.X <= CurrentPos.X;
+                        bool YLessThan = cc.Units[0].Position.Y <= CurrentPos.Y;
+                        bool XPlusSizeLessThan = cc.Units[0].Position.X + cc.Units[0].Size.X >= CurrentPos.X;
+                        bool YPlusSizeLessThan = cc.Units[0].Position.Y + cc.Units[0].Size.Y >= CurrentPos.Y;
+                        if (XLessThan && YLessThan && XPlusSizeLessThan && YPlusSizeLessThan)
+                        {
+                            tile = (ModifiableTile)cc.Units[i];
+                        } 
+                    }
+
+                    if (tile == null) {
+                         tile = wh.GetTile(CurrentPos);
+                    }
+                    if (tile != null)
+                    {
+
+                        if (tile is UnitComponent)
+                        {
+                            //BuildQueue size
+                            //Pos: (591,391) Size: (200,120)
+                            float x = 591;//MaxX = 791
+                            float y = 359;//MaxY = 511
+                            float scale = 0.25f;
+                            foreach (IQueueable<TextureValue> queueable in ((UnitComponent)tile).QueueableThings)
+                            {
+                                if (queueable is Building)
+                                {
+                                    ((Building)queueable).UpdatePosition(new Vector2(x,y));
+                                    Component com = new CommandButton(Game.GraphicsDevice, new BuildSelectCommand((Building)queueable), queueable,new Point(16));
+                                    float width = ((Building)queueable).Size.X;
+                                    float height = ((Building)queueable).Size.Y;
+                                    com.Scale = 0.25f;
+                                    overlay.AddComponent(com);
+                                    x += 16 * ((Building)queueable).Size.X;
+                                    if (x > 791)
+                                    {
+                                        x = 591;
+                                        y += 16 * ((Building)queueable).Size.Y;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            else if (input.RightClick())
+            {
+                Tile tile = wh.GetTile(CurrentPos);
+                if (tile is IHarvestable)
+                {
+                    return new AttackCommand((IEntity)tile);
+                }
+                else if (tile is Building)
+                {
+                    if (((Building)tile).CurrentHealth >= ((Building)tile).TotalHealth)
+                    {
+                        return new GarrisonCommand((Building)tile);
+                    }
+                    else
+                    {
+                        //command = new RepairCommand((Building)tile); Garrison at the moment will cause the buildings to be repaired....needs to be updated later
+                    }
+                }
+                else
+                {
+                    return new Movecommand((CurrentPos).ToPoint().ToVector2());
+                }
+            }
+            else
+            {
+                return null;
+            }
+            return null;
         }
     }
 }

@@ -13,7 +13,7 @@ using WorldManager.TileHandlerLibrary;
 
 namespace WorldManager.MapData
 {
-    public class Map
+    public class Map : IMapObserver
     {
         public Vector2 mapSize { get; private set; }
         Tile[,,] tiles;
@@ -29,32 +29,36 @@ namespace WorldManager.MapData
         }
         public void GenerateMap(GraphicsDevice gd)
         {
-            Color[] colors = new Color[(int)((mapSize.X * mapSize.Y)/4)];
-            Color[] tileImage = new Color[16*16]; 
+            Color[] colors = new Color[(int)((mapSize.X * mapSize.Y))];
             for (int y = 0; y < mapSize.Y; y++)
             {
                 for (int x = 0; x < mapSize.X; x++)
                 {
-                    tiles[x, y, 0] = GenerateTerrain(new Vector2(x, y));
+                    tiles[x, y, 0] = GenerateTerrain(new Vector2(x, y)).PlacedTile();
                     tiles[x, y, 1] = GenerateDecor(new Vector2(x, y));
+                    if (tiles[x, y, 1] != null)
+                    {
+                        tiles[x, y, 1].PlacedTile();
+                        ((ModifiableTile)tiles[x, y, 1]).Subscribe(this);
+                    }
                 }
             }
-            /*for (int y = 0; y < mapSize.Y/2; y++)
-            {
-                for (int x = 0; x < mapSize.X/2; x++)
-                {
-                    if (tiles[x, y, 1] != null) ContentHandler.DrawnTexture(tiles[x * 2, y * 2, 0].block.texture).GetData(tileImage);
-                    else ContentHandler.DrawnTexture(tiles[x * 2, y * 2, 0].block.texture).GetData(tileImage);
-                    colors[(int)((x) + (y) * (mapSize.X / 2))] = tileImage[(int)(tileImage.Length / 2)];
-                }
-            }
-            mapTexture = new Texture2D(gd, (int)mapSize.X/2, (int)mapSize.Y/2);
-            mapTexture.SetData(colors, 0, (int)((mapSize.X * mapSize.Y)/4));*/
+             for (int y = 0; y < mapSize.Y; y++)
+             {
+                 for (int x = 0; x < mapSize.X; x++)
+                 {
+                     if (tiles[x, y, 1] != null) colors[(int)((x) + (y) * (mapSize.X))] = tiles[x,y,1].tileColor;
+                     else colors[(int)((x) + (y) * (mapSize.X))] = tiles[x, y, 0].tileColor;
+                 }
+             }
+             mapTexture = new Texture2D(gd, (int)mapSize.X, (int)mapSize.Y);
+             mapTexture.SetData(colors, 0, (int)((mapSize.X * mapSize.Y)));
+         
         }
 
         internal void PlaceBlock(ModifiableTile building, Vector2 position)
         {
-            for (int y = 0; y <= building.Size.Y ; y++)
+            for (int y = 0; y <= building.Size.Y; y++)
             {
                 for (int x = 0; x <= building.Size.X; x++)
                 {
@@ -68,7 +72,8 @@ namespace WorldManager.MapData
                         {
                             tiles[(int)position.X + x, (int)position.Y + y, 1] = new ReferenceTile((ModifiableTile)tiles[(int)position.X, (int)position.Y, 1]);
                         }
-                    } catch(IndexOutOfRangeException ex)
+                    }
+                    catch (IndexOutOfRangeException ex)
                     {
                         //If the player tries to place a building off the map
                         string error = $"{ex}";
@@ -79,11 +84,25 @@ namespace WorldManager.MapData
 
         public ModifiableTile GetTile(Vector2 position)
         {
-            return (ModifiableTile)tiles[(int)position.X, (int)position.Y, 1];
+            try
+            {
+                return (ModifiableTile)tiles[(int)position.X, (int)position.Y, 1];
+            }
+            catch (IndexOutOfRangeException)
+            {
+                return null;
+            }
         }
         public Tile GetBackTile(Vector2 position)
         {
-            return tiles[(int)position.X, (int)position.Y, 0];
+            try
+            {
+                return tiles[(int)position.X, (int)position.Y, 0];
+            }
+            catch (IndexOutOfRangeException)
+            {
+                return null;
+            }
         }
 
         public BackGroundTile GenerateTerrain(Vector2 position)
@@ -91,9 +110,17 @@ namespace WorldManager.MapData
             return wg.Biome(position, Seed);
         }
 
-        public Tile GenerateDecor(Vector2 position)
+        public ModifiableTile GenerateDecor(Vector2 position)
         {
-            return wg.AddDecor(tiles[(int)position.X,(int)position.Y,0].block,position.X,position.Y);
+            return wg.AddDecor(tiles[(int)position.X, (int)position.Y, 0].block, position.X, position.Y);
+        }
+
+        public void Update(ModifiableTile observer)
+        {
+            if (observer.State == tileState.dead)
+            {
+                tiles[(int)observer.Position.X, (int)observer.Position.Y, 1] = null;
+            }
         }
     }
 }

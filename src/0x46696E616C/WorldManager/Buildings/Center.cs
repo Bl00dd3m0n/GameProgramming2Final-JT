@@ -16,7 +16,7 @@ namespace _0x46696E616C.Buildings
             energyCost = 5;
             name = "Center";
             Position = position;
-            Size = new Vector2(2, 2);
+            Size = new Vector2(4, 4);
             TotalHealth = 5000;
             CurrentHealth = 0;
         }

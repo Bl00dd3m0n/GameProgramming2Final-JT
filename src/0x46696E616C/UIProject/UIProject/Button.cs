@@ -15,7 +15,6 @@ namespace UIProject
         public static int value;
         public virtual void Click()
         {
-            value++;
             Clicked = true;
         }
         #region constructors

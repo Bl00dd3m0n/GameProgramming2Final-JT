@@ -11,12 +11,13 @@ namespace _0x46696E616C.AstarAlgorithm
     {
         public float fCost { get; private set; }
         public Vector2 Position { get; private set; }
-        public bool Closed { get; set; }
+        public Node Parent;
+        public Node[] Child;
 
-        public Node(Vector2 startPosition, bool closed, float fCost)
+        public Node(Vector2 startPosition, float fCost)
         {
+            Child = new Node[9];
             this.Position = startPosition;
-            this.Closed = closed;
             this.fCost = fCost;
         }
     }

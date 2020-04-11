@@ -13,8 +13,10 @@ namespace UIProject
         Vector2 Position { get; }
         Point Size { get; }
         Color color { get; }
+        Rectangle bounds { get; }
         string Text { get; }
         Texture2D picture { get; }
+        float Scale { get; }
         void Draw(GraphicsDevice gd);
     }
 }

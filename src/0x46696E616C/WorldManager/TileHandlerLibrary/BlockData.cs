@@ -21,7 +21,8 @@ namespace NationBuilder.TileHandlerLibrary
         Center,
         FireWall,
         InternetCafe,
-        Lab,MediaCenter,
+        Lab,
+        MediaCenter,
         Mines,
         ServerFarm,
         SolarPanel,
@@ -32,7 +33,18 @@ namespace NationBuilder.TileHandlerLibrary
 
         None,
         Cursor,
+        PowerSupply,
 
+        //Icons
+        CenterIcon,
+        FireWallIcon,
+        InternetCafeIcon,
+        LabIcon,
+        MediaCenterIcon,
+        MinesIcon,
+        ServerFarmIcon,
+        SolarPanelIcon,
+        SteelFactoryIcon,
     }
     [Serializable]
     public struct BlockData

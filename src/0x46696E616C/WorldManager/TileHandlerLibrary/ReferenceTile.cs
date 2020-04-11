@@ -14,7 +14,7 @@ namespace WorldManager.TileHandlerLibrary
     {
         private ModifiableTile tile;
 
-        public ReferenceTile(ModifiableTile tile) : base(tile.Game,TextureValue.None, tile.position)
+        public ReferenceTile(ModifiableTile tile) : base(tile.Game,TextureValue.None, tile.Position, tile.tileColor)
         {
             this.tile = tile;
         }

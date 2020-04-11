@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using _0x46696E616C.Buildings;
+using _0x46696E616C.MobHandler;
 using _0x46696E616C.MobHandler.Units;
 using _0x46696E616C.WorldManager.Resources;
 using Microsoft.Xna.Framework;
@@ -14,18 +15,30 @@ namespace _0x46696E616C.CommandPattern
     class CommandComponent : GameComponent, ICommandComponent
     {
         Wallet resources;
-        List<IUnit> SelectedUnits;
-        internal List<IUnit> units;
+        internal List<IUnit> SelectedUnits;
+
+        List<string> resourceStringList;
+        private List<IUnit> units;
+        public List<IUnit> Units
+        {
+            get { return units.ToList(); }
+            private set { units = value; }
+        }
         List<Building> Buildings;
         List<Building> toBuild;
+
         Energy energy;
         float timer;
+
+        public Building selectedBuild;
+
         public CommandComponent(Game game, Wallet startingResources) : base(game)
         {
             energy = new Energy();
             Buildings = new List<Building>();
             toBuild = new List<Building>();
             resources = startingResources;
+
         }
         /// <summary>
         /// Test Constructor to easily get units
@@ -39,15 +52,36 @@ namespace _0x46696E616C.CommandPattern
             toBuild = new List<Building>();
             resources = startingResources;
             SelectedUnits = this.units = units;
+            resourceStringList = new List<string>();
         }
 
         public void Select(List<IUnit> units)
         {
             SelectedUnits = units;
         }
+
         public void Attack(IEntity target)
         {
-            throw new NotImplementedException();
+            foreach (IUnit unit in SelectedUnits)
+            {
+                if (unit is UnitComponent)
+                {
+                    if (target is IHarvestable)
+                    {
+                        ((UnitComponent)unit).Harvest(target);
+                    }
+                    else
+                    {
+                        ((UnitComponent)unit).Attack(target);
+                    }
+
+                }
+            }
+        }
+
+        internal void SelectBuild(Building build)
+        {
+            this.selectedBuild = build;
         }
 
         public void Move(Vector2 Position)
@@ -61,22 +95,34 @@ namespace _0x46696E616C.CommandPattern
             }
         }
 
-
-        internal void Build(Building building, WorldHandler wh, Vector2 Position)
+        internal void Garrison(Building building)
         {
-            Wallet wallet = resources.Withdraw(building.Cost);
+            foreach (IUnit unit in SelectedUnits)
+            {
+                if (unit is UnitComponent)
+                {
+                    ((UnitComponent)unit).Garrison(unit);
+                }
+            }
+        }
+
+
+        internal void Build(WorldHandler wh, Vector2 Position)
+        {
+            Wallet wallet = resources.Withdraw(selectedBuild.Cost);
             if (wallet != null)
             {
-                if (wh.Place(building, Position))
+                if (wh.Place(selectedBuild, Position))
                 {
-                    toBuild.Add(building);
+                    selectedBuild.UpdatePosition(Position);
+                    toBuild.Add(selectedBuild);
                     if (SelectedUnits != null)
                     {
                         foreach (IUnit unit in SelectedUnits)
                         {
                             if (unit is UnitComponent)
                             {
-                                ((UnitComponent)unit).Build(building);
+                                ((UnitComponent)unit).Build(selectedBuild);
                             }
                         }
                     }
@@ -88,10 +134,15 @@ namespace _0x46696E616C.CommandPattern
             }
         }
 
-        public string Resources()
+        public List<string> Resources()
         {
-            string returnMessage = $"Energy:{resources.Count(new Energy())} Iron:{resources.Count(new Iron())} Likes:{resources.Count(new Likes())} Money:{resources.Count(new Money())} Steel:{resources.Count(new Steel())}"; ;
-            return returnMessage;
+            resourceStringList.Clear();
+            resourceStringList.Add($"Energy:{resources.Count(new Energy())}");
+            resourceStringList.Add($"Iron:{resources.Count(new Iron())}");
+            resourceStringList.Add($"Likes:{resources.Count(new Likes())}");
+            resourceStringList.Add($"Money:{resources.Count(new Money())}");
+            resourceStringList.Add($"Steel:{resources.Count(new Steel())}");
+            return resourceStringList;
         }
 
         public string Time()
@@ -114,9 +165,9 @@ namespace _0x46696E616C.CommandPattern
 
         public override void Update(GameTime gameTime)
         {
-            foreach(IUnit unit in units)
+            foreach (IUnit unit in units)
             {
-                if(unit is UnitComponent)
+                if (unit is UnitComponent)
                 {
                     ((UnitComponent)unit).Update(gameTime);
                 }
@@ -136,7 +187,7 @@ namespace _0x46696E616C.CommandPattern
             for (int i = 0; i < toBuild.Count; i++)
             {
                 toBuild[i].healthBar.UpdateHealth(toBuild[i], Game.GraphicsDevice);
-                toBuild[i].Construct(20/60f); //TODO implement worker proficiency at repairing/building here(More workers/better tech should speed this process up)
+                toBuild[i].Construct(); //TODO implement worker proficiency at repairing/building here(More workers/better tech should speed this process up)
                 if (toBuild[i].CurrentHealth >= toBuild[i].TotalHealth)
                 {
                     Buildings.Add(toBuild[i]);

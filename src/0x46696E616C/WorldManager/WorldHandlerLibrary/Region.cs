@@ -29,7 +29,7 @@ namespace NationBuilder.WorldHandlerLibrary
             {
                 //decorAndBack[0] = decorTiles.First(l => l.position == position);
                 decorCheck = true;
-                decorAndBack[1] = backTiles.First(l => l.position == position);
+                decorAndBack[1] = backTiles.First(l => l.Position == position);
             } catch(InvalidOperationException e)
             {
                 if (decorCheck)
@@ -37,7 +37,7 @@ namespace NationBuilder.WorldHandlerLibrary
                     try
                     {
                         decorAndBack[0] = null;
-                        decorAndBack[1] = backTiles.First(l => l.position == position);
+                        decorAndBack[1] = backTiles.First(l => l.Position == position);
                     }
                     catch (InvalidOperationException ex)
                     {

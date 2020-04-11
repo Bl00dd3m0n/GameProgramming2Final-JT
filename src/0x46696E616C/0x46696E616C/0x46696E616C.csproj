@@ -44,6 +44,7 @@
     <Compile Include="AstarAlgorithm\A_Star.cs" />
     <Compile Include="AstarAlgorithm\Node.cs" />
     <Compile Include="CommandPattern\Command.cs" />
+    <Compile Include="CommandPattern\GameCommands\BuildSelectCommand.cs" />
     <Compile Include="CommandPattern\GameCommands\CommandComponent.cs" />
     <Compile Include="CommandPattern\CommandProccesor.cs" />
     <Compile Include="CommandPattern\GameCommands\AttackCommand.cs" />
@@ -51,11 +52,17 @@
     <Compile Include="CommandPattern\GameCommands\IObserver.cs" />
     <Compile Include="CommandPattern\GameCommands\Movecommand.cs" />
     <Compile Include="CommandPattern\CommandWithUndo.cs" />
+    <Compile Include="CommandPattern\GameCommands\GarrisonCommand.cs" />
+    <Compile Include="CommandPattern\GameCommands\RepairCommand.cs" />
+    <Compile Include="CommandPattern\GameCommands\SelectCommand.cs" />
+    <Compile Include="CommandPattern\GameCommands\TrainCommand.cs" />
     <Compile Include="CommandPattern\ICommand.cs" />
     <Compile Include="CommandPattern\ICommandComponent.cs" />
     <Compile Include="CommandPattern\ICommandWithUndo.cs" />
     <Compile Include="CommandPattern\UnitCommands\UnitComponent.cs" />
     <Compile Include="Game1.cs" />
+    <Compile Include="UIComponents\CommandButton.cs" />
+    <Compile Include="UIComponents\Overlay.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

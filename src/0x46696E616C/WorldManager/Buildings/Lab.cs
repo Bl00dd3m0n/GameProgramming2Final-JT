@@ -17,7 +17,7 @@ namespace _0x46696E616C.Buildings
             Cost = new Wallet();
             name = "Lab";
             Position = position;
-            Size = new Vector2(0, 0);
+            Size = new Vector2(2, 2);
             TotalHealth = 1000;
             CurrentHealth = 0;
         }

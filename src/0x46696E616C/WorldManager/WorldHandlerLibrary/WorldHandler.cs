@@ -23,10 +23,19 @@ namespace WorldManager
         public WorldHandler(Game game, string WorldName)
         {
             Seed = 14153456352343;
-            map = new Map(game, new Vector2(game.GraphicsDevice.Viewport.Width, game.GraphicsDevice.Viewport.Height), Seed);
+            map = new Map(game, new Vector2(game.GraphicsDevice.Viewport.Width/2, game.GraphicsDevice.Viewport.Height/2), Seed);
             map.GenerateMap(game.GraphicsDevice);
             save = Save.save;
             this.game = game;
+        }
+
+        public bool Contains(Vector2 position)
+        {
+            if(GetBackgroundTile(position) != null)
+            {
+                return true;
+            }
+            return false;
         }
 
         public bool Place(Building building, Vector2 position)
@@ -51,6 +60,11 @@ namespace WorldManager
             return map.mapTexture;
         }
 
+        public bool CheckPlacement(Building building)
+        {
+            return CheckPlacement(building.Position, building.Size);
+        }
+
         public bool CheckPlacement(Vector2 position, Vector2 size)
         {
             
@@ -71,8 +85,6 @@ namespace WorldManager
             {
                 return false;
             }
-
-            
         }
 
         public void LoadArea()

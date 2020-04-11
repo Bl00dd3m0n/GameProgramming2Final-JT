@@ -16,7 +16,7 @@ namespace _0x46696E616C.Buildings
             energyCost = 20;
             name = "FireWall";
             Position = position;
-            Size = new Vector2(0, 0);
+            Size = new Vector2(1, 1);
             TotalHealth = 2000;
             CurrentHealth = 0;
         }

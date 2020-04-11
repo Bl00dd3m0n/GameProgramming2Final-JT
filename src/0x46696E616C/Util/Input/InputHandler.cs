@@ -102,7 +102,11 @@ namespace _0x46696E616C.Input
                 Pressed = true;
             }
         }
-
+        /// <summary>
+        /// If the key is down at all
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         public bool CheckKeyDown(Keys key)
         {
             if (PressedKeys.Contains(key))
@@ -111,6 +115,19 @@ namespace _0x46696E616C.Input
                 return true;
             }
             //Key commands will be put here
+            return false;
+        }
+        /// <summary>
+        /// If the key has been pressed once have to release and press again to activate
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public bool GetKeyDown(Keys key)
+        {
+            if(Updated && PressedKeys.Contains(key))
+            {
+                return true;
+            }
             return false;
         }
 

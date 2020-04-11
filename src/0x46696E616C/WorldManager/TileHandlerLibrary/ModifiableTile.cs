@@ -11,14 +11,16 @@ using Vector2 = Microsoft.Xna.Framework.Vector2;
 //using MyVector2 = NationBuilder.TileHandlerLibrary.Vector2;
 using _0x46696E616C.MobHandler.Units;
 using _0x46696E616C.MobHandler;
+using WorldManager.MapData;
 
 namespace WorldManager.TileHandlerLibrary
 {
+    public enum tileState { whole, damaged, dead }
     public abstract class ModifiableTile : Tile, IEntity
     {
-        public string name { get; protected set; }
+        public tileState State { get; private set; }
 
-        public Vector2 Position { get { return position; } protected set { position = value; } }
+        public string name { get; protected set; }
 
         public Vector2 Size { get; protected set; }
 
@@ -27,25 +29,43 @@ namespace WorldManager.TileHandlerLibrary
         public float CurrentHealth { get; protected set; }
 
         public HealthBar healthBar { get; protected set; }
+        List<IMapObserver> MapWatcher;
 
-        public ModifiableTile(Game game, TextureValue texture, Vector2 position) : base(game, texture, position)
+        public ModifiableTile(Game game, TextureValue texture, Vector2 position, Color color) : base(game, texture, position, color)
         {
-            healthBar = new HealthBar(new Rectangle(this.position.ToPoint()-new Point(0,(int)(this.Size.Y*16+1)), Size.ToPoint()));
+            MapWatcher = new List<IMapObserver>();
+            healthBar = new HealthBar(new Rectangle(this.Position.ToPoint()-new Point(0,(int)(this.Size.Y*16+1)), Size.ToPoint()));
+        }
+        public virtual void Subscribe(IMapObserver map)
+        {
+            MapWatcher.Add(map);
         }
 
+        public virtual void UnSubscribe(IMapObserver map)
+        {
+            MapWatcher.Add(map);
+        }
+        public virtual void Update()
+        {
+
+        }
         public virtual void Damage(float value)
         {
-            throw new NotImplementedException();
+            CurrentHealth -= TotalHealth;
         }
 
         public virtual void Die()
         {
-            throw new NotImplementedException();
+            State = tileState.dead;
+            foreach(IMapObserver map in MapWatcher)
+            {
+                map.Update(this);
+            }
         }
-
-        public void QueueBuild()
+        public override void UpdatePosition(Vector2 position)
         {
-            throw new NotImplementedException();
+            base.UpdatePosition(position);
+            healthBar = new HealthBar(new Rectangle(this.Position.ToPoint() - new Point(0, 1), Size.ToPoint()));
         }
     }
 }

@@ -16,7 +16,7 @@ namespace _0x46696E616C.Buildings
             energyCost = 5;
             name = "Server Farm";
             Position = position;
-            Size = new Vector2(0, 0);
+            Size = new Vector2(3, 3);
             TotalHealth = 2000;
         }
     }

@@ -12,7 +12,7 @@ namespace _0x46696E616C.Buildings
             Cost = new Wallet();
             name = "Steel Factory";
             Position = position;
-            Size = new Vector2(0, 0);
+            Size = new Vector2(3, 3);
             TotalHealth = 0;
             CurrentHealth = 0;
         }

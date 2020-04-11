@@ -16,7 +16,7 @@ namespace _0x46696E616C.Buildings
             energyCost = 20;
             name = "Media Center";
             Position = position;
-            Size = new Vector2(0, 0);
+            Size = new Vector2(4, 4);
             TotalHealth = 2000;
             CurrentHealth = 0;
         }
