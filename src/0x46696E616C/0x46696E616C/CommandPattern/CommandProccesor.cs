@@ -116,11 +116,11 @@ namespace _0x46696E616C.CommandPattern
                                     float height = ((Building)queueable).Size.Y;
                                     com.Scale = 0.25f;
                                     overlay.AddComponent(com);
-                                    x += 16 * ((Building)queueable).Size.X;
+                                    x += 128 * scale;
                                     if (x > 791)
                                     {
                                         x = 591;
-                                        y += 16 * ((Building)queueable).Size.Y;
+                                        y += 128 * scale;
                                     }
                                 }
                             }

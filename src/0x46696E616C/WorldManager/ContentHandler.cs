@@ -31,10 +31,18 @@ namespace NationBuilder.DataHandlerLibrary
         public static Texture2D SolarPanel;
         //Unit Textures
         public static Texture2D Civilian;
+        //Icon Textures
+        public static Texture2D CenterIcon;
+        public static Texture2D FireWallIcon;
+        public static Texture2D InternetCafeIcon;
+        public static Texture2D LabIcon;
+        public static Texture2D MediaCenterIcon;
+        public static Texture2D MinesIcon;
+        public static Texture2D ServerFarmIcon;
+        public static Texture2D SolarPanelIcon;
         //Util Content
         public static Texture2D Cursor;
         public static SpriteFont Font;
-        private static Texture2D CenterIcon;
 
         public static bool LoadContent(Game game)
         {
@@ -50,9 +58,9 @@ namespace NationBuilder.DataHandlerLibrary
                 Iron = SetTexture(TextureValue.IronVein, game);
                 //Building Textures
                 Center = SetTexture(TextureValue.Center, game);
-                //FireWall = SetTexture(TextureValue.FireWall, game);
-                //InternetCafe = SetTexture(TextureValue.InternetCafe, game);
-                //Lab = SetTexture(TextureValue.Lab, game);
+                FireWall = SetTexture(TextureValue.FireWall, game);
+                InternetCafe = SetTexture(TextureValue.InternetCafe, game);
+                Lab = SetTexture(TextureValue.Lab, game);
                 // MediaCenter = SetTexture(TextureValue.MediaCenter, game);
                 // Mines = SetTexture(TextureValue.Mines, game);
                 //ServerFarm = SetTexture(TextureValue.ServerFarm, game);
@@ -61,9 +69,9 @@ namespace NationBuilder.DataHandlerLibrary
                 Civilian = SetTexture(TextureValue.Civilian, game);
                 //Icon Textures
                 CenterIcon = SetTexture(TextureValue.CenterIcon, game);
-                //FireWall = SetTexture(TextureValue.FireWall, game);
-                //InternetCafe = SetTexture(TextureValue.InternetCafe, game);
-                //Lab = SetTexture(TextureValue.Lab, game);
+                FireWallIcon = SetTexture(TextureValue.FireWallIcon, game);
+                InternetCafeIcon = SetTexture(TextureValue.InternetCafeIcon, game);
+                LabIcon = SetTexture(TextureValue.LabIcon, game);
                 // MediaCenter = SetTexture(TextureValue.MediaCenter, game);
                 // Mines = SetTexture(TextureValue.Mines, game);
                 //ServerFarm = SetTexture(TextureValue.ServerFarm, game);
@@ -98,11 +106,11 @@ namespace NationBuilder.DataHandlerLibrary
                 case TextureValue.Center:
                     return Center;
                 case TextureValue.FireWall:
-                    return SolarPanel;
+                    return FireWall;
                 case TextureValue.InternetCafe:
-                    return SolarPanel;
+                    return InternetCafe;
                 case TextureValue.Lab:
-                    return SolarPanel;
+                    return Lab;
                 case TextureValue.MediaCenter:
                     return SolarPanel;
                 case TextureValue.Mines:
@@ -118,11 +126,11 @@ namespace NationBuilder.DataHandlerLibrary
                 case TextureValue.CenterIcon:
                     return CenterIcon;
                 case TextureValue.FireWallIcon:
-                    return SolarPanel;
+                    return FireWallIcon;
                 case TextureValue.InternetCafeIcon:
-                    return SolarPanel;
+                    return InternetCafeIcon;
                 case TextureValue.LabIcon:
-                    return SolarPanel;
+                    return LabIcon;
                 case TextureValue.MediaCenterIcon:
                     return SolarPanel;
                 case TextureValue.MinesIcon:

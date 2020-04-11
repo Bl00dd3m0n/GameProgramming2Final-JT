@@ -49,6 +49,30 @@
 /processorParam:TextureFormat=Color
 /build:../../../../assets/Cursor.png;Cursor.png
 
+#begin ../../../../assets/FireWall.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:../../../../assets/FireWall.png;FireWall.png
+
+#begin ../../../../assets/FireWallIcon.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:../../../../assets/FireWallIcon.png;FireWallIcon.png
+
 #begin ../../../../assets/Grass.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -61,6 +85,30 @@
 /processorParam:TextureFormat=Color
 /build:../../../../assets/Grass.png;Grass.png
 
+#begin ../../../../assets/InternetCafe.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:../../../../assets/InternetCafe.png;InternetCafe.png
+
+#begin ../../../../assets/InternetCafeIcon.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:../../../../assets/InternetCafeIcon.png;InternetCafeIcon.png
+
 #begin ../../../../assets/IronOre.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -71,7 +119,31 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../../../assets/IronOre.png;IronVein.png
+/build:../../../../assets/IronOre.png;IronOre.png
+
+#begin ../../../../assets/Lab.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:../../../../assets/Lab.png;Lab.png
+
+#begin ../../../../assets/LabIcon.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:../../../../assets/LabIcon.png;LabIcon.png
 
 #begin ../../../../assets/Overlay.png
 /importer:TextureImporter
@@ -95,7 +167,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../../../assets/PlayerTest.png;Civilian.png
+/build:../../../../assets/PlayerTest.png;PlayerTest.png
 
 #begin ../../../../assets/Sand.png
 /importer:TextureImporter
