@@ -29,20 +29,20 @@ namespace _0x46696E616C.CommandPattern
         A_Star astar;
         List<Building> toBuild;
         Wallet UnitWallet;
-        public UnitComponent(Game game, string name, Vector2 size, float totalHealth, float currentHealth, Vector2 position, BaseUnitState state, TextureValue texture, WorldHandler world) : base(game, name, size, totalHealth, currentHealth, position, state, texture, Color.Blue)
+        bool arrived;
+        public UnitComponent(Game game, string name, Vector2 size, float totalHealth, float currentHealth, Vector2 position, BaseUnitState state, TextureValue texture, WorldHandler world, TextureValue Icon) : base(game, name, size, totalHealth, currentHealth, position, state, texture, Color.Blue, Icon)
         {
             QueueableThings = new List<IQueueable<TextureValue>>();
-            QueueableThings.Add(new Center(game, TextureValue.Center, Vector2.Zero));
-            QueueableThings.Add(new FireWall(game, TextureValue.FireWall, Vector2.Zero));
-            QueueableThings.Add(new InternetCafe(game, TextureValue.InternetCafe, Vector2.Zero));
-            QueueableThings.Add(new Lab(game, TextureValue.Lab, Vector2.Zero));
-            QueueableThings.Add(new MediaCenter(game, TextureValue.MediaCenter, Vector2.Zero));
-            QueueableThings.Add(new Mines(game, TextureValue.Mines, Vector2.Zero));
-            QueueableThings.Add(new PowerSupply(game, TextureValue.PowerSupply, Vector2.Zero));
-            QueueableThings.Add(new Mines(game, TextureValue.Mines, Vector2.Zero));
-            QueueableThings.Add(new ServerFarm(game, TextureValue.ServerFarm, Vector2.Zero));
-            QueueableThings.Add(new SolarPanel(game, TextureValue.SolarPanel, Vector2.Zero));
-            QueueableThings.Add(new SteelFactory(game, TextureValue.SteelFactory, Vector2.Zero));
+            QueueableThings.Add(new Center(game, TextureValue.Center, Vector2.Zero, TextureValue.CenterIcon));
+            QueueableThings.Add(new FireWall(game, TextureValue.FireWall, Vector2.Zero, TextureValue.FireWallIcon));
+            QueueableThings.Add(new InternetCafe(game, TextureValue.InternetCafe, Vector2.Zero, TextureValue.InternetCafeIcon));
+            QueueableThings.Add(new Lab(game, TextureValue.Lab, Vector2.Zero, TextureValue.LabIcon));
+            QueueableThings.Add(new MediaCenter(game, TextureValue.MediaCenter, Vector2.Zero, TextureValue.MediaCenterIcon));
+            QueueableThings.Add(new Mines(game, TextureValue.Mines, Vector2.Zero, TextureValue.MinesIcon));
+            QueueableThings.Add(new PowerSupply(game, TextureValue.PowerSupply, Vector2.Zero, TextureValue.PowerSupplyIcon));
+            QueueableThings.Add(new ServerFarm(game, TextureValue.ServerFarm, Vector2.Zero, TextureValue.ServerFarmIcon));
+            QueueableThings.Add(new SolarPanel(game, TextureValue.SolarPanel, Vector2.Zero, TextureValue.SolarPanelIcon));
+            QueueableThings.Add(new SteelFactory(game, TextureValue.SteelFactory, Vector2.Zero, TextureValue.SteelFactoryIcon));
 
             astar = new A_Star();
             waypoints = new List<Vector2>();
@@ -60,17 +60,20 @@ namespace _0x46696E616C.CommandPattern
             Target = target;
             Move(target.Position);
             State = BaseUnitState.build;
+            arrived = false;
         }
 
         public void Move(Vector2 Position)
         {
             //waypoints = astar.FindPath(this.position, Position, world);
             TargetPosition = Position;
+            arrived = false;
         }
         public void Attack(IEntity target)
         {
             this.Target = target;
             this.TargetPosition = Target.Position;
+            arrived = false;
         }
         public override void Update(GameTime gameTime)
         {
@@ -95,11 +98,16 @@ namespace _0x46696E616C.CommandPattern
             if (Position.Y > TargetPosition.Y + 0.5f)
                 Direction -= yOne;
             Position += Direction * 5 * gameTime.ElapsedGameTime.Milliseconds / 1000;
-            if (Direction == zero && Target != null)
+            this.UpdatePosition(Position);
+            
+            if (Direction == zero && Target != null && !arrived)
             {
                 if (Target is Building)
                 {
                     ((Building)Target).GarrisonedUnits.Add(this);
+                    ((Building)Target).Deposit(this.UnitWallet.Withdraw());
+                    arrived = true;
+
                 }
                 else if (Target is IHarvestable)
                 {
@@ -109,6 +117,7 @@ namespace _0x46696E616C.CommandPattern
                 {
                     Target.Damage(this.AttackPower);
                 }
+
             }
             //WayPointFollower();
         }
@@ -126,17 +135,19 @@ namespace _0x46696E616C.CommandPattern
         {
             this.Target = target;
             this.TargetPosition = Target.Position;
+            arrived = false;
         }
 
-        public void Move(IEntity Target)
-        {
-            throw new NotImplementedException();
-        }
         public void Harvest(IEntity target)
         {
             this.Target = target;
             this.TargetPosition = Target.Position;
+            arrived = false;
         }
 
+        public override BasicUnit NewInstace(float currentHealth, Vector2 position)
+        {
+            return new UnitComponent(this.Game, this.name, this.Size, this.TotalHealth, currentHealth, position, BaseUnitState.Idle, this.block.texture, this.world, this.Icon);
+        }
     }
 }

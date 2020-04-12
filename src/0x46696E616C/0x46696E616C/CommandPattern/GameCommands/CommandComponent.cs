@@ -8,17 +8,21 @@ using _0x46696E616C.MobHandler;
 using _0x46696E616C.MobHandler.Units;
 using _0x46696E616C.WorldManager.Resources;
 using Microsoft.Xna.Framework;
+using NationBuilder.TileHandlerLibrary;
+using TechHandler;
 using WorldManager;
+using WorldManager.MapData;
 
 namespace _0x46696E616C.CommandPattern
 {
-    class CommandComponent : GameComponent, ICommandComponent
+    class CommandComponent : GameComponent, ICommandComponent, IBuildingObserver
     {
         Wallet resources;
         internal List<IUnit> SelectedUnits;
 
         List<string> resourceStringList;
         private List<IUnit> units;
+
         public List<IUnit> Units
         {
             get { return units.ToList(); }
@@ -79,6 +83,11 @@ namespace _0x46696E616C.CommandPattern
             }
         }
 
+        internal bool CheckCost(Building build)
+        {
+            return resources.CheckCost(build);
+        }
+
         internal void SelectBuild(Building build)
         {
             this.selectedBuild = build;
@@ -101,7 +110,7 @@ namespace _0x46696E616C.CommandPattern
             {
                 if (unit is UnitComponent)
                 {
-                    ((UnitComponent)unit).Garrison(unit);
+                    ((UnitComponent)unit).Garrison(building);
                 }
             }
         }
@@ -110,11 +119,14 @@ namespace _0x46696E616C.CommandPattern
         internal void Build(WorldHandler wh, Vector2 Position)
         {
             Wallet wallet = resources.Withdraw(selectedBuild.Cost);
+            if (selectedBuild.worldComponent == null) selectedBuild.Subscribe(this);
             if (wallet != null)
             {
                 if (wh.Place(selectedBuild, Position))
                 {
                     selectedBuild.UpdatePosition(Position);
+                    selectedBuild.PlacedTile();
+
                     toBuild.Add(selectedBuild);
                     if (SelectedUnits != null)
                     {
@@ -132,11 +144,14 @@ namespace _0x46696E616C.CommandPattern
                     resources.Deposit(wallet);
                 }
             }
+            selectedBuild = selectedBuild.NewInstace(Game, selectedBuild.block.texture, selectedBuild.Position, selectedBuild.Icon);
+            selectedBuild.Subscribe(this);
         }
 
         public List<string> Resources()
         {
             resourceStringList.Clear();
+            resourceStringList.Add($"Wood:{resources.Count(new Wood())}");
             resourceStringList.Add($"Energy:{resources.Count(new Energy())}");
             resourceStringList.Add($"Iron:{resources.Count(new Iron())}");
             resourceStringList.Add($"Likes:{resources.Count(new Likes())}");
@@ -178,6 +193,7 @@ namespace _0x46696E616C.CommandPattern
                 ProduceResources();
                 ChargeEnergy();
                 Construction();
+                Train();
             }
             base.Update(gameTime);
         }
@@ -196,6 +212,22 @@ namespace _0x46696E616C.CommandPattern
             }
 
         }
+        public void Train(Building build, IUnit unit)
+        {
+            if (!Buildings.Contains(build)) Buildings.Add(build);
+            build.trainingQueue.Enqueue((IQueueable<TextureValue>)unit);
+        }
+        private void Train()
+        {
+            for (int i = 0; i < Buildings.Count; i++)
+            {
+                IQueueable<TextureValue> item = Buildings[i].Train();
+                if(item != null)
+                {
+                    units.Add((IUnit)item);
+                }
+            }
+        }
 
         public void ChargeEnergy()
         {
@@ -213,10 +245,15 @@ namespace _0x46696E616C.CommandPattern
                 {
                     for (int i = 0; i < ((IProductionCenter)building).productionTypes.Count; i++)
                     {
-                        resources.Deposit(((IProductionCenter)building).productionTypes[i], ((IProductionCenter)building).ProductionAMinute / 60f);
+                        resources.Deposit(((IProductionCenter)building).productionTypes[i], ((IProductionCenter)building).ProductionAMinute[i] / 60f);
                     }
                 }
             }
+        }
+
+        public void Deposit(Wallet wallet)
+        {
+            this.resources.Deposit(wallet);
         }
     }
 }

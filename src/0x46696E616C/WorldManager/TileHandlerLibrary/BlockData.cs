@@ -45,6 +45,7 @@ namespace NationBuilder.TileHandlerLibrary
         ServerFarmIcon,
         SolarPanelIcon,
         SteelFactoryIcon,
+        PowerSupplyIcon,
     }
     [Serializable]
     public struct BlockData

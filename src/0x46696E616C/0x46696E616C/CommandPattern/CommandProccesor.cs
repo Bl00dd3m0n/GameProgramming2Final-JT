@@ -19,6 +19,7 @@ using TechHandler;
 using UIProject;
 using Util;
 using WorldManager;
+using WorldManager.MapData;
 using WorldManager.TileHandlerLibrary;
 
 namespace _0x46696E616C.CommandPattern
@@ -90,15 +91,19 @@ namespace _0x46696E616C.CommandPattern
                         if (XLessThan && YLessThan && XPlusSizeLessThan && YPlusSizeLessThan)
                         {
                             tile = (ModifiableTile)cc.Units[i];
-                        } 
+                        }
                     }
 
                     if (tile == null) {
-                         tile = wh.GetTile(CurrentPos);
+                        tile = wh.GetTile(CurrentPos);
+                    }
+                    if (tile is ReferenceTile)
+                    {
+                        tile = ((ReferenceTile)tile).tile;
                     }
                     if (tile != null)
                     {
-
+                        overlay.RemoveAllComponents(typeof(CommandButton));
                         if (tile is UnitComponent)
                         {
                             //BuildQueue size
@@ -111,16 +116,40 @@ namespace _0x46696E616C.CommandPattern
                                 if (queueable is Building)
                                 {
                                     ((Building)queueable).UpdatePosition(new Vector2(x,y));
-                                    Component com = new CommandButton(Game.GraphicsDevice, new BuildSelectCommand((Building)queueable), queueable,new Point(16));
+                                    Component com = new CommandButton(Game.GraphicsDevice, new BuildSelectCommand((Building)queueable), queueable,new Point(32));
                                     float width = ((Building)queueable).Size.X;
                                     float height = ((Building)queueable).Size.Y;
                                     com.Scale = 0.25f;
                                     overlay.AddComponent(com);
                                     x += 128 * scale;
-                                    if (x > 791)
+                                    if (x +128 * scale> 791)
                                     {
                                         x = 591;
                                         y += 128 * scale;
+                                    }
+                                }
+                            }
+                        }
+                        else if(tile is Building)
+                        {
+                            float x = 591;//MaxX = 791
+                            float y = 359;//MaxY = 511
+                            float scale = 0.25f;
+                            foreach (IQueueable<TextureValue> queueable in ((Building)tile).QueueableThings)
+                            {
+                                if (queueable is UnitComponent)
+                                {
+                                    ((UnitComponent)queueable).UpdatePosition(new Vector2(x, y));
+                                    Component com = new CommandButton(Game.GraphicsDevice, new TrainCommand((IUnit)queueable, (Building)tile), queueable, new Point(32));
+                                    float width = ((UnitComponent)queueable).Size.X;
+                                    float height = ((UnitComponent)queueable).Size.Y;
+                                    com.Scale = 2;
+                                    overlay.AddComponent(com);
+                                    x += 16 * scale;
+                                    if (x + 16 * scale > 791)
+                                    {
+                                        x = 591;
+                                        y += 16 * scale;
                                     }
                                 }
                             }
@@ -131,6 +160,10 @@ namespace _0x46696E616C.CommandPattern
             else if (input.RightClick())
             {
                 Tile tile = wh.GetTile(CurrentPos);
+                if(tile is ReferenceTile)
+                {
+                    tile = ((ReferenceTile)tile).tile;
+                }
                 if (tile is IHarvestable)
                 {
                     return new AttackCommand((IEntity)tile);
@@ -143,7 +176,7 @@ namespace _0x46696E616C.CommandPattern
                     }
                     else
                     {
-                        //command = new RepairCommand((Building)tile); Garrison at the moment will cause the buildings to be repaired....needs to be updated later
+                        return new GarrisonCommand((Building)tile); //Should be a repair command Garrison at the moment will cause the buildings to be repaired....needs to be updated later
                     }
                 }
                 else

@@ -74,5 +74,16 @@ namespace UIProject
             components.Clear();
         }
 
+        public void RemoveAllComponents(Type type)
+        {
+            for (int i = 0; i < components.Count; i++)
+            {
+                if (components[i].GetType() == type)
+                {
+                    components.Remove(components[i]);
+                    i--;
+                }
+            }
+        }
     }
 }

@@ -10,6 +10,7 @@ using _0x46696E616C.MobHandler;
 using System.Collections.Generic;
 using _0x46696E616C.CommandPattern.Commands;
 using TechHandler;
+using WorldManager.MapData;
 
 namespace _0x46696E616C.Buildings
 {
@@ -24,12 +25,13 @@ namespace _0x46696E616C.Buildings
 
         public List<IUnit> GarrisonedUnits { get; set; }
         public Queue<IQueueable<TextureValue>> trainingQueue { get; set; }
-        public List<IQueueable <TextureValue>> QueueableThings { get; protected set; } 
+        public List<IQueueable<TextureValue>> QueueableThings { get; protected set; }
         public TextureValue Icon { get; protected set; }
         public override Vector2 Position { get { return base.Position; } }
         Color teamColor; //Maybe implement this
-
-        public Building(Game game, TextureValue texture, Vector2 position) : base(game, texture, position, Color.Blue)
+        IQueueable<TextureValue> trainingObject;
+        public IBuildingObserver worldComponent { get; protected set; }
+        public Building(Game game, TextureValue texture, Vector2 position, TextureValue Icon) : base(game, texture, position, Color.Blue)
         {
             Cost = new Wallet();
             name = "Building";
@@ -40,7 +42,28 @@ namespace _0x46696E616C.Buildings
             energyCost = 0;
             healthBar = new HealthBar(new Rectangle(this.Position.ToPoint() - new Point(0, (int)(this.Size.Y * 16 + 1)), Size.ToPoint()));
             GarrisonedUnits = new List<IUnit>();
-            this.Icon = block.texture + 13;//if the texture values change this breaks it find a better way to do this
+            this.Icon = Icon;//if the texture values change this breaks it find a better way to do this
+            QueueableThings = new List<IQueueable<TextureValue>>();
+            trainingQueue = new Queue<IQueueable<TextureValue>>();
+        }
+
+        public void Subscribe(IBuildingObserver observer)
+        {
+            worldComponent = observer;
+        }
+
+        public IQueueable<TextureValue> Train()
+        {
+            if (trainingQueue.Count > 0)
+            {
+                trainingObject = trainingQueue.Peek();
+                if (((IEntity)trainingObject).CurrentHealth >= ((IEntity)trainingObject).TotalHealth)
+                {
+                    return trainingQueue.Dequeue();
+                }
+                CurrentHealth += 1f;//this probably should be updated too
+            }
+            return null;
         }
 
         public void Construct()
@@ -49,10 +72,16 @@ namespace _0x46696E616C.Buildings
             {
                 if (unit is BasicUnit)
                 {
-                    CurrentHealth += ((BasicUnit)unit).BuildPower/60;
+                    CurrentHealth += ((BasicUnit)unit).BuildPower;
                 }
-                if (CurrentHealth > TotalHealth) CurrentHealth = TotalHealth;
+                if (CurrentHealth > TotalHealth)
+                    CurrentHealth = TotalHealth;
             }
+        }
+
+        public virtual void AddQueueable(IQueueable<TextureValue> item)
+        {
+            QueueableThings.Add(item);//workaround for not being able to have UnitComponent
         }
 
         public override void Damage(float amount)
@@ -62,12 +91,21 @@ namespace _0x46696E616C.Buildings
 
         public void Destroy()
         {
-            
+
         }
 
         public override void Die()
         {
             throw new NotImplementedException();
+        }
+        public virtual Building NewInstace(Game game, TextureValue tex, Vector2 position, TextureValue Icon)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Deposit(Wallet wallet)
+        {
+            worldComponent.Deposit(wallet);
         }
     }
 }

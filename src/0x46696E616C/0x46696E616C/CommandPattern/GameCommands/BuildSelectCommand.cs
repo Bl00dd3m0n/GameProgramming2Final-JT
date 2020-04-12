@@ -9,7 +9,7 @@ namespace _0x46696E616C.CommandPattern.GameCommands
 {
     class BuildSelectCommand : Command
     {
-        Building build;
+        public Building build { get; private set; }
         public BuildSelectCommand(Building build)
         {
             this.CommandName = "Select Building";

@@ -1,4 +1,5 @@
-﻿using _0x46696E616C.CommandPattern;
+﻿using _0x46696E616C.Buildings;
+using _0x46696E616C.CommandPattern;
 using _0x46696E616C.CommandPattern.Commands;
 using _0x46696E616C.Input;
 using _0x46696E616C.MobHandler.Units;
@@ -11,6 +12,7 @@ using NationBuilder.DataHandlerLibrary;
 using NationBuilder.TileHandlerLibrary;
 using NationBuilder.WorldHandlerLibrary;
 using System.Collections.Generic;
+using TechHandler;
 using UIProject;
 using Util;
 using WorldManager;
@@ -66,6 +68,7 @@ namespace _0x46696E616C
             WorldHandler world = new WorldHandler(this, "TempWorld");
 
             Wallet startingResources = new Wallet();
+            startingResources.Deposit(new Wood(), 500);
             startingResources.Deposit(new Steel(), 500);
             startingResources.Deposit(new Money(), 500);
             startingResources.Deposit(new Likes(), 500);
@@ -77,15 +80,20 @@ namespace _0x46696E616C
             canvas.LoadCanvas(sheet.GetStyleSheet(GraphicsDevice));
 
             input = new MouseKeyboard(this, spriteBatch);
-            cam = new Camera(this, input, world);
+            //318,98 - Temp spawn point until I randomize it
+            Vector2 startPoint = new Vector2(318, 98);
+            cam = new Camera(this, input, world, startPoint);
             List<IUnit> units = new List<IUnit>();
-            units.Add(new UnitComponent(this, "Base unit", new Vector2(1, 1), 100, 100, new Vector2(4, 4), BaseUnitState.Idle, TextureValue.Civilian, world));
+            units.Add(new UnitComponent(this, "Base unit", new Vector2(1, 1), 100, 100, startPoint + new Vector2(4, 4), BaseUnitState.Idle, TextureValue.Civilian, world, TextureValue.Civilian));
             cc = new CommandComponent(this, startingResources, units);
             process = new CommandProccesor(this, new List<IUnit>(), world, input, cc, cam);
             overlay = new Overlay(this, input, world, process);
 
-
-
+            Center center = new Center(this, TextureValue.Center, startPoint, TextureValue.CenterIcon);
+            center.AddQueueable(((IQueueable<TextureValue>)((UnitComponent)units[units.Count-1]).NewInstace(100,startPoint)));
+            world.Place(center, startPoint);
+            center.Subscribe(cc);
+            
             cam.Initialize();
             overlay.Initialize();
             process.Initialize();

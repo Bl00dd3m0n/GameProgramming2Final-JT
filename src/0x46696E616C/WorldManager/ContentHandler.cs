@@ -27,8 +27,10 @@ namespace NationBuilder.DataHandlerLibrary
         public static Texture2D Lab;
         public static Texture2D MediaCenter;
         public static Texture2D Mines;
+        public static Texture2D PowerSupply;
         public static Texture2D ServerFarm;
         public static Texture2D SolarPanel;
+        public static Texture2D SteelFactory;
         //Unit Textures
         public static Texture2D Civilian;
         //Icon Textures
@@ -38,8 +40,10 @@ namespace NationBuilder.DataHandlerLibrary
         public static Texture2D LabIcon;
         public static Texture2D MediaCenterIcon;
         public static Texture2D MinesIcon;
+        public static Texture2D PowerSupplyIcon;
         public static Texture2D ServerFarmIcon;
         public static Texture2D SolarPanelIcon;
+        public static Texture2D SteelFactoryIcon;
         //Util Content
         public static Texture2D Cursor;
         public static SpriteFont Font;
@@ -61,10 +65,12 @@ namespace NationBuilder.DataHandlerLibrary
                 FireWall = SetTexture(TextureValue.FireWall, game);
                 InternetCafe = SetTexture(TextureValue.InternetCafe, game);
                 Lab = SetTexture(TextureValue.Lab, game);
-                // MediaCenter = SetTexture(TextureValue.MediaCenter, game);
-                // Mines = SetTexture(TextureValue.Mines, game);
-                //ServerFarm = SetTexture(TextureValue.ServerFarm, game);
+                MediaCenter = SetTexture(TextureValue.MediaCenter, game);
+                Mines = SetTexture(TextureValue.Mines, game);
+                PowerSupply = SetTexture(TextureValue.PowerSupply, game);
+                ServerFarm = SetTexture(TextureValue.ServerFarm, game);
                 SolarPanel = SetTexture(TextureValue.SolarPanel, game);
+                SteelFactory = SetTexture(TextureValue.SteelFactory, game);
                 //Unit Textures
                 Civilian = SetTexture(TextureValue.Civilian, game);
                 //Icon Textures
@@ -72,9 +78,12 @@ namespace NationBuilder.DataHandlerLibrary
                 FireWallIcon = SetTexture(TextureValue.FireWallIcon, game);
                 InternetCafeIcon = SetTexture(TextureValue.InternetCafeIcon, game);
                 LabIcon = SetTexture(TextureValue.LabIcon, game);
-                // MediaCenter = SetTexture(TextureValue.MediaCenter, game);
-                // Mines = SetTexture(TextureValue.Mines, game);
-                //ServerFarm = SetTexture(TextureValue.ServerFarm, game);
+                MediaCenterIcon = SetTexture(TextureValue.MediaCenterIcon, game);
+                MinesIcon = SetTexture(TextureValue.MinesIcon, game);
+                PowerSupplyIcon = SetTexture(TextureValue.PowerSupplyIcon, game);
+                ServerFarmIcon = SetTexture(TextureValue.ServerFarmIcon, game);
+                SolarPanelIcon = SetTexture(TextureValue.SolarPanelIcon, game);
+                SteelFactoryIcon = SetTexture(TextureValue.SteelFactoryIcon, game);
                 //Util Content
                 Cursor = SetTexture(TextureValue.Cursor, game);
                 Font = game.Content.Load<SpriteFont>("Ariel");
@@ -112,13 +121,17 @@ namespace NationBuilder.DataHandlerLibrary
                 case TextureValue.Lab:
                     return Lab;
                 case TextureValue.MediaCenter:
-                    return SolarPanel;
+                    return MediaCenter;
                 case TextureValue.Mines:
-                    return SolarPanel;
+                    return Mines;
+                case TextureValue.PowerSupply:
+                    return PowerSupply;
                 case TextureValue.ServerFarm:
-                    return SolarPanel;
+                    return ServerFarm;
                 case TextureValue.SolarPanel:
                     return SolarPanel;
+                case TextureValue.SteelFactory:
+                    return SteelFactory;
                 //Units
                 case TextureValue.Civilian:
                     return Civilian;
@@ -132,15 +145,17 @@ namespace NationBuilder.DataHandlerLibrary
                 case TextureValue.LabIcon:
                     return LabIcon;
                 case TextureValue.MediaCenterIcon:
-                    return SolarPanel;
+                    return MediaCenterIcon;
                 case TextureValue.MinesIcon:
-                    return SolarPanel;
+                    return MinesIcon;
+                case TextureValue.PowerSupplyIcon:
+                    return PowerSupplyIcon;
                 case TextureValue.ServerFarmIcon:
-                    return SolarPanel;
+                    return ServerFarmIcon;
                 case TextureValue.SolarPanelIcon:
-                    return SolarPanel;
-                case TextureValue.SteelFactory:
-                    return SolarPanel;
+                    return SolarPanelIcon;
+                case TextureValue.SteelFactoryIcon:
+                    return SteelFactoryIcon;
                 //Util
                 case TextureValue.Cursor:
                     return Cursor;

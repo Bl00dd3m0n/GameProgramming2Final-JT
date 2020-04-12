@@ -12,7 +12,7 @@ using WorldManager.TileHandlerLibrary;
 
 namespace _0x46696E616C.CommandPattern.Commands
 {
-    public class BasicUnit : ModifiableTile, IUnit, ITechObserver
+    public class BasicUnit : ModifiableTile, IUnit, ITechObserver, IQueueable<TextureValue>
     {
         enum UnitState { Build, Attack, Flee, Idle }
 
@@ -23,8 +23,11 @@ namespace _0x46696E616C.CommandPattern.Commands
         public float HarvestPower { get; protected set; }
         public float AttackPower { get; protected set; }
         public List<IQueueable<TextureValue>> QueueableThings { get; protected set; }
+
+        public TextureValue Icon { get; protected set; }
+
         //TODO List of commands needed to be implemented for the units
-        public BasicUnit(Game game, string name, Vector2 size, float totalHealth, float currentHealth, Vector2 position, BaseUnitState state, NationBuilder.TileHandlerLibrary.TextureValue texture, Color color) : base(game, texture, position, color)
+        public BasicUnit(Game game, string name, Vector2 size, float totalHealth, float currentHealth, Vector2 position, BaseUnitState state, TextureValue texture, Color color, TextureValue icon) : base(game, texture, position, color)
         {
             this.name = name;
             this.Size = size;
@@ -37,11 +40,17 @@ namespace _0x46696E616C.CommandPattern.Commands
             this.AttackPower = 1;
             Direction = new Vector2(0, 0);
             speed = 0;
+            this.Icon = icon;
         }
 
         public void QueueBuild()
         {
             throw new NotImplementedException();
+        }
+
+        public virtual BasicUnit NewInstace(float currentHealth, Vector2 position)
+        {
+            return new BasicUnit(this.Game, this.name, this.Size,this.TotalHealth, currentHealth, position, BaseUnitState.Idle, this.block.texture, this.tileColor, this.Icon);
         }
     }
 }

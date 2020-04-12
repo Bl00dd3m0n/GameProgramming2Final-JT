@@ -64,8 +64,15 @@ namespace WorldManager.TileHandlerLibrary
         }
         public override void UpdatePosition(Vector2 position)
         {
-            base.UpdatePosition(position);
-            healthBar = new HealthBar(new Rectangle(this.Position.ToPoint() - new Point(0, 1), Size.ToPoint()));
+            if (this is IHarvestable)
+            {
+            }
+            else
+            {
+                base.UpdatePosition(position);
+                healthBar = new HealthBar(new Rectangle(new Point((int)position.X, (int)position.Y - 1), new Point((int)(Size.X * 16), (int)(5))));
+                healthBar.UpdateHealth(this, Game.GraphicsDevice);
+            }
         }
     }
 }

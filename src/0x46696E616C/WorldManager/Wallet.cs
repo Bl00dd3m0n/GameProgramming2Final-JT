@@ -1,4 +1,5 @@
-﻿using _0x46696E616C.WorldManager.Resources;
+﻿using _0x46696E616C.Buildings;
+using _0x46696E616C.WorldManager.Resources;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -84,6 +85,36 @@ namespace _0x46696E616C
                 }
             }
             return -1;
+        }
+
+        public Wallet Withdraw()
+        {
+            Wallet WithdrawWallet = new Wallet();
+            foreach (IResource resource in resources)
+            {
+                if (this.Count(resource) > 0)
+                {
+                    if (this.Count(resource) > Count(resource))
+                    {
+                        return null;
+                    }
+                    WithdrawWallet.Deposit(resource, this.resources[this.IndexOf(resource)].Count);
+                    this.Withdraw(resource, this.resources[this.IndexOf(resource)].Count);
+                }
+            }
+            return WithdrawWallet;
+        }
+
+        public bool CheckCost(Building build)
+        {
+            foreach(IResource resource in build.Cost.resources)
+            {
+                if(build.Cost.Count(resource) > this.Count(resource))
+                {
+                    return false;
+                }
+            }
+            return true;
         }
 
         public Wallet Withdraw(Wallet cost)

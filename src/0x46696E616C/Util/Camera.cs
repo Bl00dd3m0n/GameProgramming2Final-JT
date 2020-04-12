@@ -34,16 +34,27 @@ namespace Util
         SpriteBatch sb;
         MouseKeyboard input;
         Vector2 Dir;
-        public Camera(Game game, InputHandler input, WorldHandler worldHandler) : base(game)
+        private MouseKeyboard input1;
+        private WorldHandler world1;
+        private Vector2 startPoint;
+
+        public Camera(Game game, InputHandler input, WorldHandler worldHandler) : this(game,input,worldHandler,new Vector2(0,0))
+        {
+
+        }
+
+        public Camera(Game game, InputHandler input, WorldHandler worldHandler, Vector2 startPoint) : base(game)
         {
             Tile.Zoom = 3;
             MoveSpeed = 6.25f;
+            this.position = startPoint;
             this.ViewPort = new Rectangle(position.ToPoint(), new Point(30, 16));
             this.input = (MouseKeyboard)input;
             Dir = new Vector2(0, 0);
             this.world = worldHandler;
             bounds = new Rectangle(new Vector2(0, 0).ToPoint(), (world.GetSize()).ToPoint());
         }
+
         public override void Initialize()
         {
             base.Initialize();

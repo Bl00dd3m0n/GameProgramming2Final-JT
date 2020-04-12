@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using _0x46696E616C.Buildings;
 using _0x46696E616C.CommandPattern;
+using _0x46696E616C.CommandPattern.GameCommands;
 using _0x46696E616C.Input;
 using _0x46696E616C.MobHandler.Units;
 using Microsoft.Xna.Framework;
@@ -30,7 +31,6 @@ namespace _0x46696E616C.UIComponents
             cp = command;
             this.world= world;
             this.input = input;
-            cp.cc.selectedBuild = new SolarPanel(game,TextureValue.SolarPanel, new Vector2());
             cp.overlay = this;
         }
 
@@ -52,6 +52,19 @@ namespace _0x46696E616C.UIComponents
             spriteBatch.Draw(OverlayTexture, new Vector2(), Color.White);
             DrawMap();
             DrawText();
+            foreach (CommandButton button in components.Where(l => l is CommandButton))//For all queueable objects if you can afford it, it shows up normally if not it shows up red
+            {
+                if(button.command is BuildSelectCommand)
+                {
+                    if (!cp.cc.CheckCost(((BuildSelectCommand)button.command).build))
+                    {
+                        button.color = Color.Red;
+                    } else
+                    {
+                        button.color = Color.White;
+                    }
+                }
+            }
             spriteBatch.End();
             base.Draw(gameTime);
         }
@@ -63,9 +76,16 @@ namespace _0x46696E616C.UIComponents
                 if(components.Find(x=>x.bounds.Contains(input.inputPos)) != null)
                 {
                     IComponent component = components.Find(x => x.bounds.Contains(input.inputPos));
-                    if (component is CommandButton)
+                    if (component is CommandButton)//If the user can afford to train/build things it returns the selected unit, if not it returns null
                     {
-                        return (Command)((CommandButton)component).command;
+                        if (((CommandButton)component).command is BuildSelectCommand)
+                        {
+                            BuildSelectCommand command = (BuildSelectCommand)((CommandButton)component).command;
+                            if (cp.cc.CheckCost(command.build))
+                            {
+                                return (Command)((CommandButton)component).command;
+                            }
+                        }
                     }
                 }
             }
@@ -86,19 +106,9 @@ namespace _0x46696E616C.UIComponents
             }
         }
 
-        public override void Initialize()
-        {
-            base.Initialize();
-        }
-
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            base.Dispose(disposing);
         }
 
         protected override void LoadContent()
