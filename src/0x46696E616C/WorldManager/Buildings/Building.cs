@@ -11,6 +11,8 @@ using System.Collections.Generic;
 using _0x46696E616C.CommandPattern.Commands;
 using TechHandler;
 using WorldManager.MapData;
+using WorldManager.Buildings;
+using System.Collections;
 
 namespace _0x46696E616C.Buildings
 {
@@ -31,6 +33,9 @@ namespace _0x46696E616C.Buildings
         Color teamColor; //Maybe implement this
         IQueueable<TextureValue> trainingObject;
         public IBuildingObserver worldComponent { get; protected set; }
+
+        Vector2 spawnPoint { get; set; }
+
         public Building(Game game, TextureValue texture, Vector2 position, TextureValue Icon) : base(game, texture, position, Color.Blue)
         {
             Cost = new Wallet();
@@ -59,6 +64,11 @@ namespace _0x46696E616C.Buildings
                 trainingObject = trainingQueue.Peek();
                 if (((IEntity)trainingObject).CurrentHealth >= ((IEntity)trainingObject).TotalHealth)
                 {
+                    if (trainingObject is BasicUnit)
+                    {
+                        ((BasicUnit)trainingObject).UpdatePosition(spawnPoint);
+                        ((BasicUnit)trainingObject).PlacedTile();
+                    }
                     return trainingQueue.Dequeue();
                 }
                 CurrentHealth += 1f;//this probably should be updated too
@@ -93,7 +103,11 @@ namespace _0x46696E616C.Buildings
         {
 
         }
-
+        public override void UpdatePosition(Vector2 position)
+        {
+            spawnPoint = position - (new Vector2(0, -1) * this.Size);
+            base.UpdatePosition(position);
+        }
         public override void Die()
         {
             throw new NotImplementedException();
@@ -102,10 +116,23 @@ namespace _0x46696E616C.Buildings
         {
             throw new NotImplementedException();
         }
-
-        public void Deposit(Wallet wallet)
+        public virtual void Deposit(Wallet wallet)
         {
-            worldComponent.Deposit(wallet);
+
+        }
+
+        public virtual void Collect(Wallet resource)
+        {
+
+        }
+
+        public void SetSpawn(Vector2 position)
+        {
+            this.spawnPoint = position;
+        }
+        public Vector2 GetSpawn()
+        {
+            return this.spawnPoint;
         }
     }
 }

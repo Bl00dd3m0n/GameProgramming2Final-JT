@@ -25,8 +25,18 @@ namespace _0x46696E616C.UIComponents
         #region constructors
         public CommandButton(GraphicsDevice gd) : this() { graphics = gd; }
         public CommandButton(GraphicsDevice gd, ICommand command, IQueueable<TextureValue> queueableObject, Point size) : this(command, queueableObject, size) { graphics = gd; }
+        public CommandButton(GraphicsDevice gd, ICommand command, Vector2 position, TextureValue tex, Point size) : this(command, position, tex, size) { graphics = gd; }
 
         protected CommandButton() : this(null, null, new Point(0, 0)) { }
+
+        protected CommandButton(ICommand command, Vector2 position, TextureValue picture, Point size)
+        {
+            this.bounds = new Rectangle(position.ToPoint(), Size);
+            this.color = color;
+            this.Position = position;
+            this.picture = ContentHandler.DrawnTexture(picture);
+            this.command = command;
+        }
 
         protected CommandButton(ICommand command, IQueueable<TextureValue> queueableObject, Point Size)
         {

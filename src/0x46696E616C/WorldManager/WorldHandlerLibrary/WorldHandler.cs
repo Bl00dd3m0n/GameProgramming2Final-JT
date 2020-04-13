@@ -1,4 +1,5 @@
 ﻿using _0x46696E616C.Buildings;
+using _0x46696E616C.MobHandler.Units;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using NationBuilder.TileHandlerLibrary;
@@ -99,6 +100,11 @@ namespace WorldManager
         public Tile GetBackgroundTile(Vector2 position)
         {
             return map.GetBackTile(position);
+        }
+
+        public IEntity FindNearest(string type, Vector2 Position)
+        {
+            return map.GetTile(type, Position);
         }
     }
 }

@@ -19,17 +19,6 @@ namespace WorldManager.Mobs.HarvestableUnits
 
 
         public IResource type { get; private set; }
-        public string name { get; private set; }
-
-        public Vector2 Size { get; private set; }
-
-        public float TotalHealth { get; private set; }
-
-        public float CurrentHealth { get; private set; }
-
-        public Vector2 Position { get; private set; }
-
-        public HealthBar healthBar { get; protected set; }
 
         protected HarvestableUnit(Game game, TextureValue texture, IResource type, string name, Vector2 size, float totalHealth, float currentHealth, Vector2 position, Color color) : base(game, texture, position, color)
         {
@@ -43,7 +32,7 @@ namespace WorldManager.Mobs.HarvestableUnits
         }
 
 
-        public virtual void Damage(float damage)
+        public override void Damage(float damage)
         {
             CurrentHealth -= damage;
             if(CurrentHealth <=0)
@@ -52,7 +41,7 @@ namespace WorldManager.Mobs.HarvestableUnits
             }
         }
 
-        public virtual void Die()
+        public override void Die()
         {
             base.Die();
         }
@@ -63,6 +52,11 @@ namespace WorldManager.Mobs.HarvestableUnits
             Harvest.Deposit(type, (int)(1 * efficiency));
             Damage(1 * efficiency);
             return Harvest;
+        }
+
+        public void Return(Wallet wal)
+        {
+            this.CurrentHealth+= wal.Count(type);
         }
     }
 }

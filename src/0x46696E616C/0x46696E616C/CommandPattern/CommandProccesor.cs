@@ -135,12 +135,13 @@ namespace _0x46696E616C.CommandPattern
                             float x = 591;//MaxX = 791
                             float y = 359;//MaxY = 511
                             float scale = 0.25f;
+                            Component com = null;
                             foreach (IQueueable<TextureValue> queueable in ((Building)tile).QueueableThings)
                             {
                                 if (queueable is UnitComponent)
                                 {
                                     ((UnitComponent)queueable).UpdatePosition(new Vector2(x, y));
-                                    Component com = new CommandButton(Game.GraphicsDevice, new TrainCommand((IUnit)queueable, (Building)tile), queueable, new Point(32));
+                                    com = new CommandButton(Game.GraphicsDevice, new TrainCommand((IUnit)queueable, (Building)tile), queueable, new Point(32));
                                     float width = ((UnitComponent)queueable).Size.X;
                                     float height = ((UnitComponent)queueable).Size.Y;
                                     com.Scale = 2;
@@ -153,6 +154,7 @@ namespace _0x46696E616C.CommandPattern
                                     }
                                 }
                             }
+                            com = new CommandButton(Game.GraphicsDevice, new SetSpawnPointCommand(currentPos,(Building)tile), new Vector2(757,447), TextureValue.SpawnPoint, new Point(32));
                         }
                     }
                 }
@@ -176,7 +178,7 @@ namespace _0x46696E616C.CommandPattern
                     }
                     else
                     {
-                        return new GarrisonCommand((Building)tile); //Should be a repair command Garrison at the moment will cause the buildings to be repaired....needs to be updated later
+                        return new RepairCommand((Building)tile); //Should be a repair command Garrison at the moment will cause the buildings to be repaired....needs to be updated later
                     }
                 }
                 else

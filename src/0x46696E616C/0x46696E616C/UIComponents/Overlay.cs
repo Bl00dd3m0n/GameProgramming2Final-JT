@@ -85,6 +85,9 @@ namespace _0x46696E616C.UIComponents
                             {
                                 return (Command)((CommandButton)component).command;
                             }
+                        } else
+                        {
+                            return (Command)((CommandButton)component).command;
                         }
                     }
                 }

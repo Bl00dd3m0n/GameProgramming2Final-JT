@@ -3,6 +3,7 @@ using _0x46696E616C.Buildings;
 using _0x46696E616C.CommandPattern.Commands;
 using _0x46696E616C.MobHandler;
 using _0x46696E616C.MobHandler.Units;
+using _0x46696E616C.WorldManager.Resources;
 using Microsoft.Xna.Framework;
 using NationBuilder.TileHandlerLibrary;
 using System;
@@ -12,7 +13,9 @@ using System.Text;
 using System.Threading.Tasks;
 using TechHandler;
 using WorldManager;
+using WorldManager.Buildings;
 using WorldManager.Mobs.HarvestableUnits;
+using WorldManager.TileHandlerLibrary;
 using Vector2 = Microsoft.Xna.Framework.Vector2;
 
 namespace _0x46696E616C.CommandPattern
@@ -21,6 +24,7 @@ namespace _0x46696E616C.CommandPattern
     {
         IEntity Target;
         Vector2 TargetPosition;
+        Vector2 NextPoint;
         Vector2 zero;
         Vector2 xOne;
         Vector2 yOne;
@@ -30,6 +34,7 @@ namespace _0x46696E616C.CommandPattern
         List<Building> toBuild;
         Wallet UnitWallet;
         bool arrived;
+        IEntity returnTarget;
         public UnitComponent(Game game, string name, Vector2 size, float totalHealth, float currentHealth, Vector2 position, BaseUnitState state, TextureValue texture, WorldHandler world, TextureValue Icon) : base(game, name, size, totalHealth, currentHealth, position, state, texture, Color.Blue, Icon)
         {
             QueueableThings = new List<IQueueable<TextureValue>>();
@@ -52,96 +57,147 @@ namespace _0x46696E616C.CommandPattern
             speed = 50;
             this.world = world;
             toBuild = new List<Building>();
-            UnitWallet = new Wallet();
+            UnitWallet = new UnitWallet(10);
+            NextPoint = TargetPosition = Position;
+            
         }
 
-        public void Build(IEntity target)
-        {
-            Target = target;
-            Move(target.Position);
-            State = BaseUnitState.build;
-            arrived = false;
-        }
-
-        public void Move(Vector2 Position)
-        {
-            //waypoints = astar.FindPath(this.position, Position, world);
-            TargetPosition = Position;
-            arrived = false;
-        }
-        public void Attack(IEntity target)
-        {
-            this.Target = target;
-            this.TargetPosition = Target.Position;
-            arrived = false;
-        }
         public override void Update(GameTime gameTime)
         {
             UpdateMove(gameTime);
+            UnitInteraction();
             base.Update(gameTime);
         }
 
+        private void UnitInteraction()
+        {
+            if (Direction == zero && Target != null && !arrived && TargetPosition == NextPoint)
+            {
+                if (Target is Building)
+                {
+                    ((Building)Target).GarrisonedUnits.Add(this);
+
+                    if (((Building)Target).HasTag("Wood Collector") && ((Building)Target).HasTag("Iron Collector"))
+                    {
+                        ((Building)Target).Collect(this.UnitWallet.Withdraw());
+                    }
+                    else if (((Building)Target).HasTag("Iron Collector"))
+                    {
+                        ((Building)Target).Collect(this.UnitWallet.Withdraw(new Iron()));
+                    }
+                    arrived = true;
+                    if (returnTarget != null) Harvest(returnTarget);
+                    returnTarget = null;//Set to null after setting target...keeps the unit from going random places the player wouldn't expect.
+
+                }
+                else if (Target is IHarvestable)
+                {
+                    Type type = ((HarvestableUnit)Target).type.GetType();
+                    Wallet wal = ((HarvestableUnit)Target).Harvest(this.HarvestPower);
+                    if (((HarvestableUnit)Target).State == tileState.dead) //When the source dies find a new thing to harvest
+                    {
+                        Harvest(world.FindNearest(((HarvestableUnit)Target).type.GetType().Name.ToString(), this.Position));
+                    }
+                    bool returnResources = UnitWallet.Deposit(wal);
+                    if (returnResources)
+                    {
+                        ((HarvestableUnit)Target).Return(wal);
+                        returnTarget = Target;
+                        Garrison(world.FindNearest(type.Name.ToString() + " Collector", this.Position));
+                    }
+                }
+                else
+                {
+                    Target.Damage(this.AttackPower);
+                }
+            }
+        }
+
         /// <summary>
-        /// Probably implement some sort of A* and flocking ai either here or 
+        /// Moves by waypoint
         /// </summary>
         ///<see cref="Probably implement some sort of A* and flocking ai either here or in the Command Component"/>>
         private void UpdateMove(GameTime gameTime)
         {
 
             Direction = zero;
-            if (Position.X < TargetPosition.X - 0.5f)
+            if (Position.X < NextPoint.X - 0.5f)
                 Direction += xOne;
-            if (Position.X > TargetPosition.X + 0.5f)
+            if (Position.X > NextPoint.X + 0.5f)
                 Direction -= xOne;
-            if (Position.Y < TargetPosition.Y - 0.5f)
+            if (Position.Y < NextPoint.Y - 0.5f)
                 Direction += yOne;
-            if (Position.Y > TargetPosition.Y + 0.5f)
+            if (Position.Y > NextPoint.Y + 0.5f)
                 Direction -= yOne;
             Position += Direction * 5 * gameTime.ElapsedGameTime.Milliseconds / 1000;
-            this.UpdatePosition(Position);
-            
-            if (Direction == zero && Target != null && !arrived)
-            {
-                if (Target is Building)
-                {
-                    ((Building)Target).GarrisonedUnits.Add(this);
-                    ((Building)Target).Deposit(this.UnitWallet.Withdraw());
-                    arrived = true;
+            //this.UpdatePosition(Position);
 
-                }
-                else if (Target is IHarvestable)
-                {
-                    UnitWallet.Deposit(((HarvestableUnit)Target).Harvest(this.HarvestPower));
-                }
-                else
-                {
-                    Target.Damage(this.AttackPower);
-                }
-
-            }
-            //WayPointFollower();
+            WayPointFollower();
         }
 
         private void WayPointFollower()
         {
-            if (Direction == zero && waypoints.Count > 0)
+            if (Direction == zero && waypoints.Count > 1)
             {
-                TargetPosition = waypoints[waypoints.Count - 1];
-                waypoints.Remove(waypoints[waypoints.Count - 1]);
+                waypoints.Remove(waypoints[0]);
+                NextPoint = waypoints[0];
             }
         }
 
-        public void Garrison(IEntity target)
+        public void Build(IEntity target)
         {
+            ResetUnit();
+            Target = target;
+            Move(target.Position - new Vector2(1f, 0));
+            State = BaseUnitState.build;
+            arrived = false;
+        }
+        /// <summary>
+        /// Generates waypoints using A*
+        /// </summary>
+        /// <param name="Position"></param>
+        public void Move(Vector2 Position)
+        {
+            ResetUnit();
+            waypoints.Clear();
+            waypoints = astar.FindPath(this.Position, Position, world);
+            NextPoint = waypoints[0];
+            TargetPosition = Position;
+            arrived = false;
+        }
+        public void Attack(IEntity target)
+        {
+            ResetUnit();
             this.Target = target;
             this.TargetPosition = Target.Position;
             arrived = false;
         }
 
+        public void Garrison(IEntity target)
+        {
+            ResetUnit();
+            this.Target = target;
+            Move(Target.Position);
+            arrived = false;
+        }
+        /// <summary>
+        /// Ungarisons unit...more functionality might be added
+        /// </summary>
+        private void ResetUnit()
+        {
+            if (this.Target is Building)
+            {
+                if (((Building)this.Target).GarrisonedUnits.Contains(this))
+                {
+                    ((Building)this.Target).GarrisonedUnits.Remove(this);
+                }
+            }
+        }
         public void Harvest(IEntity target)
         {
+            ResetUnit();
             this.Target = target;
-            this.TargetPosition = Target.Position;
+            this.Move(target.Position - new Vector2(1, 0));
             arrived = false;
         }
 

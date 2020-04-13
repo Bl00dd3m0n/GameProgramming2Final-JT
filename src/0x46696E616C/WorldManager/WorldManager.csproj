@@ -45,6 +45,7 @@
     <Compile Include="Buildings\Building.cs" />
     <Compile Include="Buildings\Center.cs" />
     <Compile Include="Buildings\FireWall.cs" />
+    <Compile Include="Buildings\ICollectionCenter.cs" />
     <Compile Include="Buildings\InternetCafe.cs" />
     <Compile Include="Buildings\IProductionCenter.cs" />
     <Compile Include="Buildings\Lab.cs" />
@@ -79,6 +80,7 @@
     <Compile Include="TileHandlerLibrary\ReferenceTile.cs" />
     <Compile Include="TileHandlerLibrary\Tile.cs" />
     <Compile Include="TileHandlerLibrary\TileHandler.cs" />
+    <Compile Include="UnitWallet.cs" />
     <Compile Include="Wallet.cs" />
     <Compile Include="WindowsSave.cs" />
     <Compile Include="WorldHandlerLibrary\WorldHandler.cs" />

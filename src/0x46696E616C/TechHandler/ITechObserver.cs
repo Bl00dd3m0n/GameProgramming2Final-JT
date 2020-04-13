@@ -8,5 +8,6 @@ namespace TechHandler
 {
     public interface ITechObserver
     {
+        void Update(ITech tech);
     }
 }

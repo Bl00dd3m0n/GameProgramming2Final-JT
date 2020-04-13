@@ -43,6 +43,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="IQueueable.cs" />
+    <Compile Include="ITech.cs" />
     <Compile Include="ITechObserver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

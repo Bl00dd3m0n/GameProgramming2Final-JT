@@ -23,7 +23,7 @@ namespace _0x46696E616C.AstarAlgorithm
             Node EndNode = null;
             bool OnMap = world.Contains(EndPosition);
             int i = 0;
-            while (open.Count > 0 && i < world.GetSize().X + world.GetSize().Y && OnMap)
+            while (open.Count > 0 && i < world.GetSize().X * world.GetSize().Y && OnMap)
             {
                 i++;
                 CurrentNode = open[0];
@@ -41,7 +41,7 @@ namespace _0x46696E616C.AstarAlgorithm
                     for (int x = -1; x <= 1; x++)
                     {
                         Vector2 CurrentPos = CurrentNode.Position + new Vector2(x, y);
-                        if (world.CheckPlacement(CurrentPos, new Vector2(1)) && CurrentPos != CurrentNode.Position)
+                        if ((world.CheckPlacement(CurrentPos, new Vector2(1)) || CurrentNode.Position != StartPosition) && CurrentPos != CurrentNode.Position)//To avoid the entire game breaking if you spawn something on a block CurrentPos != StartPosition needs to be implemented
                         {
                             Node tempNode = new Node(CurrentPos, FCost(GCost(StartPosition, CurrentPos), HCost(EndPosition, CurrentPos)));
                             tempNode.Parent = CurrentNode;
@@ -81,16 +81,10 @@ namespace _0x46696E616C.AstarAlgorithm
                         {
                             if (closedNode.Position == node.Position)
                             {
-                                if (node.fCost >= closedNode.fCost)
+                                AddNode = false;
+                                if (node.fCost < closedNode.fCost)
                                 {
-                                    AddNode = false;
-                                    break;
-                                }
-                                else
-                                {
-                                    AddNode = false;
                                     open.Add(closedNode);
-                                    heldNode = closedNode;
                                     break;
                                 }
                             }
@@ -108,10 +102,13 @@ namespace _0x46696E616C.AstarAlgorithm
             {
                 while (EndNode != null)
                 {
+
                     waypoints.Add(EndNode.Position);
+
                     EndNode = EndNode.Parent;
                 }
             }
+            waypoints.Reverse();
             return waypoints;
         }
 
@@ -121,8 +118,7 @@ namespace _0x46696E616C.AstarAlgorithm
         /// <returns>G cost</returns>
         private float GCost(Vector2 start, Vector2 currentPosition)
         {
-
-            return (float)Math.Sqrt((Math.Abs(start.X) + Math.Abs(currentPosition.X)) + (Math.Abs(start.Y) + Math.Abs(currentPosition.Y))) * 10;
+            return (float)Math.Sqrt(Math.Pow(start.X - currentPosition.X, 2) + Math.Pow(start.Y - currentPosition.Y, 2)) * 10;
         }
         /// <summary>
         /// Distance from the end
@@ -130,7 +126,7 @@ namespace _0x46696E616C.AstarAlgorithm
         /// <returns>H Cost</returns>
         private float HCost(Vector2 end, Vector2 currentPosition)
         {
-            return (float)Math.Sqrt((Math.Abs(end.X) + Math.Abs(currentPosition.X)) + (Math.Abs(end.Y) + Math.Abs(currentPosition.Y))) * 10;
+            return (float)Math.Sqrt(Math.Pow(end.X - currentPosition.X, 2) + Math.Pow(end.Y - currentPosition.Y, 2)) * 10;
         }
 
         /// <summary>

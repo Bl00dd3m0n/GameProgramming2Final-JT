@@ -85,7 +85,7 @@ namespace _0x46696E616C
             cam = new Camera(this, input, world, startPoint);
             List<IUnit> units = new List<IUnit>();
             units.Add(new UnitComponent(this, "Base unit", new Vector2(1, 1), 100, 100, startPoint + new Vector2(4, 4), BaseUnitState.Idle, TextureValue.Civilian, world, TextureValue.Civilian));
-            cc = new CommandComponent(this, startingResources, units);
+            cc = new CommandComponent(this, startingResources, units, world);
             process = new CommandProccesor(this, new List<IUnit>(), world, input, cc, cam);
             overlay = new Overlay(this, input, world, process);
 
@@ -133,7 +133,7 @@ namespace _0x46696E616C
 
             base.Update(gameTime);
         }
-        bool debug = true;
+        bool debug = false;
         /// <summary>
         /// This is called when the game should draw itself.
         /// </summary>

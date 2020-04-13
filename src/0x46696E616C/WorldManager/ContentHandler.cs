@@ -47,6 +47,7 @@ namespace NationBuilder.DataHandlerLibrary
         //Util Content
         public static Texture2D Cursor;
         public static SpriteFont Font;
+        public static Texture2D SpawnPoint;
 
         public static bool LoadContent(Game game)
         {
@@ -86,6 +87,7 @@ namespace NationBuilder.DataHandlerLibrary
                 SteelFactoryIcon = SetTexture(TextureValue.SteelFactoryIcon, game);
                 //Util Content
                 Cursor = SetTexture(TextureValue.Cursor, game);
+                SpawnPoint = SetTexture(TextureValue.SpawnPoint, game);
                 Font = game.Content.Load<SpriteFont>("Ariel");
                 return true;
             }
@@ -159,6 +161,8 @@ namespace NationBuilder.DataHandlerLibrary
                 //Util
                 case TextureValue.Cursor:
                     return Cursor;
+                case TextureValue.SpawnPoint:
+                        return SpawnPoint;
                 default:
                     return Grass;
             }

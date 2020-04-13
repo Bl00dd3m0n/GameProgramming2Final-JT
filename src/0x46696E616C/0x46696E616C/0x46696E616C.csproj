@@ -55,6 +55,7 @@
     <Compile Include="CommandPattern\GameCommands\GarrisonCommand.cs" />
     <Compile Include="CommandPattern\GameCommands\RepairCommand.cs" />
     <Compile Include="CommandPattern\GameCommands\SelectCommand.cs" />
+    <Compile Include="CommandPattern\GameCommands\SetSpawnPointCommand.cs" />
     <Compile Include="CommandPattern\GameCommands\TrainCommand.cs" />
     <Compile Include="CommandPattern\ICommand.cs" />
     <Compile Include="CommandPattern\ICommandComponent.cs" />

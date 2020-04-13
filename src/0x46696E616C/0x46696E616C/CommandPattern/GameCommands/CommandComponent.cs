@@ -23,6 +23,11 @@ namespace _0x46696E616C.CommandPattern
         List<string> resourceStringList;
         private List<IUnit> units;
 
+        internal void SetSpawnPoint(Vector2 position, Building building)
+        {
+            //building.SpawnPoint();
+        }
+
         public List<IUnit> Units
         {
             get { return units.ToList(); }
@@ -35,7 +40,7 @@ namespace _0x46696E616C.CommandPattern
         float timer;
 
         public Building selectedBuild;
-
+        private WorldHandler world;
         public CommandComponent(Game game, Wallet startingResources) : base(game)
         {
             energy = new Energy();
@@ -49,7 +54,7 @@ namespace _0x46696E616C.CommandPattern
         /// </summary>
         /// <param name="game"></param>
         /// <param name="startingResources"></param>
-        public CommandComponent(Game game, Wallet startingResources, List<IUnit> units) : base(game)
+        public CommandComponent(Game game, Wallet startingResources, List<IUnit> units, WorldHandler world) : base(game)
         {
             energy = new Energy();
             Buildings = new List<Building>();
@@ -57,6 +62,8 @@ namespace _0x46696E616C.CommandPattern
             resources = startingResources;
             SelectedUnits = this.units = units;
             resourceStringList = new List<string>();
+            this.world = world;
+
         }
 
         public void Select(List<IUnit> units)
@@ -206,6 +213,20 @@ namespace _0x46696E616C.CommandPattern
                 toBuild[i].Construct(); //TODO implement worker proficiency at repairing/building here(More workers/better tech should speed this process up)
                 if (toBuild[i].CurrentHealth >= toBuild[i].TotalHealth)
                 {
+                    if (toBuild[i].HasTag("Wood Collector"))
+                    {
+                        for (int j = 0; j < toBuild[i].GarrisonedUnits.Count; j++)
+                        {
+                            ((UnitComponent)toBuild[i].GarrisonedUnits[j]).Harvest(world.FindNearest("Wood", toBuild[i].GarrisonedUnits[j].Position));
+                        }
+                    }
+                    else if(toBuild[i].HasTag("Iron Collector"))
+                    {
+                        for(int j = 0; j < toBuild[i].GarrisonedUnits.Count; j++)
+                        {
+                            ((UnitComponent)toBuild[i].GarrisonedUnits[j]).Harvest(world.FindNearest("Iron", toBuild[i].GarrisonedUnits[j].Position));
+                        }
+                    }
                     Buildings.Add(toBuild[i]);
                     toBuild.RemoveAt(i);
                 }
@@ -214,7 +235,8 @@ namespace _0x46696E616C.CommandPattern
         }
         public void Train(Building build, IUnit unit)
         {
-            if (!Buildings.Contains(build)) Buildings.Add(build);
+            if (!Buildings.Contains(build))
+                Buildings.Add(build);
             build.trainingQueue.Enqueue((IQueueable<TextureValue>)unit);
         }
         private void Train()
@@ -225,6 +247,10 @@ namespace _0x46696E616C.CommandPattern
                 if(item != null)
                 {
                     units.Add((IUnit)item);
+                    if(units[units.Count - 1] is UnitComponent)
+                    {
+                        ((UnitComponent)units[units.Count - 1]).Move(Buildings[i].GetSpawn());
+                    }
                 }
             }
         }
@@ -254,6 +280,18 @@ namespace _0x46696E616C.CommandPattern
         public void Deposit(Wallet wallet)
         {
             this.resources.Deposit(wallet);
+        }
+
+        internal void Repair(Building building)
+        {
+            toBuild.Add(building);
+            foreach (IUnit unit in units)
+            {
+                if (unit is UnitComponent)
+                {
+                    ((UnitComponent)unit).Build(building);
+                }
+            }
         }
     }
 }

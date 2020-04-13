@@ -30,11 +30,12 @@ namespace WorldManager.TileHandlerLibrary
 
         public HealthBar healthBar { get; protected set; }
         List<IMapObserver> MapWatcher;
-
+        protected List<string> tags;
         public ModifiableTile(Game game, TextureValue texture, Vector2 position, Color color) : base(game, texture, position, color)
         {
             MapWatcher = new List<IMapObserver>();
             healthBar = new HealthBar(new Rectangle(this.Position.ToPoint()-new Point(0,(int)(this.Size.Y*16+1)), Size.ToPoint()));
+            tags = new List<string>();
         }
         public virtual void Subscribe(IMapObserver map)
         {
@@ -73,6 +74,12 @@ namespace WorldManager.TileHandlerLibrary
                 healthBar = new HealthBar(new Rectangle(new Point((int)position.X, (int)position.Y - 1), new Point((int)(Size.X * 16), (int)(5))));
                 healthBar.UpdateHealth(this, Game.GraphicsDevice);
             }
+        }
+
+        public bool HasTag(string v)
+        {
+            if (tags.Contains(v)) return true;
+            return false;
         }
     }
 }

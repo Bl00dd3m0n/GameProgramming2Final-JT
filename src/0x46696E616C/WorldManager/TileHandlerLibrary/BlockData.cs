@@ -34,6 +34,7 @@ namespace NationBuilder.TileHandlerLibrary
         None,
         Cursor,
         PowerSupply,
+        SpawnPoint,
 
         //Icons
         CenterIcon,

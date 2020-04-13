@@ -1,4 +1,6 @@
 ﻿using _0x46696E616C.Buildings;
+using _0x46696E616C.MobHandler;
+using _0x46696E616C.MobHandler.Units;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using NationBuilder.DataHandlerLibrary;
@@ -43,17 +45,17 @@ namespace WorldManager.MapData
                     }
                 }
             }
-             for (int y = 0; y < mapSize.Y; y++)
-             {
-                 for (int x = 0; x < mapSize.X; x++)
-                 {
-                     if (tiles[x, y, 1] != null) colors[(int)((x) + (y) * (mapSize.X))] = tiles[x,y,1].tileColor;
-                     else colors[(int)((x) + (y) * (mapSize.X))] = tiles[x, y, 0].tileColor;
-                 }
-             }
-             mapTexture = new Texture2D(gd, (int)mapSize.X, (int)mapSize.Y);
-             mapTexture.SetData(colors, 0, (int)((mapSize.X * mapSize.Y)));
-         
+            for (int y = 0; y < mapSize.Y; y++)
+            {
+                for (int x = 0; x < mapSize.X; x++)
+                {
+                    if (tiles[x, y, 1] != null) colors[(int)((x) + (y) * (mapSize.X))] = tiles[x, y, 1].tileColor;
+                    else colors[(int)((x) + (y) * (mapSize.X))] = tiles[x, y, 0].tileColor;
+                }
+            }
+            mapTexture = new Texture2D(gd, (int)mapSize.X, (int)mapSize.Y);
+            mapTexture.SetData(colors, 0, (int)((mapSize.X * mapSize.Y)));
+
         }
 
         internal void PlaceBlock(ModifiableTile building, Vector2 position)
@@ -80,6 +82,30 @@ namespace WorldManager.MapData
                     }
                 }
             }
+        }
+
+        internal IEntity GetTile(string v, Vector2 Position)
+        {
+            IEntity tile = null;
+            float distance = 0;
+            for (int y = 0; y < mapSize.Y; y++)
+            {
+                for (int x = 0; x < mapSize.X; x++)
+                {
+                    if(tiles[x,y,1] != null)
+                    {
+                        if (((ModifiableTile)tiles[x, y, 1]).HasTag(v))
+                        {
+                            if (Vector2.Distance(tiles[x, y, 1].Position, Position) < distance || distance == 0)
+                            {
+                                tile = (IEntity)tiles[x, y, 1];
+                                distance = Vector2.Distance(tiles[x, y, 1].Position, Position);
+                            }
+                        }
+                    }
+                }
+            }
+            return tile;
         }
 
         public ModifiableTile GetTile(Vector2 position)

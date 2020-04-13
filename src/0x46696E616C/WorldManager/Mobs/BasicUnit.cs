@@ -52,5 +52,10 @@ namespace _0x46696E616C.CommandPattern.Commands
         {
             return new BasicUnit(this.Game, this.name, this.Size,this.TotalHealth, currentHealth, position, BaseUnitState.Idle, this.block.texture, this.tileColor, this.Icon);
         }
+
+        public void Update(ITech tech)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
