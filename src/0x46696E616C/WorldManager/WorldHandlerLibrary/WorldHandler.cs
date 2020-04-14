@@ -21,6 +21,7 @@ namespace WorldManager
         Game game;
         Save save;
         long Seed;
+
         public WorldHandler(Game game, string WorldName)
         {
             Seed = 14153456352343;
@@ -88,14 +89,14 @@ namespace WorldManager
             }
         }
 
-        public void LoadArea()
-        {
-
-        }
 
         public ModifiableTile GetTile(Vector2 position)
         {
             return map.GetTile(position);
+        }
+        public IUnit GetUnit(Vector2 position)
+        {
+            return map.GetUnits(position);
         }
         public Tile GetBackgroundTile(Vector2 position)
         {
@@ -105,6 +106,11 @@ namespace WorldManager
         public IEntity FindNearest(string type, Vector2 Position)
         {
             return map.GetTile(type, Position);
+        }
+
+        public void AddMob(IEntity unit)
+        {
+            map.AddMob(unit);
         }
     }
 }

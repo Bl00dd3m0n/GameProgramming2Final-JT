@@ -27,7 +27,7 @@ namespace UIProject
 
         protected Button(Vector2 position, Point Size) : this(position, Size, Color.White) { }
 
-        protected Button(Vector2 position, Point size, Color color)
+        protected Button(Vector2 position, Point size, Color color) : base(position, size, color)
         {
             this.Size = size;
             this.color = color;

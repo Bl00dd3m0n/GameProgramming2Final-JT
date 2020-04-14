@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using _0x46696E616C.Buildings;
+using _0x46696E616C.CommandPattern.Commands;
 using _0x46696E616C.MobHandler;
 using _0x46696E616C.MobHandler.Units;
 using _0x46696E616C.WorldManager.Resources;
@@ -12,6 +13,7 @@ using NationBuilder.TileHandlerLibrary;
 using TechHandler;
 using WorldManager;
 using WorldManager.MapData;
+using WorldManager.TileHandlerLibrary;
 
 namespace _0x46696E616C.CommandPattern
 {
@@ -60,15 +62,23 @@ namespace _0x46696E616C.CommandPattern
             Buildings = new List<Building>();
             toBuild = new List<Building>();
             resources = startingResources;
-            SelectedUnits = this.units = units;
+            this.units = units.ToList();
+            this.SelectedUnits = units.ToList();
             resourceStringList = new List<string>();
             this.world = world;
 
         }
 
+        public void Select(IUnit units)
+        {
+            SelectedUnits.Clear();
+            SelectedUnits.Add(units);
+        }
+
         public void Select(List<IUnit> units)
         {
-            SelectedUnits = units;
+            SelectedUnits.Clear();
+            SelectedUnits.AddRange(units);
         }
 
         public void Attack(IEntity target)
@@ -97,12 +107,12 @@ namespace _0x46696E616C.CommandPattern
 
         internal void SelectBuild(Building build)
         {
-            this.selectedBuild = build;
+            this.selectedBuild = build.NewInstace(Game, build.block.texture, build.Position, build.Icon);
         }
 
         public void Move(Vector2 Position)
         {
-            foreach (IUnit unit in units)
+            foreach (IUnit unit in SelectedUnits)
             {
                 if (unit is UnitComponent)
                 {
@@ -202,6 +212,7 @@ namespace _0x46696E616C.CommandPattern
                 Construction();
                 Train();
             }
+            CleanList();
             base.Update(gameTime);
         }
 
@@ -233,12 +244,44 @@ namespace _0x46696E616C.CommandPattern
             }
 
         }
+
+        /// <summary>
+        /// Cleans up this list when the unit dies in the world
+        /// </summary>
+        private void CleanList()
+        {
+            for (int i = 0; i < units.Count; i++)
+            {
+                if(((ModifiableTile)units[i]).State == tileState.dead)
+                {
+                    if (SelectedUnits.Contains(units[i]))
+                    {
+                        SelectedUnits.Remove(units[i]);
+                    }
+                    units.Remove(units[i]);
+                    i--;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Starts units training in the building
+        /// </summary>
+        /// <param name="build"></param>
+        /// <param name="unit"></param>
         public void Train(Building build, IUnit unit)
         {
             if (!Buildings.Contains(build))
                 Buildings.Add(build);
+            if(unit is UnitComponent)
+            {
+                unit = ((UnitComponent)unit).NewInstace(0, unit.Position);
+            }
             build.trainingQueue.Enqueue((IQueueable<TextureValue>)unit);
         }
+        /// <summary>
+        /// Actual training update loop - returns the units that are at full health(AKA fully trained)
+        /// </summary>
         private void Train()
         {
             for (int i = 0; i < Buildings.Count; i++)
@@ -250,11 +293,14 @@ namespace _0x46696E616C.CommandPattern
                     if(units[units.Count - 1] is UnitComponent)
                     {
                         ((UnitComponent)units[units.Count - 1]).Move(Buildings[i].GetSpawn());
+                        world.AddMob(units[units.Count - 1]);
                     }
                 }
             }
         }
-
+        /// <summary>
+        /// Pulls energy cost for buildings
+        /// </summary>
         public void ChargeEnergy()
         {
             foreach (Building building in Buildings)
@@ -262,7 +308,9 @@ namespace _0x46696E616C.CommandPattern
                 resources.Withdraw(energy, building.energyCost / 60f); // TODO implement an building shutoff if the player runs out of energy
             }
         }
-
+        /// <summary>
+        /// Runs through buildings and produces resources
+        /// </summary>
         public void ProduceResources()
         {
             foreach (Building building in Buildings)
@@ -276,16 +324,22 @@ namespace _0x46696E616C.CommandPattern
                 }
             }
         }
-
+        /// <summary>
+        /// deposits resources into the players wallet
+        /// </summary>
+        /// <param name="wallet"></param>
         public void Deposit(Wallet wallet)
         {
             this.resources.Deposit(wallet);
         }
-
+        /// <summary>
+        /// has every unit
+        /// </summary>
+        /// <param name="building"></param>
         internal void Repair(Building building)
         {
             toBuild.Add(building);
-            foreach (IUnit unit in units)
+            foreach (IUnit unit in SelectedUnits)
             {
                 if (unit is UnitComponent)
                 {

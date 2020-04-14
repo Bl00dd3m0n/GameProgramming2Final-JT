@@ -22,12 +22,15 @@ namespace WorldManager.MapData
         public Texture2D mapTexture { get; private set; }
         long Seed;
         WorldGeneration wg;
+        List<IEntity> mobs;
+
         public Map(Game game, Vector2 mapSize, long Seed)
         {
             tiles = new Tile[(int)mapSize.X, (int)mapSize.Y, 2];
             this.mapSize = mapSize;
             this.Seed = Seed;
             wg = new WorldGeneration(game, this.GetType().Name.ToString(), Seed, mapSize);
+            mobs = new List<IEntity>();
         }
         public void GenerateMap(GraphicsDevice gd)
         {
@@ -84,6 +87,11 @@ namespace WorldManager.MapData
             }
         }
 
+        internal IUnit GetUnits(Vector2 position)
+        {
+            return (IUnit)mobs.Find(l => l.Position.ToPoint() == position.ToPoint());
+        }
+
         internal IEntity GetTile(string v, Vector2 Position)
         {
             IEntity tile = null;
@@ -92,7 +100,7 @@ namespace WorldManager.MapData
             {
                 for (int x = 0; x < mapSize.X; x++)
                 {
-                    if(tiles[x,y,1] != null)
+                    if (tiles[x, y, 1] != null)
                     {
                         if (((ModifiableTile)tiles[x, y, 1]).HasTag(v))
                         {
@@ -108,7 +116,7 @@ namespace WorldManager.MapData
             return tile;
         }
 
-        public ModifiableTile GetTile(Vector2 position)
+        internal ModifiableTile GetTile(Vector2 position)
         {
             try
             {
@@ -119,7 +127,7 @@ namespace WorldManager.MapData
                 return null;
             }
         }
-        public Tile GetBackTile(Vector2 position)
+        internal Tile GetBackTile(Vector2 position)
         {
             try
             {
@@ -131,12 +139,12 @@ namespace WorldManager.MapData
             }
         }
 
-        public BackGroundTile GenerateTerrain(Vector2 position)
+        internal BackGroundTile GenerateTerrain(Vector2 position)
         {
             return wg.Biome(position, Seed);
         }
 
-        public ModifiableTile GenerateDecor(Vector2 position)
+        internal ModifiableTile GenerateDecor(Vector2 position)
         {
             return wg.AddDecor(tiles[(int)position.X, (int)position.Y, 0].block, position.X, position.Y);
         }
@@ -145,8 +153,22 @@ namespace WorldManager.MapData
         {
             if (observer.State == tileState.dead)
             {
-                tiles[(int)observer.Position.X, (int)observer.Position.Y, 1] = null;
+
+                if (observer is IUnit)
+                {
+                    int index = mobs.FindIndex(l => l.Position.ToPoint() == observer.Position.ToPoint());
+                    if (index >= 0)
+                    {
+                        mobs.RemoveAt(index);
+                    }
+                }
+                else tiles[(int)observer.Position.X, (int)observer.Position.Y, 1] = null;
             }
+        }
+        internal void AddMob(IEntity unit)
+        {
+            mobs.Add(unit);
+            ((ModifiableTile)unit).Subscribe(this);
         }
     }
 }

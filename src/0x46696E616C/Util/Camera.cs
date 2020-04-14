@@ -34,11 +34,8 @@ namespace Util
         SpriteBatch sb;
         MouseKeyboard input;
         Vector2 Dir;
-        private MouseKeyboard input1;
-        private WorldHandler world1;
-        private Vector2 startPoint;
 
-        public Camera(Game game, InputHandler input, WorldHandler worldHandler) : this(game,input,worldHandler,new Vector2(0,0))
+        public Camera(Game game, InputHandler input, WorldHandler worldHandler) : this(game, input, worldHandler, new Vector2(0, 0))
         {
 
         }
@@ -93,13 +90,13 @@ namespace Util
         {
             Dir.X = 0;
             Dir.Y = 0;
-            if (input.CheckKeyDown(Keys.W) && bounds.Top < ViewPort.Top+(2*Tile.Zoom))//TODO Solve Scrolling Offset
+            if (input.CheckKeyDown(Keys.W) && bounds.Top < ViewPort.Top + (2 * Tile.Zoom))//TODO Solve Scrolling Offset
                 Dir.Y = -1;
             if (input.CheckKeyDown(Keys.S) && bounds.Bottom > ViewPort.Bottom)//TODO Solve Scrolling Offset
                 Dir.Y = 1;
             if (input.CheckKeyDown(Keys.A) && bounds.Left < ViewPort.Left + 2)
                 Dir.X = -1;
-            if (input.CheckKeyDown(Keys.D) && bounds.Right > ViewPort.Right-2)
+            if (input.CheckKeyDown(Keys.D) && bounds.Right > ViewPort.Right - 2)
                 Dir.X = 1;
             position += Dir * MoveSpeed * timer / 100;
             position = position.ToPoint().ToVector2();//Truncates the position to interger values
@@ -109,16 +106,16 @@ namespace Util
         public override void Draw(GameTime gameTime)
         {
             sb.Begin();
-            for (int i = 0; i < 2; i++)
+            for (int i = 0; i < 3; i++)
             {
                 int OverX = 0;
                 int OverY = 0;
                 float scale = 3;
                 if (ViewPort.Top < 0) OverY = -ViewPort.Top;
                 if (ViewPort.Left < 0) OverX = -ViewPort.Left;
-                for (int y = ViewPort.Top; y < ViewPort.Bottom * (Tile.Zoom*scale)+OverY; y++)
+                for (int y = ViewPort.Top; y < ViewPort.Bottom * (Tile.Zoom * scale) + OverY; y++)
                 {
-                    for (int x = ViewPort.Left; x < ViewPort.Right * (Tile.Zoom*scale)+OverX; x++)
+                    for (int x = ViewPort.Left; x < ViewPort.Right * (Tile.Zoom * scale) + OverX; x++)
                     {
                         DrawScreen(x, y, i);
                     }
@@ -131,7 +128,7 @@ namespace Util
             base.Draw(gameTime);
         }
 
-        private void DrawScreen(int x, int y,int i)
+        private void DrawScreen(int x, int y, int i)
         {
             if (x >= 0 && x < bounds.Width && y >= 0 && y < bounds.Height)
             {
@@ -139,6 +136,16 @@ namespace Util
                 {
                     Tile backtile = world.GetBackgroundTile(new Vector2(x, y));
                     sb.Draw(ContentHandler.DrawnTexture(backtile.block.texture), (backtile.Position * Tile.Zoom * 16) - (position * Tile.Zoom * 16), null, Color.White, 0, new Vector2(0), Tile.Zoom, SpriteEffects.None, 0);
+                }
+                else if (i == 1)
+                {
+                    ModifiableTile tile = (ModifiableTile)world.GetUnit(new Vector2(x, y));
+                    if (tile != null && tile.block.texture != TextureValue.None)
+                    {
+                        Texture2D texture = ContentHandler.DrawnTexture(tile.block.texture);
+                        sb.Draw(ContentHandler.DrawnTexture(tile.block.texture), (tile.Position * Tile.Zoom * 16) - (position * Tile.Zoom * 16), null, Color.White, 0, new Vector2(0), Tile.Zoom, SpriteEffects.None, 0);
+                        DrawHealth(tile);
+                    }
                 }
                 else
                 {
@@ -148,14 +155,18 @@ namespace Util
                         Texture2D texture = ContentHandler.DrawnTexture(decorTile.block.texture);
                         decorTile.UpdatePosition(decorTile.Position.ToPoint().ToVector2());
                         sb.Draw(ContentHandler.DrawnTexture(decorTile.block.texture), (decorTile.Position * Tile.Zoom * 16) - (position * Tile.Zoom * 16), null, Color.White, 0, new Vector2(0), Tile.Zoom, SpriteEffects.None, 0);
-                        if (decorTile.healthBar != null)
-                        {
-                            if (decorTile.healthBar.Health != null)
-                            {
-                                sb.Draw(decorTile.healthBar.Health, (decorTile.healthBar.Bounds.Location.ToVector2() * Tile.Zoom * 16) - (position * Tile.Zoom * 16), null, Color.White, 0, new Vector2(0), Tile.Zoom, SpriteEffects.None, 0);
-                            }
-                        }
+                        DrawHealth(decorTile);
                     }
+                }
+            }
+        }
+        private void DrawHealth(ModifiableTile tileWithHealth)
+        {
+            if (tileWithHealth.healthBar != null)
+            {
+                if (tileWithHealth.healthBar.Health != null)
+                {
+                    sb.Draw(tileWithHealth.healthBar.Health, (tileWithHealth.healthBar.Bounds.Location.ToVector2() * Tile.Zoom * 16) - (position * Tile.Zoom * 16), null, Color.White, 0, new Vector2(0), Tile.Zoom, SpriteEffects.None, 0);
                 }
             }
         }

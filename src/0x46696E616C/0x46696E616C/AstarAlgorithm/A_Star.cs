@@ -14,6 +14,7 @@ namespace _0x46696E616C.AstarAlgorithm
         public List<Vector2> FindPath(Vector2 StartPosition, Vector2 EndPosition, WorldHandler world)
         {
             StartPosition = StartPosition.ToPoint().ToVector2();
+            EndPosition = EndPosition.ToPoint().ToVector2();
             List<Vector2> waypoints = new List<Vector2>();
             List<Node> open = new List<Node>();
             List<Node> closed = new List<Node>();
@@ -23,7 +24,7 @@ namespace _0x46696E616C.AstarAlgorithm
             Node EndNode = null;
             bool OnMap = world.Contains(EndPosition);
             int i = 0;
-            while (open.Count > 0 && i < world.GetSize().X * world.GetSize().Y && OnMap)
+            while (open.Count > 0 && i < world.GetSize().X * world.GetSize().Y && OnMap && StartPosition != EndPosition)
             {
                 i++;
                 CurrentNode = open[0];
@@ -41,7 +42,7 @@ namespace _0x46696E616C.AstarAlgorithm
                     for (int x = -1; x <= 1; x++)
                     {
                         Vector2 CurrentPos = CurrentNode.Position + new Vector2(x, y);
-                        if ((world.CheckPlacement(CurrentPos, new Vector2(1)) || CurrentNode.Position != StartPosition) && CurrentPos != CurrentNode.Position)//To avoid the entire game breaking if you spawn something on a block CurrentPos != StartPosition needs to be implemented
+                        if ((world.CheckPlacement(CurrentPos, new Vector2(1)) || CurrentNode.Position != StartPosition) && world.GetUnit(CurrentPos) == null && CurrentPos != CurrentNode.Position)//To avoid the entire game breaking if you spawn something on a block CurrentPos != StartPosition needs to be implemented
                         {
                             Node tempNode = new Node(CurrentPos, FCost(GCost(StartPosition, CurrentPos), HCost(EndPosition, CurrentPos)));
                             tempNode.Parent = CurrentNode;

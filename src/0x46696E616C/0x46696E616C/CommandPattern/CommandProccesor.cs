@@ -45,7 +45,7 @@ namespace _0x46696E616C.CommandPattern
         }
         public override void Update(GameTime gameTime)
         {
-            CurrentPos = (camera.Position + (input.inputPos / (Tile.Zoom * 16)));
+            CurrentPos = ConvertToWorldSpace(input.inputPos);
             Command command = null;
             if (input is MouseKeyboard && Game.IsActive)
             {
@@ -84,58 +84,47 @@ namespace _0x46696E616C.CommandPattern
                     ModifiableTile tile = null;
                     for (int i = 0; i < cc.Units.Count; i++)
                     {
-                        bool XLessThan = cc.Units[0].Position.X <= CurrentPos.X;
-                        bool YLessThan = cc.Units[0].Position.Y <= CurrentPos.Y;
-                        bool XPlusSizeLessThan = cc.Units[0].Position.X + cc.Units[0].Size.X >= CurrentPos.X;
-                        bool YPlusSizeLessThan = cc.Units[0].Position.Y + cc.Units[0].Size.Y >= CurrentPos.Y;
+                        bool XLessThan = cc.Units[i].Position.X <= CurrentPos.X;
+                        bool YLessThan = cc.Units[i].Position.Y <= CurrentPos.Y;
+                        bool XPlusSizeLessThan = cc.Units[i].Position.X + cc.Units[i].Size.X >= CurrentPos.X;
+                        bool YPlusSizeLessThan = cc.Units[i].Position.Y + cc.Units[i].Size.Y >= CurrentPos.Y;
                         if (XLessThan && YLessThan && XPlusSizeLessThan && YPlusSizeLessThan)
                         {
                             tile = (ModifiableTile)cc.Units[i];
                         }
                     }
 
-                    if (tile == null) {
+                    if (tile == null)
+                    {
                         tile = wh.GetTile(CurrentPos);
                     }
                     if (tile is ReferenceTile)
                     {
                         tile = ((ReferenceTile)tile).tile;
                     }
+                    if(tile == null)
+                    {
+                        try
+                        {
+                            tile = (ModifiableTile)wh.GetUnit(CurrentPos);
+                        }
+                        catch (ArgumentOutOfRangeException) { }//Prevents a crash if there aren't any units at this point
+                    }
                     if (tile != null)
                     {
                         overlay.RemoveAllComponents(typeof(CommandButton));
                         if (tile is UnitComponent)
                         {
-                            //BuildQueue size
-                            //Pos: (591,391) Size: (200,120)
-                            float x = 591;//MaxX = 791
-                            float y = 359;//MaxY = 511
-                            float scale = 0.25f;
-                            foreach (IQueueable<TextureValue> queueable in ((UnitComponent)tile).QueueableThings)
-                            {
-                                if (queueable is Building)
-                                {
-                                    ((Building)queueable).UpdatePosition(new Vector2(x,y));
-                                    Component com = new CommandButton(Game.GraphicsDevice, new BuildSelectCommand((Building)queueable), queueable,new Point(32));
-                                    float width = ((Building)queueable).Size.X;
-                                    float height = ((Building)queueable).Size.Y;
-                                    com.Scale = 0.25f;
-                                    overlay.AddComponent(com);
-                                    x += 128 * scale;
-                                    if (x +128 * scale> 791)
-                                    {
-                                        x = 591;
-                                        y += 128 * scale;
-                                    }
-                                }
-                            }
+                            AddUnitQueueables(tile);
+                            return new SelectCommand((IUnit)tile);
                         }
-                        else if(tile is Building)
+                        else if (tile is Building)
                         {
                             float x = 591;//MaxX = 791
                             float y = 359;//MaxY = 511
                             float scale = 0.25f;
                             Component com = null;
+                            overlay.RemoveAllComponents(typeof(CommandButton));
                             foreach (IQueueable<TextureValue> queueable in ((Building)tile).QueueableThings)
                             {
                                 if (queueable is UnitComponent)
@@ -154,7 +143,7 @@ namespace _0x46696E616C.CommandPattern
                                     }
                                 }
                             }
-                            com = new CommandButton(Game.GraphicsDevice, new SetSpawnPointCommand(currentPos,(Building)tile), new Vector2(757,447), TextureValue.SpawnPoint, new Point(32));
+                            com = new CommandButton(Game.GraphicsDevice, new SetSpawnPointCommand(currentPos, (Building)tile), new Vector2(757, 447), TextureValue.SpawnPoint, new Point(32));
                         }
                     }
                 }
@@ -162,7 +151,7 @@ namespace _0x46696E616C.CommandPattern
             else if (input.RightClick())
             {
                 Tile tile = wh.GetTile(CurrentPos);
-                if(tile is ReferenceTile)
+                if (tile is ReferenceTile)
                 {
                     tile = ((ReferenceTile)tile).tile;
                 }
@@ -183,14 +172,87 @@ namespace _0x46696E616C.CommandPattern
                 }
                 else
                 {
-                    return new Movecommand((CurrentPos).ToPoint().ToVector2());
+                    IUnit unit = wh.GetUnit(CurrentPos);
+                    if (unit != null)
+                    {
+                        return new AttackCommand(unit);
+                    }
+                    else
+                    {
+                        return new Movecommand((CurrentPos).ToPoint().ToVector2());
+                    }
                 }
             }
-            else
+            else if (input.LeftRelease())
             {
-                return null;
+                Vector2 startPoint = ConvertToWorldSpace(input.selectionStart);
+                Vector2 endPoint = ConvertToWorldSpace(input.selectionEnd);
+                List<IUnit> unitSelection = new List<IUnit>();
+                Vector2 tempStart = startPoint;
+                Vector2 tempEnd = endPoint;
+                bool UnitsTheSame = true;
+                #region Fix Start/End points
+                int startY = (int)startPoint.Y > endPoint.Y ? (int)endPoint.Y : (int)startPoint.Y; //If the endpoint is above the start point flip it
+                int startX = (int)startPoint.X > endPoint.X ? (int)endPoint.X : (int)startPoint.X; //if the end point is left of the start point flip it
+                int endY = (int)startPoint.Y == startY ? (int)endPoint.Y : (int)startPoint.Y; //if the start point is the start point stay the same if not flip
+                int endX = (int)startPoint.X == startX ? (int)endPoint.X : (int)startPoint.X; //^
+                #endregion
+                
+                for (int y = (int)startY; y < endY; y++)
+                {
+                    for (int x = (int)startX; x < endX; x++)
+                    {
+                       unitSelection.Add(wh.GetUnit(new Vector2(x, y)));
+                        if (unitSelection.Count > 0) {
+                            if (unitSelection.Where(l => l.GetType() != unitSelection[0].GetType()).Count() > 0) // if there are any units not like the first unit in the list they aren't the same otherwise they are
+                            {
+                                UnitsTheSame = false;
+                            }
+                        }
+                    }
+                }
+                if(UnitsTheSame && unitSelection.Count > 0)
+                {
+                    AddUnitQueueables((Tile)unitSelection[0]);
+                }
+                if (unitSelection.Count > 0)
+                {
+                    return new SelectCommand(unitSelection);
+                }
             }
             return null;
+        }
+
+        private void AddUnitQueueables(Tile tile)
+        {
+            //BuildQueue size
+            //Pos: (591,391) Size: (200,120)
+            float x = 591;//MaxX = 791
+            float y = 359;//MaxY = 511
+            float scale = 0.25f;
+            foreach (IQueueable<TextureValue> queueable in ((UnitComponent)tile).QueueableThings)
+            {
+                if (queueable is Building)
+                {
+                    ((Building)queueable).UpdatePosition(new Vector2(x, y));
+                    Component com = new CommandButton(Game.GraphicsDevice, new BuildSelectCommand((Building)queueable), new Vector2(x,y), queueable.Icon, new Point(32));
+                    float width = ((Building)queueable).Size.X;
+                    float height = ((Building)queueable).Size.Y;
+                    com.Scale = 0.25f;
+                    overlay.AddComponent(com);
+                    x += 128 * scale;
+                    if (x + 128 * scale > 791)
+                    {
+                        x = 591;
+                        y += 128 * scale;
+                    }
+                }
+            }
+        }
+
+        private Vector2 ConvertToWorldSpace(Vector2 position)
+        {
+            return camera.Position + (position / (Tile.Zoom * 16));
         }
     }
 }

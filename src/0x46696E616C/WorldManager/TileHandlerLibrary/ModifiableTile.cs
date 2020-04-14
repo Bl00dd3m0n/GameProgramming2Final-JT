@@ -26,17 +26,38 @@ namespace WorldManager.TileHandlerLibrary
 
         public float TotalHealth { get; protected set; }
 
-        public float CurrentHealth { get; protected set; }
+        public float currentHealth;
+
+        public float CurrentHealth {
+            get
+            {
+                return currentHealth;
+            }
+            set
+            {
+                if(CurrentHealth <= TotalHealth)//Doesn't let you build past full health
+                {
+                    currentHealth = value;
+                }
+                else if(currentHealth >= TotalHealth && !built)
+                {
+                    built = true;
+                }
+            }
+        }
 
         public HealthBar healthBar { get; protected set; }
         List<IMapObserver> MapWatcher;
         protected List<string> tags;
+        public bool built { get; protected set; }
         public ModifiableTile(Game game, TextureValue texture, Vector2 position, Color color) : base(game, texture, position, color)
         {
+            built = false;
             MapWatcher = new List<IMapObserver>();
             healthBar = new HealthBar(new Rectangle(this.Position.ToPoint()-new Point(0,(int)(this.Size.Y*16+1)), Size.ToPoint()));
             tags = new List<string>();
         }
+
         public virtual void Subscribe(IMapObserver map)
         {
             MapWatcher.Add(map);
@@ -53,6 +74,10 @@ namespace WorldManager.TileHandlerLibrary
         public virtual void Damage(float value)
         {
             CurrentHealth -= TotalHealth;
+            if(CurrentHealth <= 0)
+            {
+                Die();
+            }
         }
 
         public virtual void Die()

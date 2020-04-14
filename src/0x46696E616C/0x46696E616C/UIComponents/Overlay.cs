@@ -42,14 +42,14 @@ namespace _0x46696E616C.UIComponents
                 Building build = cp.cc.selectedBuild;
                 if (world.CheckPlacement(cp.CurrentPos, build.Size))
                 {
-                    spriteBatch.Draw(ContentHandler.DrawnTexture(build.block.texture), (cp.CurrentPos * Tile.Zoom * 16) - (cp.camera.Position * Tile.Zoom * 16), null, Color.Green, 0, new Vector2(0), Tile.Zoom, SpriteEffects.None, 0);
+                    spriteBatch.Draw(ContentHandler.DrawnTexture(build.block.texture), (cp.CurrentPos * Tile.Zoom * 16) - (cp.camera.Position * Tile.Zoom * 16), null, Color.Green, 0, Vector2.Zero, Tile.Zoom, SpriteEffects.None, 0);
                 }
                 else
                 {
-                    spriteBatch.Draw(ContentHandler.DrawnTexture(build.block.texture), (cp.CurrentPos * Tile.Zoom * 16) - (cp.camera.Position * Tile.Zoom * 16), null, Color.Red, 0, new Vector2(0), Tile.Zoom, SpriteEffects.None, 0);
+                    spriteBatch.Draw(ContentHandler.DrawnTexture(build.block.texture), (cp.CurrentPos * Tile.Zoom * 16) - (cp.camera.Position * Tile.Zoom * 16), null, Color.Red, 0, Vector2.Zero, Tile.Zoom, SpriteEffects.None, 0);
                 }
             }
-            spriteBatch.Draw(OverlayTexture, new Vector2(), Color.White);
+            spriteBatch.Draw(OverlayTexture, Vector2.Zero, Color.White);
             DrawMap();
             DrawText();
             foreach (CommandButton button in components.Where(l => l is CommandButton))//For all queueable objects if you can afford it, it shows up normally if not it shows up red
@@ -142,8 +142,8 @@ namespace _0x46696E616C.UIComponents
         {
             float scale = 0.5f;
             Vector2 Position = new Vector2(0,GraphicsDevice.Viewport.Height)-new Vector2(-8, world.GetSize().Y * scale);
-            spriteBatch.Draw(world.getMap(), Position, null, Color.White, 0, new Vector2(0, 0), scale, SpriteEffects.None, 0);
-            spriteBatch.Draw(CameraView, (cp.camera.Position*scale) + Position, null, Color.White, 0, new Vector2(0, 0), (scale/Tile.Zoom), SpriteEffects.None, 0);
+            spriteBatch.Draw(world.getMap(), Position, null, Color.White, 0, Vector2.Zero, scale, SpriteEffects.None, 0);
+            spriteBatch.Draw(CameraView, (cp.camera.Position*scale) + Position, null, Color.White, 0, Vector2.Zero, (scale/Tile.Zoom), SpriteEffects.None, 0);
         }
     }
 }

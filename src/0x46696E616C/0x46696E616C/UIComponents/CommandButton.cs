@@ -29,7 +29,7 @@ namespace _0x46696E616C.UIComponents
 
         protected CommandButton() : this(null, null, new Point(0, 0)) { }
 
-        protected CommandButton(ICommand command, Vector2 position, TextureValue picture, Point size)
+        protected CommandButton(ICommand command, Vector2 position, TextureValue picture, Point size) : base(position, size, Color.White)
         {
             this.bounds = new Rectangle(position.ToPoint(), Size);
             this.color = color;

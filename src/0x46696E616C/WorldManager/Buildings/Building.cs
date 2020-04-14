@@ -71,7 +71,7 @@ namespace _0x46696E616C.Buildings
                     }
                     return trainingQueue.Dequeue();
                 }
-                CurrentHealth += 1f;//this probably should be updated too
+                ((BasicUnit)trainingObject).CurrentHealth += 1f;//this probably should be updated too
             }
             return null;
         }

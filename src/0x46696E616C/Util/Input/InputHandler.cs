@@ -12,7 +12,10 @@ namespace _0x46696E616C.Input
     public class InputHandler : GameComponent
     {
         public Vector2 inputPos { get; protected set; }
+        public Vector2 selectionStart { get; protected set; }
+        public Vector2 selectionEnd { get; protected set; }
         protected SpriteBatch spriteBatch;
+        protected float clickTimer;
         public InputHandler(Game game, SpriteBatch sb) : base(game)
         {
             this.spriteBatch = sb;
@@ -40,7 +43,7 @@ namespace _0x46696E616C.Input
         public float prevScrollVal { get; private set;  }
         public bool Updated { get; private set; }
 
-        bool leftButtonPressed, rightButtonPressed;
+        bool leftButtonPressed, leftButtonReleased, rightButtonPressed;
         public MouseKeyboard(Game game, SpriteBatch sb) : base(game, sb)
         {
 
@@ -54,6 +57,7 @@ namespace _0x46696E616C.Input
 
         public override void Update(GameTime gameTime)
         {
+            clickTimer += gameTime.ElapsedGameTime.Milliseconds;
             if (Game.IsActive)//Stops updating inputs if the player is outside the game
             {
                 UpdateKeyBoardState();
@@ -77,15 +81,26 @@ namespace _0x46696E616C.Input
         private void UpdateMouseState()
         {
             mouse = Mouse.GetState();
-            leftButtonPressed = rightButtonPressed = false;
-            if (mouse != prevMouseState)
+            leftButtonPressed = leftButtonReleased = rightButtonPressed = false;
+
+            if (mouse.LeftButton != prevMouseState.LeftButton || mouse.RightButton != prevMouseState.RightButton)//Position changes mean a different state - this if statement needs to only change if the mouse is clicked
             {
-                prevMouseState = mouse;
                 Updated = true;
                 if (mouse.LeftButton == ButtonState.Pressed)
+                {
+                    clickTimer = 0;
+                    selectionStart = inputPos;
                     leftButtonPressed = true;
+                }
+                if (mouse.LeftButton == ButtonState.Released && prevMouseState.LeftButton == ButtonState.Pressed && clickTimer / 1000 >= 0.2)
+                {
+                    leftButtonReleased = true;
+                    selectionEnd = inputPos;
+                    clickTimer = 0;
+                }
                 if (mouse.RightButton == ButtonState.Pressed)
                     rightButtonPressed = true;
+                prevMouseState = mouse;
             }
 
         }
@@ -137,8 +152,12 @@ namespace _0x46696E616C.Input
         }
 
         public bool LeftClick()
-        {
+        {   
             return leftButtonPressed;
+        }
+        public bool LeftRelease()
+        {
+            return leftButtonReleased;
         }
     }
 }

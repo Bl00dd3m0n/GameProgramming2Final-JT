@@ -35,6 +35,7 @@ namespace _0x46696E616C.CommandPattern
         Wallet UnitWallet;
         bool arrived;
         IEntity returnTarget;
+        float timer = 0;
         public UnitComponent(Game game, string name, Vector2 size, float totalHealth, float currentHealth, Vector2 position, BaseUnitState state, TextureValue texture, WorldHandler world, TextureValue Icon) : base(game, name, size, totalHealth, currentHealth, position, state, texture, Color.Blue, Icon)
         {
             QueueableThings = new List<IQueueable<TextureValue>>();
@@ -64,14 +65,19 @@ namespace _0x46696E616C.CommandPattern
 
         public override void Update(GameTime gameTime)
         {
+            timer += gameTime.ElapsedGameTime.Milliseconds;
             UpdateMove(gameTime);
-            UnitInteraction();
+            if (timer / 1000 >= 1)
+            {
+                UnitInteraction();
+                
+            }
             base.Update(gameTime);
         }
 
         private void UnitInteraction()
         {
-            if (Direction == zero && Target != null && !arrived && TargetPosition == NextPoint)
+            if (Direction == zero && Target != null && !arrived && TargetPosition.ToPoint() == NextPoint.ToPoint())
             {
                 if (Target is Building)
                 {
@@ -109,7 +115,9 @@ namespace _0x46696E616C.CommandPattern
                 else
                 {
                     Target.Damage(this.AttackPower);
+                    if (((ModifiableTile)Target).State == tileState.dead) Target = null;
                 }
+                timer = 0;// Only reset the timer if the unit does something that way the player instantly acts when they get to the position
             }
         }
 
@@ -148,7 +156,7 @@ namespace _0x46696E616C.CommandPattern
         {
             ResetUnit();
             Target = target;
-            Move(target.Position - new Vector2(1f, 0));
+            Move(target.Position);
             State = BaseUnitState.build;
             arrived = false;
         }
@@ -158,10 +166,14 @@ namespace _0x46696E616C.CommandPattern
         /// <param name="Position"></param>
         public void Move(Vector2 Position)
         {
+            Position -= new Vector2(1, 0);
             ResetUnit();
             waypoints.Clear();
             waypoints = astar.FindPath(this.Position, Position, world);
-            NextPoint = waypoints[0];
+            if (waypoints.Count > 0)
+            {
+                NextPoint = waypoints[0];
+            }
             TargetPosition = Position;
             arrived = false;
         }
@@ -169,7 +181,7 @@ namespace _0x46696E616C.CommandPattern
         {
             ResetUnit();
             this.Target = target;
-            this.TargetPosition = Target.Position;
+            Move(Target.Position);
             arrived = false;
         }
 
@@ -197,7 +209,7 @@ namespace _0x46696E616C.CommandPattern
         {
             ResetUnit();
             this.Target = target;
-            this.Move(target.Position - new Vector2(1, 0));
+            this.Move(target.Position);
             arrived = false;
         }
 
