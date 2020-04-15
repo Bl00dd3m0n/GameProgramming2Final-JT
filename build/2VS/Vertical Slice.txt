@@ -1,0 +1,33 @@
+Some notes:
+Everything stems from the the game1 file in the 0x46696E616C project
+
+For the most part the outline of the game goes like this:
+0x46696E616C:
+A* implementation:
+ * Anything related to my command components or the a* implementation
+
+Mob Handler:
+ * Template for mobs like a health bar and the interfaces
+Tech Handler:
+ * To be implemented - will hold all Upgrades for the world as a whole
+UI Project:
+ * All components not tied to command are put here
+Util:
+ * Holds the input manager and the camera - Quad is in here but it isn't getting used....was testing something
+World Manager:
+ * All concrete implementations of Buildings/Mobs are here - should figure out how to move the A* implementation out of 0x46696E616C to move unit    component here
+ * All map handling/generation
+ * All tiles are here
+ * Content Handling is done here
+ * World saving is done here - change over to a json save probably for tiles.
+Known Bugs:
+ * Units are extremely difficult to move off harvesting resources to go do something else.
+Todo(By importance):
+ * Implement combat units 
+ * Implement Wave manager
+ * Implement a better saving method
+ * Implement description boxes for cost and details
+ * Add group movement to not collide
+ * Implement main menu
+ * Figure out a way to go to the nearest point of the building
+ * Clean up my file path
