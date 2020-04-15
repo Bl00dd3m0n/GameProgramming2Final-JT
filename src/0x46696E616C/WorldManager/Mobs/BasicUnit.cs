@@ -35,7 +35,7 @@ namespace _0x46696E616C.CommandPattern.Commands
             this.CurrentHealth = currentHealth;
             this.Position = position;
             this.State = state;
-            this.BuildPower = 1;
+            this.BuildPower = 10;
             this.HarvestPower = 1;
             this.AttackPower = 1;
             Direction = new Vector2(0, 0);
@@ -46,6 +46,12 @@ namespace _0x46696E616C.CommandPattern.Commands
         public void QueueBuild()
         {
             throw new NotImplementedException();
+        }
+
+        public override void UpdatePosition(Vector2 position)
+        {
+            healthBar.Position = position;
+            base.UpdatePosition(position);
         }
 
         public virtual BasicUnit NewInstace(float currentHealth, Vector2 position)

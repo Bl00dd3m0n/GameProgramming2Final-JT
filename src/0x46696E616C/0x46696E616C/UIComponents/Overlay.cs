@@ -37,18 +37,7 @@ namespace _0x46696E616C.UIComponents
         public override void Draw(GameTime gameTime)
         {
             spriteBatch.Begin();
-            if (cp.cc.selectedBuild != null)
-            {
-                Building build = cp.cc.selectedBuild;
-                if (world.CheckPlacement(cp.CurrentPos, build.Size))
-                {
-                    spriteBatch.Draw(ContentHandler.DrawnTexture(build.block.texture), (cp.CurrentPos * Tile.Zoom * 16) - (cp.camera.Position * Tile.Zoom * 16), null, Color.Green, 0, Vector2.Zero, Tile.Zoom, SpriteEffects.None, 0);
-                }
-                else
-                {
-                    spriteBatch.Draw(ContentHandler.DrawnTexture(build.block.texture), (cp.CurrentPos * Tile.Zoom * 16) - (cp.camera.Position * Tile.Zoom * 16), null, Color.Red, 0, Vector2.Zero, Tile.Zoom, SpriteEffects.None, 0);
-                }
-            }
+            ComponentOverlay();
             spriteBatch.Draw(OverlayTexture, Vector2.Zero, Color.White);
             DrawMap();
             DrawText();
@@ -68,7 +57,31 @@ namespace _0x46696E616C.UIComponents
             spriteBatch.End();
             base.Draw(gameTime);
         }
-
+        /// <summary>
+        /// Drawing for selected buildings and the spawn marker(Visual placement markers - Buildings/spawn markers)
+        /// </summary>
+        private void ComponentOverlay()
+        {
+            if (cp.cc.selectedBuild != null)
+            {
+                Building build = cp.cc.selectedBuild;
+                if (world.CheckPlacement(cp.CurrentPos, build.Size))
+                {
+                    spriteBatch.Draw(ContentHandler.DrawnTexture(build.block.texture), (cp.CurrentPos * Tile.Zoom * 16) - (cp.camera.Position * Tile.Zoom * 16), null, Color.Green, 0, Vector2.Zero, Tile.Zoom, SpriteEffects.None, 0);
+                }
+                else
+                {
+                    spriteBatch.Draw(ContentHandler.DrawnTexture(build.block.texture), (cp.CurrentPos * Tile.Zoom * 16) - (cp.camera.Position * Tile.Zoom * 16), null, Color.Red, 0, Vector2.Zero, Tile.Zoom, SpriteEffects.None, 0);
+                }
+            } else if(cp.cc.SpawnMarker != null)
+            {
+                spriteBatch.Draw(cp.cc.SpawnMarker, (cp.CurrentPos * Tile.Zoom * 16) - (cp.camera.Position * Tile.Zoom * 16), null, Color.Red, 0, Vector2.Zero, Tile.Zoom, SpriteEffects.None, 0);
+            } 
+        }
+        /// <summary>
+        /// The command processor calls the overlay to see if a button was clicked with a command if a command button was clicked return the command
+        /// </summary>
+        /// <returns></returns>
         internal Command ClickCheck()
         {
             if(((MouseKeyboard)input).LeftClick())
@@ -99,7 +112,9 @@ namespace _0x46696E616C.UIComponents
         {
             
         }
-
+        /// <summary>
+        /// For now it just draws the resource text
+        /// </summary>
         private void DrawText()
         {
             List<string> resources = cp.cc.Resources();
@@ -120,9 +135,12 @@ namespace _0x46696E616C.UIComponents
             DrawViewPortRepresentation();
             base.LoadContent();
         }
-
+        /// <summary>
+        ///Get the viewport and draw it visually on the map
+        /// </summary>
         private void DrawViewPortRepresentation()
         {
+
             Color[] bounds = new Color[cp.camera.Size.X*cp.camera.Size.Y];
             for(int y = 0; y < cp.camera.Size.Y;y++)
             {
@@ -140,6 +158,7 @@ namespace _0x46696E616C.UIComponents
 
         private void DrawMap()
         {
+            //Draw the worlds map scaled down
             float scale = 0.5f;
             Vector2 Position = new Vector2(0,GraphicsDevice.Viewport.Height)-new Vector2(-8, world.GetSize().Y * scale);
             spriteBatch.Draw(world.getMap(), Position, null, Color.White, 0, Vector2.Zero, scale, SpriteEffects.None, 0);

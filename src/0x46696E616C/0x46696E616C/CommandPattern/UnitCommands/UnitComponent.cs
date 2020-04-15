@@ -60,7 +60,6 @@ namespace _0x46696E616C.CommandPattern
             toBuild = new List<Building>();
             UnitWallet = new UnitWallet(10);
             NextPoint = TargetPosition = Position;
-            
         }
 
         public override void Update(GameTime gameTime)
@@ -74,12 +73,15 @@ namespace _0x46696E616C.CommandPattern
             }
             base.Update(gameTime);
         }
-
+        /// <summary>
+        /// Interact with each tile based on what type of tile it is if the unit is within 1 tile of their target.
+        /// </summary>
         private void UnitInteraction()
         {
-            if (Direction == zero && Target != null && !arrived && TargetPosition.ToPoint() == NextPoint.ToPoint())
+            float dist = Vector2.Distance(TargetPosition, NextPoint);
+            if (Direction == zero && Target != null && !arrived && dist <= 1.1f)
             {
-                if (Target is Building)
+                if (Target is Building && ((ModifiableTile)Target).TeamAssociation == this.TeamAssociation)
                 {
                     ((Building)Target).GarrisonedUnits.Add(this);
 
@@ -105,14 +107,19 @@ namespace _0x46696E616C.CommandPattern
                         Harvest(world.FindNearest(((HarvestableUnit)Target).type.GetType().Name.ToString(), this.Position));
                     }
                     bool returnResources = UnitWallet.Deposit(wal);
-                    if (returnResources)
+                    if (returnResources)//If the unit wallet is full return it to the nearest building that collects the type of the harvestable resource
                     {
                         ((HarvestableUnit)Target).Return(wal);
                         returnTarget = Target;
-                        Garrison(world.FindNearest(type.Name.ToString() + " Collector", this.Position));
+                        try
+                        {
+                            Garrison(world.FindNearest(type.Name.ToString() + " Collector", this.Position));
+                        }
+                        catch (NullReferenceException) { }
                     }
                 }
-                else
+                //Attack the unit if it isn't part of their team
+                else if(((ModifiableTile)Target).TeamAssociation != this.TeamAssociation)
                 {
                     Target.Damage(this.AttackPower);
                     if (((ModifiableTile)Target).State == tileState.dead) Target = null;
@@ -127,7 +134,6 @@ namespace _0x46696E616C.CommandPattern
         ///<see cref="Probably implement some sort of A* and flocking ai either here or in the Command Component"/>>
         private void UpdateMove(GameTime gameTime)
         {
-
             Direction = zero;
             if (Position.X < NextPoint.X - 0.5f)
                 Direction += xOne;
@@ -138,11 +144,12 @@ namespace _0x46696E616C.CommandPattern
             if (Position.Y > NextPoint.Y + 0.5f)
                 Direction -= yOne;
             Position += Direction * 5 * gameTime.ElapsedGameTime.Milliseconds / 1000;
-            //this.UpdatePosition(Position);
 
             WayPointFollower();
         }
-
+        /// <summary>
+        /// if the unit has hit a waypoint go to the next one
+        /// </summary>
         private void WayPointFollower()
         {
             if (Direction == zero && waypoints.Count > 1)
@@ -151,7 +158,10 @@ namespace _0x46696E616C.CommandPattern
                 NextPoint = waypoints[0];
             }
         }
-
+        /// <summary>
+        /// Targets a placed building to build
+        /// </summary>
+        /// <param name="target"></param>
         public void Build(IEntity target)
         {
             ResetUnit();
@@ -166,9 +176,9 @@ namespace _0x46696E616C.CommandPattern
         /// <param name="Position"></param>
         public void Move(Vector2 Position)
         {
-            Position -= new Vector2(1, 0);
             ResetUnit();
             waypoints.Clear();
+            Position -= new Vector2(1, 0);
             waypoints = astar.FindPath(this.Position, Position, world);
             if (waypoints.Count > 0)
             {
@@ -177,6 +187,10 @@ namespace _0x46696E616C.CommandPattern
             TargetPosition = Position;
             arrived = false;
         }
+        /// <summary>
+        /// Attack the targetted unit
+        /// </summary>
+        /// <param name="target"></param>
         public void Attack(IEntity target)
         {
             ResetUnit();
@@ -184,7 +198,10 @@ namespace _0x46696E616C.CommandPattern
             Move(Target.Position);
             arrived = false;
         }
-
+        /// <summary>
+        /// Garrison in the targetted building
+        /// </summary>
+        /// <param name="target"></param>
         public void Garrison(IEntity target)
         {
             ResetUnit();
@@ -205,6 +222,10 @@ namespace _0x46696E616C.CommandPattern
                 }
             }
         }
+        /// <summary>
+        /// Move to the harvestable unit
+        /// </summary>
+        /// <param name="target"></param>
         public void Harvest(IEntity target)
         {
             ResetUnit();
@@ -212,7 +233,12 @@ namespace _0x46696E616C.CommandPattern
             this.Move(target.Position);
             arrived = false;
         }
-
+        /// <summary>
+        /// Returns a new unit based on the position
+        /// </summary>
+        /// <param name="currentHealth"></param>
+        /// <param name="position"></param>
+        /// <returns></returns>
         public override BasicUnit NewInstace(float currentHealth, Vector2 position)
         {
             return new UnitComponent(this.Game, this.name, this.Size, this.TotalHealth, currentHealth, position, BaseUnitState.Idle, this.block.texture, this.world, this.Icon);

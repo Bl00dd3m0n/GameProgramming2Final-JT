@@ -13,7 +13,7 @@ namespace NationBuilder.TileHandlerLibrary
         public static float Zoom;
         public BlockData block;
         private Vector2 position;
-        bool placed;
+        protected bool placed;
         public Color tileColor { get; protected set; }
         public virtual Vector2 Position
         {

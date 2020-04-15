@@ -12,6 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WorldManager;
 using WorldManager.TileHandlerLibrary;
+using _0x46696E616C.CommandPattern.Commands;
 
 namespace Util
 {
@@ -85,7 +86,9 @@ namespace Util
             }
             input.Scrolling();
         }
-
+        /// <summary>
+        /// Movement setup for the camera
+        /// </summary>
         private void CameraPosition()
         {
             Dir.X = 0;
@@ -106,6 +109,7 @@ namespace Util
         public override void Draw(GameTime gameTime)
         {
             sb.Begin();
+            //Layer tiles by type
             for (int i = 0; i < 3; i++)
             {
                 int OverX = 0;
@@ -113,9 +117,10 @@ namespace Util
                 float scale = 3;
                 if (ViewPort.Top < 0) OverY = -ViewPort.Top;
                 if (ViewPort.Left < 0) OverX = -ViewPort.Left;
-                for (int y = ViewPort.Top; y < ViewPort.Bottom * (Tile.Zoom * scale) + OverY; y++)
+                //draw the viewport of the map using the scale
+                for (int y = ViewPort.Top; y < ViewPort.Bottom * (1+(Tile.Zoom/scale)) + OverY; y++)
                 {
-                    for (int x = ViewPort.Left; x < ViewPort.Right * (Tile.Zoom * scale) + OverX; x++)
+                    for (int x = ViewPort.Left; x < ViewPort.Right * (1 + (Tile.Zoom / scale)); x++)
                     {
                         DrawScreen(x, y, i);
                     }
@@ -132,21 +137,25 @@ namespace Util
         {
             if (x >= 0 && x < bounds.Width && y >= 0 && y < bounds.Height)
             {
+                //Background tiles are drawn first
                 if (i == 0)
                 {
                     Tile backtile = world.GetBackgroundTile(new Vector2(x, y));
                     sb.Draw(ContentHandler.DrawnTexture(backtile.block.texture), (backtile.Position * Tile.Zoom * 16) - (position * Tile.Zoom * 16), null, Color.White, 0, new Vector2(0), Tile.Zoom, SpriteEffects.None, 0);
                 }
+                //Units are drawn second
                 else if (i == 1)
                 {
                     ModifiableTile tile = (ModifiableTile)world.GetUnit(new Vector2(x, y));
                     if (tile != null && tile.block.texture != TextureValue.None)
                     {
                         Texture2D texture = ContentHandler.DrawnTexture(tile.block.texture);
-                        sb.Draw(ContentHandler.DrawnTexture(tile.block.texture), (tile.Position * Tile.Zoom * 16) - (position * Tile.Zoom * 16), null, Color.White, 0, new Vector2(0), Tile.Zoom, SpriteEffects.None, 0);
+                        ((BasicUnit)tile).UpdatePosition(new Vector2(tile.Position.X,tile.Position.Y));
                         DrawHealth(tile);
+                        sb.Draw(ContentHandler.DrawnTexture(tile.block.texture), (tile.Position * Tile.Zoom * 16) - (position * Tile.Zoom * 16), null, Color.White, 0, new Vector2(0), Tile.Zoom, SpriteEffects.None, 0);
                     }
                 }
+                //Draw buildings third
                 else
                 {
                     ModifiableTile decorTile = world.GetTile(new Vector2(x, y));
@@ -162,6 +171,7 @@ namespace Util
         }
         private void DrawHealth(ModifiableTile tileWithHealth)
         {
+            //If a tile has a health bar draw it.
             if (tileWithHealth.healthBar != null)
             {
                 if (tileWithHealth.healthBar.Health != null)

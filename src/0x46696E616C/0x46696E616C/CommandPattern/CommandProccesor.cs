@@ -34,6 +34,7 @@ namespace _0x46696E616C.CommandPattern
         List<CommandButton> buttons;
         public Vector2 CurrentPos { get; private set; }
         public Overlay overlay { get; set; }
+
         public CommandProccesor(Game game, List<IUnit> startingUnits, WorldHandler wh, MouseKeyboard input, CommandComponent command, Camera camera) : base(game)
         {
             this.cc = command;
@@ -52,6 +53,7 @@ namespace _0x46696E616C.CommandPattern
                 if (input.GetKeyDown(Keys.Escape))
                 {
                     cc.selectedBuild = null;
+                    cc.SpawnMarker = null;
                 }
                 if (input.inputPos.Y >= 33 && input.inputPos.Y <= 345) // Overlay positioning - this should probably be more dynamic
                 {
@@ -79,20 +81,13 @@ namespace _0x46696E616C.CommandPattern
                 {
                     return new BuildCommand(cc.selectedBuild, wh, (CurrentPos).ToPoint().ToVector2());
                 }
+                else if(cc.SpawnMarker != null)
+                {
+                    return new SetSpawnPointCommand(currentPos);
+                }
                 else
                 {
                     ModifiableTile tile = null;
-                    for (int i = 0; i < cc.Units.Count; i++)
-                    {
-                        bool XLessThan = cc.Units[i].Position.X <= CurrentPos.X;
-                        bool YLessThan = cc.Units[i].Position.Y <= CurrentPos.Y;
-                        bool XPlusSizeLessThan = cc.Units[i].Position.X + cc.Units[i].Size.X >= CurrentPos.X;
-                        bool YPlusSizeLessThan = cc.Units[i].Position.Y + cc.Units[i].Size.Y >= CurrentPos.Y;
-                        if (XLessThan && YLessThan && XPlusSizeLessThan && YPlusSizeLessThan)
-                        {
-                            tile = (ModifiableTile)cc.Units[i];
-                        }
-                    }
 
                     if (tile == null)
                     {
@@ -144,6 +139,8 @@ namespace _0x46696E616C.CommandPattern
                                 }
                             }
                             com = new CommandButton(Game.GraphicsDevice, new SetSpawnPointCommand(currentPos, (Building)tile), new Vector2(757, 447), TextureValue.SpawnPoint, new Point(32));
+                            com.Scale = 2;
+                            overlay.AddComponent(com);
                         }
                     }
                 }
@@ -202,16 +199,21 @@ namespace _0x46696E616C.CommandPattern
                 {
                     for (int x = (int)startX; x < endX; x++)
                     {
-                       unitSelection.Add(wh.GetUnit(new Vector2(x, y)));
-                        if (unitSelection.Count > 0) {
-                            if (unitSelection.Where(l => l.GetType() != unitSelection[0].GetType()).Count() > 0) // if there are any units not like the first unit in the list they aren't the same otherwise they are
-                            {
-                                UnitsTheSame = false;
-                            }
+                        IUnit unit = wh.GetUnit(new Vector2(x, y));
+                        if (unit != null)
+                        {
+                            unitSelection.Add(unit);
                         }
                     }
                 }
-                if(UnitsTheSame && unitSelection.Count > 0)
+                if (unitSelection.Count > 0)
+                {
+                    if (unitSelection.Where(l => l.GetType() != unitSelection[0].GetType()).Count() > 0) // if there are any units not like the first unit in the list they aren't the same otherwise they are
+                    {
+                        UnitsTheSame = false;
+                    }
+                }
+                if (UnitsTheSame && unitSelection.Count > 0)
                 {
                     AddUnitQueueables((Tile)unitSelection[0]);
                 }

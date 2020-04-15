@@ -13,11 +13,17 @@ namespace _0x46696E616C.MobHandler
     {
         public Texture2D Health { get; private set; }
         public Rectangle Bounds { get; protected set; }
+        public Vector2 Position { get { return Bounds.Location.ToVector2(); } set { Bounds = new Rectangle(value.ToPoint(), Bounds.Size); } }
         public float scale { get; set; }
         public HealthBar(Rectangle bounds)
         {
             this.Bounds = bounds;
         }
+        /// <summary>
+        /// makes a new health bar based on the tiles health
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="gd"></param>
         public void UpdateHealth(IEntity entity, GraphicsDevice gd)
         {
             if (entity.healthBar.Bounds.Width > 0 && entity.healthBar.Bounds.Height > 0)

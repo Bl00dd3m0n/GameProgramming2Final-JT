@@ -1,0 +1,8 @@
+*Explain limitations if you game has them.
+  * I honestly do not think my game is limited at all, while some things should probably be cleaned up I think I can expand the game very quickly     from where I am at.
+*How did certain patterns change your structure?
+ * The patterns for the most part really did not change the structure of my game since I have implemented most all my patterns from the start of    the project
+*What dependencies do you have and how do you deal with them
+ * I probably handled my dependencies horribbly, I have a lot of them such as tiles all having to be tied to a texture, position, and color and    it goes further down. However, for the most part anything can be moved around fairly quickly and implemented into something else.
+*Other gotchas that may occur in your game 
+ * With a lot of references to the same objects finding what exactly is causing an issue is hard. That probably should be changed, also overlay    objects for the most part have a scale that needs to be set or they don't draw properly.

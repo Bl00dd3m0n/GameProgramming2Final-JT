@@ -34,11 +34,7 @@ namespace WorldManager.Mobs.HarvestableUnits
 
         public override void Damage(float damage)
         {
-            CurrentHealth -= damage;
-            if(CurrentHealth <=0)
-            {
-                Die();
-            }
+            base.Damage(damage);
         }
 
         public override void Die()

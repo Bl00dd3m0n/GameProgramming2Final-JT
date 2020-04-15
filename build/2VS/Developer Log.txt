@@ -1,0 +1,10 @@
+How did you manage dependencies and state in your game?
+* I did not really manage my dependencies this game, I just gave dependencies to things I thought needed the dependency
+* State is managed through the observer pattern which notifies things which need to change their state when something happens.
+What Systems/Patterns are used?
+* Command pattern is used to interact with the game such as building, harvesting, and attacking
+* Observer is used to notify selected units of new commands and to notify the map if a unit died
+How is the game structured and why did you structure it like that?
+* The game is structured around the command component and the world. I structured it this way because any change in the game should stem from a command and a timer. 
+What still doesn't work, what could work better?
+* I think for the most part the game works, my units still walk over each other which is not great. I still need to implement a wave manager and hostile mobs.

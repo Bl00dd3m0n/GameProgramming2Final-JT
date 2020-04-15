@@ -47,7 +47,6 @@
     <Compile Include="Units\Dummy.cs" />
     <Compile Include="Units\IDamagable.cs" />
     <Compile Include="Units\IEntity.cs" />
-    <Compile Include="Units\IronVein.cs" />
     <Compile Include="Units\IUnit.cs" />
   </ItemGroup>
   <ItemGroup>

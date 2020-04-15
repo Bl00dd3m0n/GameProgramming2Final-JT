@@ -20,6 +20,12 @@ namespace _0x46696E616C.CommandPattern.GameCommands
             this.building = building;
         }
 
+        public SetSpawnPointCommand(Vector2 position)
+        {
+            this.CommandName = "Train Command";
+            this.position = position;
+        }
+
         public override void Execute(CommandComponent uc)
         {
             uc.SetSpawnPoint(position, building);

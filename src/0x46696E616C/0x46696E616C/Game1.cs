@@ -64,9 +64,9 @@ namespace _0x46696E616C
             spriteBatch = new SpriteBatch(GraphicsDevice);
             // TODO: use this.Content to load your game content here
             ContentHandler.LoadContent(this);
-
+            //Create a new world
             WorldHandler world = new WorldHandler(this, "TempWorld");
-
+            //Initialize the new wallet to start with....this can probably be moved to a file
             Wallet startingResources = new Wallet();
             startingResources.Deposit(new Wood(), 500);
             startingResources.Deposit(new Steel(), 500);
@@ -74,11 +74,7 @@ namespace _0x46696E616C
             startingResources.Deposit(new Likes(), 500);
             startingResources.Deposit(new Iron(), 500);
             startingResources.Deposit(new Energy(), 500);
-
-            canvas = new Canvas(this);
-            sheet = new StyleSheet("Page.xml");
-            canvas.LoadCanvas(sheet.GetStyleSheet(GraphicsDevice));
-
+            //creates a new input handler instance
             input = new MouseKeyboard(this, spriteBatch);
             //318,98 - Temp spawn point until I randomize it
             Vector2 startPoint = new Vector2(318, 98);
@@ -86,12 +82,13 @@ namespace _0x46696E616C
             List<IUnit> units = new List<IUnit>();
             units.Add(new UnitComponent(this, "Base unit", new Vector2(1, 1), 100, 100, startPoint + new Vector2(4, 4), BaseUnitState.Idle, TextureValue.Civilian, world, TextureValue.Civilian));
             world.AddMob(units[0]);
+            ((BasicUnit)units[0]).SetTeam(1);
             cc = new CommandComponent(this, startingResources, units, world);
             process = new CommandProccesor(this, new List<IUnit>(), world, input, cc, cam);
             overlay = new Overlay(this, input, world, process);
-
             Center center = new Center(this, TextureValue.Center, startPoint, TextureValue.CenterIcon);
-            center.AddQueueable(((IQueueable<TextureValue>)((UnitComponent)units[units.Count-1]).NewInstace(100,startPoint)));
+            center.SetTeam(cc.Team);
+            center.AddQueueable(((UnitComponent)units[units.Count-1]).NewInstace(100,startPoint));
             center.PlacedTile();
             world.Place(center, startPoint);
             center.Subscribe(cc);
@@ -100,7 +97,6 @@ namespace _0x46696E616C
             overlay.Initialize();
             process.Initialize();
             input.Initialize();
-            canvas.Initialize();
         }
 
         /// <summary>

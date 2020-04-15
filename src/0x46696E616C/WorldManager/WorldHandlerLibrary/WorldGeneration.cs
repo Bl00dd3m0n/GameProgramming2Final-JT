@@ -39,7 +39,12 @@ namespace NationBuilder.WorldHandlerLibrary
         {
             return noiseType.eval(x, y);
         }
-
+        /// <summary>
+        /// Generates a tile based on the seed using OpenSimplex noise
+        /// </summary>
+        /// <param name="position"></param>
+        /// <param name="seed"></param>
+        /// <returns></returns>
         public BackGroundTile Biome(Vector2 position, long seed)
         {
             float nx = position.X / MapSize.X;
@@ -64,7 +69,13 @@ namespace NationBuilder.WorldHandlerLibrary
                 else return new BackGroundTile(game, TextureValue.Stone, position, Color.Gray);
             }
         }
-
+        /// <summary>
+        /// Generates a decor tile based on the tile type using open simplex(I.E. trees are only spawnable in grass biomes, iron is only spawnable in stone tiles)
+        /// </summary>
+        /// <param name="Biome"></param>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
         public ModifiableTile AddDecor(BlockData Biome, float x, float y)
         {
             float treeFrequency = 0;
@@ -75,7 +86,7 @@ namespace NationBuilder.WorldHandlerLibrary
             }
             else if (Biome.texture == TextureValue.Stone)
             {
-                ironFrequency = 1.8f;
+                ironFrequency = 1.2f;
             }
             bool placetree = (treeFrequency * noise(x, y, ElevationNoise)) > 0.75;
             bool placeIron = (ironFrequency * noise(x, y, ElevationNoise)) > 0.75;

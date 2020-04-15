@@ -26,8 +26,10 @@ namespace WorldManager.TileHandlerLibrary
 
         public float TotalHealth { get; protected set; }
 
-        public float currentHealth;
-
+        protected float currentHealth;
+        /// <summary>
+        /// returns the current health and can only be set if the health is less than or equal to the total health
+        /// </summary>
         public float CurrentHealth {
             get
             {
@@ -46,10 +48,16 @@ namespace WorldManager.TileHandlerLibrary
             }
         }
 
+        public int TeamAssociation { get; protected set; }
+
         public HealthBar healthBar { get; protected set; }
+
         List<IMapObserver> MapWatcher;
+
         protected List<string> tags;
+
         public bool built { get; protected set; }
+
         public ModifiableTile(Game game, TextureValue texture, Vector2 position, Color color) : base(game, texture, position, color)
         {
             built = false;
@@ -57,6 +65,12 @@ namespace WorldManager.TileHandlerLibrary
             healthBar = new HealthBar(new Rectangle(this.Position.ToPoint()-new Point(0,(int)(this.Size.Y*16+1)), Size.ToPoint()));
             tags = new List<string>();
         }
+
+        public virtual void SetTeam(int team)
+        {
+            TeamAssociation = team;
+        }
+
 
         public virtual void Subscribe(IMapObserver map)
         {
@@ -88,6 +102,10 @@ namespace WorldManager.TileHandlerLibrary
                 map.Update(this);
             }
         }
+        /// <summary>
+        /// Don't update harvestable units
+        /// </summary>
+        /// <param name="position"></param>
         public override void UpdatePosition(Vector2 position)
         {
             if (this is IHarvestable)
@@ -100,7 +118,7 @@ namespace WorldManager.TileHandlerLibrary
                 healthBar.UpdateHealth(this, Game.GraphicsDevice);
             }
         }
-
+        //checks if the tile has the tag
         public bool HasTag(string v)
         {
             if (tags.Contains(v)) return true;

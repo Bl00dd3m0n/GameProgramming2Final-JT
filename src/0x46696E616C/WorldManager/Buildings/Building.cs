@@ -68,10 +68,11 @@ namespace _0x46696E616C.Buildings
                     {
                         ((BasicUnit)trainingObject).UpdatePosition(spawnPoint);
                         ((BasicUnit)trainingObject).PlacedTile();
+                        ((BasicUnit)trainingObject).SetTeam(this.TeamAssociation);
                     }
                     return trainingQueue.Dequeue();
                 }
-                ((BasicUnit)trainingObject).CurrentHealth += 1f;//this probably should be updated too
+                ((BasicUnit)trainingObject).CurrentHealth += 10f;//this probably should be updated too
             }
             return null;
         }
@@ -96,7 +97,7 @@ namespace _0x46696E616C.Buildings
 
         public override void Damage(float amount)
         {
-            CurrentHealth -= amount;
+            base.Damage(amount);
         }
 
         public void Destroy()
@@ -105,12 +106,15 @@ namespace _0x46696E616C.Buildings
         }
         public override void UpdatePosition(Vector2 position)
         {
-            spawnPoint = position - (new Vector2(0, -1) * this.Size);
+            if (!placed)
+            {
+                spawnPoint = position - (new Vector2(0, -1) * this.Size);
+            }
             base.UpdatePosition(position);
         }
         public override void Die()
         {
-            throw new NotImplementedException();
+            base.Die();
         }
         public virtual Building NewInstace(Game game, TextureValue tex, Vector2 position, TextureValue Icon)
         {
