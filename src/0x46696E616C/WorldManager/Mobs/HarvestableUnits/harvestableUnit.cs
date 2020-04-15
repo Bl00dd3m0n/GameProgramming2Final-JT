@@ -2,6 +2,7 @@
 using _0x46696E616C.MobHandler;
 using _0x46696E616C.WorldManager.Resources;
 using Microsoft.Xna.Framework;
+using MobHandler;
 using NationBuilder.TileHandlerLibrary;
 using System;
 using System.Collections.Generic;
@@ -13,22 +14,13 @@ using Vector2 = Microsoft.Xna.Framework.Vector2;
 
 namespace WorldManager.Mobs.HarvestableUnits
 {
-    abstract class HarvestableUnit : ModifiableTile, IHarvestable
+    public abstract class HarvestableUnit : ModifiableTile, IHarvestable
     {
 
 
         public IResource type { get; private set; }
-        public string name { get; private set; }
 
-        public Vector2 Size { get; private set; }
-
-        public float TotalHealth { get; private set; }
-
-        public float CurrentHealth { get; private set; }
-
-        public Vector2 Position { get; private set; }
-
-        protected HarvestableUnit(Game game, TextureValue texture, IResource type, string name, Vector2 size, float totalHealth, float currentHealth, Vector2 position) : base(game, texture, position)
+        protected HarvestableUnit(Game game, TextureValue texture, IResource type, string name, Vector2 size, float totalHealth, float currentHealth, Vector2 position, Color color) : base(game, texture, position, color)
         {
             this.type = type;
             this.name = name;
@@ -36,21 +28,18 @@ namespace WorldManager.Mobs.HarvestableUnits
             this.TotalHealth = totalHealth;
             this.CurrentHealth = currentHealth;
             this.Position = position;
+            healthBar = new HealthBar(new Rectangle(position.ToPoint()-new Point(0, (int)(size.Y*16+1)), size.ToPoint()));
         }
 
 
-        public void Damage(float damage)
+        public override void Damage(float damage)
         {
-            CurrentHealth -= damage;
-            if(CurrentHealth <=0)
-            {
-                Die();
-            }
+            base.Damage(damage);
         }
 
-        public void Die()
+        public override void Die()
         {
-            throw new NotImplementedException();
+            base.Die();
         }
 
         public Wallet Harvest(float efficiency)
@@ -59,6 +48,11 @@ namespace WorldManager.Mobs.HarvestableUnits
             Harvest.Deposit(type, (int)(1 * efficiency));
             Damage(1 * efficiency);
             return Harvest;
+        }
+
+        public void Return(Wallet wal)
+        {
+            this.CurrentHealth+= wal.Count(type);
         }
     }
 }

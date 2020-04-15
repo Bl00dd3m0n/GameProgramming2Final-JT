@@ -9,7 +9,7 @@ namespace _0x46696E616C.Buildings
 {
     public interface IProductionCenter
     {
-        int ProductionAMinute { get; }
+        List<int> ProductionAMinute { get; }
         List<IResource> productionTypes { get; }
     }
 }

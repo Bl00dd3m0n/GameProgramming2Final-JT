@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using _0x46696E616C.MobHandler;
 using NationBuilder.DataHandlerLibrary;
 using NationBuilder.TileHandlerLibrary;
 using System;
@@ -11,6 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WorldManager;
 using WorldManager.TileHandlerLibrary;
+using _0x46696E616C.CommandPattern.Commands;
 
 namespace Util
 {
@@ -21,6 +23,7 @@ namespace Util
         Rectangle ViewPort;
         Rectangle bounds;
         float MoveSpeed;
+        public Point Size { get { return ViewPort.Size; } }
         public Vector2 Position
         {
             get
@@ -29,20 +32,27 @@ namespace Util
             }
         }
         Vector2 position;
-        float zoom;
         SpriteBatch sb;
         MouseKeyboard input;
         Vector2 Dir;
-        public Camera(Game game, InputHandler input, WorldHandler worldHandler) : base(game)
+
+        public Camera(Game game, InputHandler input, WorldHandler worldHandler) : this(game, input, worldHandler, new Vector2(0, 0))
         {
-            zoom = 1.75f;
-            MoveSpeed = 19f;
+
+        }
+
+        public Camera(Game game, InputHandler input, WorldHandler worldHandler, Vector2 startPoint) : base(game)
+        {
+            Tile.Zoom = 3;
+            MoveSpeed = 6.25f;
+            this.position = startPoint;
             this.ViewPort = new Rectangle(position.ToPoint(), new Point(30, 16));
             this.input = (MouseKeyboard)input;
             Dir = new Vector2(0, 0);
             this.world = worldHandler;
             bounds = new Rectangle(new Vector2(0, 0).ToPoint(), (world.GetSize()).ToPoint());
         }
+
         public override void Initialize()
         {
             base.Initialize();
@@ -66,78 +76,107 @@ namespace Util
 
         private void AdjustCamera()
         {
-            if (input.scrollVal > input.prevScrollVal && zoom < 3f)
+            if (input.scrollVal > input.prevScrollVal && Tile.Zoom < 3f)
             {
-                zoom += 0.05f;
+                Tile.Zoom += 0.3f;
             }
-            else if (input.scrollVal < input.prevScrollVal && zoom > 1.5f)
+            else if (input.scrollVal < input.prevScrollVal && Tile.Zoom > 1f)
             {
-                zoom -= 0.05f;
+                Tile.Zoom -= 0.3f;
             }
             input.Scrolling();
         }
-
+        /// <summary>
+        /// Movement setup for the camera
+        /// </summary>
         private void CameraPosition()
         {
             Dir.X = 0;
             Dir.Y = 0;
-            if (input.CheckKeyDown(Keys.W) && bounds.Top < ViewPort.Top)
+            if (input.CheckKeyDown(Keys.W) && bounds.Top < ViewPort.Top + (2 * Tile.Zoom))//TODO Solve Scrolling Offset
                 Dir.Y = -1;
-            if (input.CheckKeyDown(Keys.S) && bounds.Bottom > ViewPort.Bottom+16)
+            if (input.CheckKeyDown(Keys.S) && bounds.Bottom > ViewPort.Bottom)//TODO Solve Scrolling Offset
                 Dir.Y = 1;
-            if (input.CheckKeyDown(Keys.A) && bounds.Left < ViewPort.Left)
+            if (input.CheckKeyDown(Keys.A) && bounds.Left < ViewPort.Left + 2)
                 Dir.X = -1;
-            if (input.CheckKeyDown(Keys.D) && bounds.Right > ViewPort.Right+16)
+            if (input.CheckKeyDown(Keys.D) && bounds.Right > ViewPort.Right - 2)
                 Dir.X = 1;
             position += Dir * MoveSpeed * timer / 100;
-            if(!bounds.Contains(position)) position -= Dir * MoveSpeed * timer / 100;
             position = position.ToPoint().ToVector2();//Truncates the position to interger values
             ViewPort.Location = position.ToPoint();
         }
 
         public override void Draw(GameTime gameTime)
         {
-            Matrix transform = Matrix.CreateScale(zoom);
-            sb.Begin(SpriteSortMode.Deferred, null, null, null, null, null, transform);
-            for (int i = 0; i < 2; i++)
+            sb.Begin();
+            //Layer tiles by type
+            for (int i = 0; i < 3; i++)
             {
-                for (int y = ViewPort.Top; y < ViewPort.Bottom; y++)
+                int OverX = 0;
+                int OverY = 0;
+                float scale = 3;
+                if (ViewPort.Top < 0) OverY = -ViewPort.Top;
+                if (ViewPort.Left < 0) OverX = -ViewPort.Left;
+                //draw the viewport of the map using the scale
+                for (int y = ViewPort.Top; y < ViewPort.Bottom * (1+(Tile.Zoom/scale)) + OverY; y++)
                 {
-                    for (int x = ViewPort.Left; x < ViewPort.Right; x++)
+                    for (int x = ViewPort.Left; x < ViewPort.Right * (1 + (Tile.Zoom / scale)); x++)
                     {
-                        if (i == 0)
-                        {
-                            Tile backtile = world.GetBackgroundTile(new Vector2(x, y));
-                            sb.Draw(ContentHandler.DrawnTexture(backtile.block.texture), (backtile.position * 16) - (position * 16), Color.White);
-                        }
-                        else
-                        {
-                            ModifiableTile decorTile = world.GetTile(new Vector2(x, y));
-                            if (decorTile != null && decorTile.block.texture != TextureValue.None)
-                            {
-
-                                Texture2D texture = ContentHandler.DrawnTexture(decorTile.block.texture);
-                                decorTile.position = decorTile.position.ToPoint().ToVector2();
-                                sb.Draw(texture, decorTile.position * 16 - (position.ToPoint().ToVector2() * 16), Color.White);
-                            }
-                        }
+                        DrawScreen(x, y, i);
                     }
                 }
             }
             sb.End();
             sb.Begin();
-            DrawMap();//Overlay shouldn't be affected by the camera
+            //DrawMap();//Overlay shouldn't be affected by the camera
             sb.End();
             base.Draw(gameTime);
         }
 
-        private void DrawMap()
+        private void DrawScreen(int x, int y, int i)
         {
-            for (int y = 0; y < bounds.Height; y++)
+            if (x >= 0 && x < bounds.Width && y >= 0 && y < bounds.Height)
             {
-                for (int x = 0; x < bounds.Width; x++)
+                //Background tiles are drawn first
+                if (i == 0)
                 {
-                    sb.Draw(world.getMap(), new Vector2(x, y) * .25f + new Vector2(0, bounds.Height * 14.5f * 0.05f), null, Color.White, 0, new Vector2(0, 0), 0.05f, SpriteEffects.None, 0);
+                    Tile backtile = world.GetBackgroundTile(new Vector2(x, y));
+                    sb.Draw(ContentHandler.DrawnTexture(backtile.block.texture), (backtile.Position * Tile.Zoom * 16) - (position * Tile.Zoom * 16), null, Color.White, 0, new Vector2(0), Tile.Zoom, SpriteEffects.None, 0);
+                }
+                //Units are drawn second
+                else if (i == 1)
+                {
+                    ModifiableTile tile = (ModifiableTile)world.GetUnit(new Vector2(x, y));
+                    if (tile != null && tile.block.texture != TextureValue.None)
+                    {
+                        Texture2D texture = ContentHandler.DrawnTexture(tile.block.texture);
+                        ((BasicUnit)tile).UpdatePosition(new Vector2(tile.Position.X,tile.Position.Y));
+                        DrawHealth(tile);
+                        sb.Draw(ContentHandler.DrawnTexture(tile.block.texture), (tile.Position * Tile.Zoom * 16) - (position * Tile.Zoom * 16), null, Color.White, 0, new Vector2(0), Tile.Zoom, SpriteEffects.None, 0);
+                    }
+                }
+                //Draw buildings third
+                else
+                {
+                    ModifiableTile decorTile = world.GetTile(new Vector2(x, y));
+                    if (decorTile != null && decorTile.block.texture != TextureValue.None)
+                    {
+                        Texture2D texture = ContentHandler.DrawnTexture(decorTile.block.texture);
+                        decorTile.UpdatePosition(decorTile.Position.ToPoint().ToVector2());
+                        sb.Draw(ContentHandler.DrawnTexture(decorTile.block.texture), (decorTile.Position * Tile.Zoom * 16) - (position * Tile.Zoom * 16), null, Color.White, 0, new Vector2(0), Tile.Zoom, SpriteEffects.None, 0);
+                        DrawHealth(decorTile);
+                    }
+                }
+            }
+        }
+        private void DrawHealth(ModifiableTile tileWithHealth)
+        {
+            //If a tile has a health bar draw it.
+            if (tileWithHealth.healthBar != null)
+            {
+                if (tileWithHealth.healthBar.Health != null)
+                {
+                    sb.Draw(tileWithHealth.healthBar.Health, (tileWithHealth.healthBar.Bounds.Location.ToVector2() * Tile.Zoom * 16) - (position * Tile.Zoom * 16), null, Color.White, 0, new Vector2(0), Tile.Zoom, SpriteEffects.None, 0);
                 }
             }
         }

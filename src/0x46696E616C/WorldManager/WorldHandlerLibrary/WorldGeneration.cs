@@ -39,7 +39,12 @@ namespace NationBuilder.WorldHandlerLibrary
         {
             return noiseType.eval(x, y);
         }
-
+        /// <summary>
+        /// Generates a tile based on the seed using OpenSimplex noise
+        /// </summary>
+        /// <param name="position"></param>
+        /// <param name="seed"></param>
+        /// <returns></returns>
         public BackGroundTile Biome(Vector2 position, long seed)
         {
             float nx = position.X / MapSize.X;
@@ -48,11 +53,11 @@ namespace NationBuilder.WorldHandlerLibrary
             double moisture = (6 * Math.Pow(noise(nx, ny, ElevationNoise), 5) - 15 * Math.Pow(noise(nx, ny, ElevationNoise), 4) + 10 * Math.Pow(noise(nx, ny, ElevationNoise), 3));
             if (elevation < 0.6)
             {
-                return new BackGroundTile(game, TextureValue.Grass, position);
+                return new BackGroundTile(game, TextureValue.Grass, position, Color.LimeGreen);
             }
             else if (elevation < 0.7)
             {
-                return new BackGroundTile(game, TextureValue.Sand, position);
+                return new BackGroundTile(game, TextureValue.Sand, position, Color.Yellow);
             }
             /*lse if (elevation < 0.9)
             {
@@ -60,12 +65,18 @@ namespace NationBuilder.WorldHandlerLibrary
             }*/
             else
             {
-                if (moisture < 0.6) return new BackGroundTile(game, TextureValue.Stone, position);//Add Snow later
-                else return new BackGroundTile(game, TextureValue.Stone, position);
+                if (moisture < 0.6) return new BackGroundTile(game, TextureValue.Stone, position, Color.Gray);//Add Snow later
+                else return new BackGroundTile(game, TextureValue.Stone, position, Color.Gray);
             }
         }
-
-        public Tile AddDecor(BlockData Biome, float x, float y)
+        /// <summary>
+        /// Generates a decor tile based on the tile type using open simplex(I.E. trees are only spawnable in grass biomes, iron is only spawnable in stone tiles)
+        /// </summary>
+        /// <param name="Biome"></param>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
+        public ModifiableTile AddDecor(BlockData Biome, float x, float y)
         {
             float treeFrequency = 0;
             float ironFrequency = 0;
@@ -75,16 +86,16 @@ namespace NationBuilder.WorldHandlerLibrary
             }
             else if (Biome.texture == TextureValue.Stone)
             {
-                ironFrequency = 1.8f;
+                ironFrequency = 1.2f;
             }
             bool placetree = (treeFrequency * noise(x, y, ElevationNoise)) > 0.75;
             bool placeIron = (ironFrequency * noise(x, y, ElevationNoise)) > 0.75;
             if (placetree)
             {
-                return new Tree(game, TextureValue.Tree, new Wood(), this.GetType().Name, new Vector2(1), 100,100, new Vector2(x,y));
+                return new Tree(game, TextureValue.Tree, new Wood(), this.GetType().Name, new Vector2(1), 100,100, new Vector2(x,y), Color.DarkGreen);
             } if(placeIron)
             {
-                return new IronVein(game, TextureValue.IronVein, new Iron(), this.GetType().Name, new Vector2(1), 100, 100, new Vector2(x, y));
+                return new IronVein(game, TextureValue.IronVein, new Iron(), this.GetType().Name, new Vector2(1), 100, 100, new Vector2(x, y), Color.OrangeRed);
             }
             return null;
         }

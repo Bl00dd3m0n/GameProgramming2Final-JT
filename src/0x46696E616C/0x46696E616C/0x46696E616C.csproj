@@ -41,18 +41,29 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="AstarAlgorithm\A_Star.cs" />
+    <Compile Include="AstarAlgorithm\Node.cs" />
     <Compile Include="CommandPattern\Command.cs" />
+    <Compile Include="CommandPattern\GameCommands\BuildSelectCommand.cs" />
     <Compile Include="CommandPattern\GameCommands\CommandComponent.cs" />
     <Compile Include="CommandPattern\CommandProccesor.cs" />
     <Compile Include="CommandPattern\GameCommands\AttackCommand.cs" />
     <Compile Include="CommandPattern\GameCommands\BuildCommand.cs" />
+    <Compile Include="CommandPattern\GameCommands\IObserver.cs" />
     <Compile Include="CommandPattern\GameCommands\Movecommand.cs" />
     <Compile Include="CommandPattern\CommandWithUndo.cs" />
+    <Compile Include="CommandPattern\GameCommands\GarrisonCommand.cs" />
+    <Compile Include="CommandPattern\GameCommands\RepairCommand.cs" />
+    <Compile Include="CommandPattern\GameCommands\SelectCommand.cs" />
+    <Compile Include="CommandPattern\GameCommands\SetSpawnPointCommand.cs" />
+    <Compile Include="CommandPattern\GameCommands\TrainCommand.cs" />
     <Compile Include="CommandPattern\ICommand.cs" />
     <Compile Include="CommandPattern\ICommandComponent.cs" />
     <Compile Include="CommandPattern\ICommandWithUndo.cs" />
     <Compile Include="CommandPattern\UnitCommands\UnitComponent.cs" />
     <Compile Include="Game1.cs" />
+    <Compile Include="UIComponents\CommandButton.cs" />
+    <Compile Include="UIComponents\Overlay.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -74,6 +85,10 @@
     <ProjectReference Include="..\MobHandler\MobHandler.csproj">
       <Project>{0c6be75c-f563-468f-aec7-06558a77e7a8}</Project>
       <Name>MobHandler</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TechHandler\TechHandler.csproj">
+      <Project>{d48ffcae-bf88-45d1-82dc-a453aaa3f8a7}</Project>
+      <Name>TechHandler</Name>
     </ProjectReference>
     <ProjectReference Include="..\UIProject\UIProject\UIProject.csproj">
       <Project>{33fae10a-3e13-43fb-a6c5-2914b7699e08}</Project>

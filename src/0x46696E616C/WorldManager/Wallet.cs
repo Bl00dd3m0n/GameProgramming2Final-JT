@@ -1,4 +1,5 @@
-﻿using _0x46696E616C.WorldManager.Resources;
+﻿using _0x46696E616C.Buildings;
+using _0x46696E616C.WorldManager.Resources;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -44,17 +45,19 @@ namespace _0x46696E616C
             return (int)resources[IndexOf(resourceType)].Count;
         }
 
-        public void Deposit(IResource resource, float amount)
+        public virtual bool Deposit(IResource resource, float amount)
         {
             resources[IndexOf(resource)].Count += amount;
+            return false;
         }
 
-        public void Deposit(Wallet wallet)
+        public virtual bool Deposit(Wallet wallet)
         {
             foreach (IResource resource in wallet.resources)
             {
                 Deposit(resource, wallet.Count(resource));
             }
+            return false;
         }
 
         public void Clear()
@@ -64,7 +67,7 @@ namespace _0x46696E616C
 
         public bool Contains(IResource item)
         {
-            foreach(IResource resource in resources)
+            foreach (IResource resource in resources)
             {
                 if (resource.GetType() == item.GetType())
                 {
@@ -86,12 +89,31 @@ namespace _0x46696E616C
             return -1;
         }
 
+        public Wallet Withdraw()
+        {
+            Wallet WithdrawWallet = new Wallet();
+            foreach (IResource resource in resources)
+            {
+                if (this.Count(resource) > 0)
+                {
+                    if (this.Count(resource) > Count(resource))
+                    {
+                        return null;
+                    }
+                    WithdrawWallet.Deposit(resource, this.resources[this.IndexOf(resource)].Count);
+                    this.Withdraw(resource, this.resources[this.IndexOf(resource)].Count);
+                }
+            }
+            return WithdrawWallet;
+        }
+
         public Wallet Withdraw(Wallet cost)
         {
             Wallet WithdrawWallet = new Wallet();
             foreach (IResource resource in cost.resources)
             {
-                if (cost.Count(resource) > 0) {
+                if (cost.Count(resource) > 0)
+                {
                     if (cost.Count(resource) > Count(resource))
                     {
                         return null;
@@ -102,17 +124,41 @@ namespace _0x46696E616C
             }
             return WithdrawWallet;
         }
+
+        public Wallet Withdraw(IResource resource)
+        {
+            Wallet WithdrawWallet = new Wallet();
+            int amount = Count(resource);
+            resources[IndexOf(resource)].Count -= amount;
+            WithdrawWallet.Deposit(resource, amount);
+            return WithdrawWallet;
+        }
+
         public Wallet Withdraw(IResource resource, float amount)
         {
             Wallet WithdrawWallet = new Wallet();
-            if (Count(resource) >= amount) {
+            if (Count(resource) >= amount)
+            {
                 resources[IndexOf(resource)].Count -= amount;
                 WithdrawWallet.Deposit(resource, amount);
                 return WithdrawWallet;
-            } else
+            }
+            else
             {
                 return null;
             }
+        }
+
+        public bool CheckCost(Building build)
+        {
+            foreach (IResource resource in build.Cost.resources)
+            {
+                if (build.Cost.Count(resource) > this.Count(resource))
+                {
+                    return false;
+                }
+            }
+            return true;
         }
 
         public static implicit operator Wallet(List<IResource> v)

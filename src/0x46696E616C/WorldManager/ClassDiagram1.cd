@@ -3,7 +3,7 @@
   <Class Name="_0x46696E616C.WorldManager.Resources.Energy" Collapsed="true" BaseTypeListCollapsed="true">
     <Position X="3.25" Y="4.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Resources\Energy.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
@@ -11,7 +11,7 @@
   <Class Name="_0x46696E616C.WorldManager.Resources.Iron" Collapsed="true" BaseTypeListCollapsed="true">
     <Position X="5" Y="4.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Resources\Iron.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
@@ -19,7 +19,7 @@
   <Class Name="_0x46696E616C.WorldManager.Resources.Likes" Collapsed="true" BaseTypeListCollapsed="true">
     <Position X="6.75" Y="4.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Resources\Likes.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
@@ -27,7 +27,7 @@
   <Class Name="_0x46696E616C.WorldManager.Resources.Money" Collapsed="true" BaseTypeListCollapsed="true">
     <Position X="3.25" Y="5.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Resources\Money.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
@@ -35,7 +35,7 @@
   <Class Name="_0x46696E616C.WorldManager.Resources.Steel" Collapsed="true" BaseTypeListCollapsed="true">
     <Position X="5" Y="5.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Resources\Steel.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
@@ -43,7 +43,7 @@
   <Class Name="_0x46696E616C.Buildings.Building" Collapsed="true">
     <Position X="17" Y="1.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAACAAAAAAAAgAAAAABAAAABAAAAAAAAAAAAAEAA=</HashCode>
+      <HashCode>AAAAAACAAAAAgAAwAAAAABAAAABAAAAAAAAAAAAAEAA=</HashCode>
       <FileName>Buildings\Building.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -65,7 +65,7 @@
   <Class Name="_0x46696E616C.Buildings.InternetCafe" Collapsed="true">
     <Position X="23.75" Y="2.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAIAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAA=</HashCode>
       <FileName>Buildings\InternetCafe.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -87,7 +87,7 @@
   <Class Name="_0x46696E616C.Buildings.Mines" Collapsed="true">
     <Position X="21.5" Y="2.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAIAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAA=</HashCode>
       <FileName>Buildings\Mines.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -102,7 +102,7 @@
   <Class Name="_0x46696E616C.Buildings.SolarPanel" Collapsed="true">
     <Position X="10.25" Y="2.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAIAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAA=</HashCode>
       <FileName>Buildings\SolarPanel.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -117,7 +117,7 @@
   <Class Name="WorldManager.MapData.Map" Collapsed="true">
     <Position X="15.75" Y="5.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AQAAAAAAAAAAAAAQAEIAAAEgIgACAAAAAAEAAAAAAAA=</HashCode>
+      <HashCode>AQQAAAAAAAAAAAAQAMIAAAEgIgACAAAAAAEAAAAAAAA=</HashCode>
       <FileName>MapData\Map.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -155,7 +155,7 @@
   <Class Name="_0x46696E616C.CommandPattern.Commands.BasicUnit" Collapsed="true">
     <Position X="9.75" Y="8.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAgAAgACAAAAQAAAAEAQAAAAAABAAQAAA=</HashCode>
+      <HashCode>IAAAAAAAAAAAAAAAECAACAAAAAAAAQAAAAAABAAAAAA=</HashCode>
       <FileName>Mobs\BasicUnit.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -170,7 +170,7 @@
   <Class Name="WorldManager.TileHandlerLibrary.ModifiableTile" Collapsed="true">
     <Position X="31.25" Y="6.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAACAAAAAgAAwAAAAAAQAAAAEAAAAAAAAAAAQAAA=</HashCode>
+      <HashCode>AAQAAACAAAAAgAAwAAAAAAQAAAAGAAIAQAAABAAQAAA=</HashCode>
       <FileName>TileHandlerLibrary\ModifiableTile.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -185,7 +185,7 @@
   <Class Name="NationBuilder.TileHandlerLibrary.Tile" Collapsed="true">
     <Position X="32.25" Y="5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAABAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAEAAAIAAAAAAAAAAAAAAAAAAABAA=</HashCode>
       <FileName>TileHandlerLibrary\Tile.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -213,14 +213,14 @@
   <Class Name="WorldManager.WorldHandler" Collapsed="true">
     <Position X="19.75" Y="11.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AQAAEAAAAACAAQCAAEAAAAAAAAAAAAAIAEQAAEAAAAA=</HashCode>
+      <HashCode>AQAAEAAQAACAAQCAAEAAAAAAAAAAAAAIAEQAAEAQAAA=</HashCode>
       <FileName>WorldHandlerLibrary\WorldHandler.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="NationBuilder.DataHandlerLibrary.ContentHandler" Collapsed="true">
     <Position X="23.75" Y="4.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAIAAAAAAAlAAAEAgAAAAABAACAAAAAAIAAAAAAAAAw=</HashCode>
+      <HashCode>AAAAAEAAASCAAACJCEAAAAAAECEgAAAAEAAgAAAKBAw=</HashCode>
       <FileName>ContentHandler.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -255,7 +255,7 @@
   <Interface Name="_0x46696E616C.WorldManager.Resources.IResource" Collapsed="true">
     <Position X="5" Y="3" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Resources\IResource.cs</FileName>
     </TypeIdentifier>
   </Interface>
@@ -269,7 +269,7 @@
   <Enum Name="NationBuilder.TileHandlerLibrary.TextureValue" Collapsed="true">
     <Position X="34.75" Y="9.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAEAAASCAAACJCAAAAAAAAAMgAAAAEAAAAAEIRAA=</HashCode>
+      <HashCode>AAAAAEQAASCAAACJCAAAAAAAEAMgAAAAEAAAAAEIRAA=</HashCode>
       <FileName>TileHandlerLibrary\BlockData.cs</FileName>
     </TypeIdentifier>
   </Enum>

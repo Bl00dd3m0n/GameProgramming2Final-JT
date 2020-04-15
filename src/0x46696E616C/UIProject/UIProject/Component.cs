@@ -16,12 +16,15 @@ namespace UIProject
         public Point Size { get; set; }
         public Color color { get; set; }
         public string Text { get; set; }
+        public Rectangle bounds { get; set; }
         public Vector2 Textposition;
 
         [XmlIgnore]
-        public Texture2D picture { get; private set; }
+        public Texture2D picture { get; protected set; }
         [XmlIgnore]
         public GraphicsDevice graphics { get; set; }
+
+        public float Scale { get; set; }
 
         #region Constructors
         /// <summary>
@@ -36,6 +39,7 @@ namespace UIProject
             this.Size = size;
             this.color = color;
             this.Position = position;
+            this.bounds = new Rectangle(position.ToPoint(), size);
         }
 
         protected Component(Vector2 position, Point size, Color color, string Text) : this(position, size, color)

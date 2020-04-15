@@ -10,11 +10,11 @@ namespace WorldManager.TileHandlerLibrary
     /// <summary>
     /// Tile to be a placeholder if the tile is bigger than a 16x16 tile
     /// </summary>
-    class ReferenceTile : ModifiableTile
+    public class ReferenceTile : ModifiableTile
     {
-        private ModifiableTile tile;
+        public ModifiableTile tile { get; private set; }
 
-        public ReferenceTile(ModifiableTile tile) : base(tile.Game,TextureValue.None, tile.position)
+        public ReferenceTile(ModifiableTile tile) : base(tile.Game,TextureValue.None, tile.Position, tile.tileColor)
         {
             this.tile = tile;
         }

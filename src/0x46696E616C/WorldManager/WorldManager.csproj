@@ -45,17 +45,20 @@
     <Compile Include="Buildings\Building.cs" />
     <Compile Include="Buildings\Center.cs" />
     <Compile Include="Buildings\FireWall.cs" />
+    <Compile Include="Buildings\ICollectionCenter.cs" />
     <Compile Include="Buildings\InternetCafe.cs" />
     <Compile Include="Buildings\IProductionCenter.cs" />
     <Compile Include="Buildings\Lab.cs" />
     <Compile Include="Buildings\MediaCenter.cs" />
     <Compile Include="Buildings\Mines.cs" />
+    <Compile Include="Buildings\PowerSupply.cs" />
     <Compile Include="Buildings\ServerFarm.cs" />
     <Compile Include="Buildings\SolarPanel.cs" />
     <Compile Include="Buildings\SteelFactory.cs" />
     <Compile Include="ContentHandler.cs" />
+    <Compile Include="MapData\IBuildingObserver.cs" />
+    <Compile Include="MapData\IMapObserver.cs" />
     <Compile Include="MapData\Map.cs" />
-    <Compile Include="MapData\WorldClock.cs" />
     <Compile Include="Mobs\BasicUnit.cs" />
     <Compile Include="Mobs\HarvestableUnits\HarvestableUnit.cs" />
     <Compile Include="Mobs\HarvestableUnits\IHarvestable.cs" />
@@ -77,6 +80,7 @@
     <Compile Include="TileHandlerLibrary\ReferenceTile.cs" />
     <Compile Include="TileHandlerLibrary\Tile.cs" />
     <Compile Include="TileHandlerLibrary\TileHandler.cs" />
+    <Compile Include="UnitWallet.cs" />
     <Compile Include="Wallet.cs" />
     <Compile Include="WindowsSave.cs" />
     <Compile Include="WorldHandlerLibrary\WorldHandler.cs" />
@@ -103,6 +107,13 @@
       <Project>{0c6be75c-f563-468f-aec7-06558a77e7a8}</Project>
       <Name>MobHandler</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TechHandler\TechHandler.csproj">
+      <Project>{d48ffcae-bf88-45d1-82dc-a453aaa3f8a7}</Project>
+      <Name>TechHandler</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Mobs\Units\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />

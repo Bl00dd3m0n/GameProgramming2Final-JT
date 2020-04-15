@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MobHandler.Units
+namespace TechHandler
 {
-    class IronVein
+    public interface ITechObserver
     {
-
+        void Update(ITech tech);
     }
 }

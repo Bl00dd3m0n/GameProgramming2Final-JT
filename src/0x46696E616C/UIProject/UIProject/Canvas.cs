@@ -10,16 +10,16 @@ namespace UIProject
 {
     public class Canvas : DrawableGameComponent
     {
-        SpriteBatch spriteBatch;
-        public IComponent[] Components { get { return components; } }
-        IComponent[] components;
-        SpriteFont font;
+        protected SpriteBatch spriteBatch;
+        public List<IComponent> Components { get { return components; } }
+        protected List<IComponent> components;
+        protected SpriteFont font;
         public Canvas(Game game) : base(game)
         {
-            components = new IComponent[0];
+            components = new List<IComponent>();
         }
 
-        public void LoadCanvas(IComponent[] components)
+        public void LoadCanvas(List<IComponent> components)
         {
             this.components = components;
         }
@@ -41,7 +41,7 @@ namespace UIProject
         {
             spriteBatch.Begin();
 
-            for (int i = 0; i < components.Length; i++)
+            for (int i = 0; i < components.Count; i++)
             {
                 if (((Button)components[i]).Clicked)
                 {
@@ -49,9 +49,9 @@ namespace UIProject
                 }
                 else
                 {
-                    spriteBatch.Draw(components[i].picture, components[i].Position, components[i].color);
+                    spriteBatch.Draw(components[i].picture, components[i].Position, null, components[i].color, 0, new Vector2(0), components[i].Scale, SpriteEffects.None, 0);
                 }
-                if (components[i].Text != string.Empty)
+                if (components[i].Text != null && components[i].Text != string.Empty)
                 {
                     Vector2 position = components[i].Position + (components[i].Size.ToVector2() / 2) - (font.MeasureString(components[i].Text) / 2);
                     spriteBatch.DrawString(font, components[i].Text, position, Color.Black);
@@ -60,20 +60,30 @@ namespace UIProject
             spriteBatch.End();
             base.Draw(gameTime);
         }
-        public void AddComponent(Component component)
+        public virtual void AddComponent(IComponent component)
         {
-            Array.Resize(ref components, components.Length + 1);
-            components[components.Length] = component;
+            components.Add(component);
         }
-        public void RemoveComponent(int value)
+        public virtual void RemoveComponent(int value)
         {
-            Array.Resize(ref components, components.Length - 1);
+            components.RemoveAt(value);
         }
 
         public void RemoveAllComponents()
         {
-            Array.Clear(components, 0, components.Length);
+            components.Clear();
         }
 
+        public void RemoveAllComponents(Type type)
+        {
+            for (int i = 0; i < components.Count; i++)
+            {
+                if (components[i].GetType() == type)
+                {
+                    components.Remove(components[i]);
+                    i--;
+                }
+            }
+        }
     }
 }
