@@ -5,7 +5,6 @@ using _0x46696E616C.Input;
 using _0x46696E616C.MobHandler;
 using _0x46696E616C.MobHandler.Units;
 using _0x46696E616C.UIComponents;
-using _0x46696E616C.WorldManager.Resources;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using NationBuilder.DataHandlerLibrary;
@@ -108,7 +107,7 @@ namespace _0x46696E616C.CommandPattern
                     if (tile != null)
                     {
                         overlay.RemoveAllComponents(typeof(CommandButton));
-                        if (tile is UnitComponent)
+                        if (tile is Civilian)
                         {
                             AddUnitQueueables(tile);
                             return new SelectCommand((IUnit)tile);
@@ -122,12 +121,12 @@ namespace _0x46696E616C.CommandPattern
                             overlay.RemoveAllComponents(typeof(CommandButton));
                             foreach (IQueueable<TextureValue> queueable in ((Building)tile).QueueableThings)
                             {
-                                if (queueable is UnitComponent)
+                                if (queueable is Civilian)
                                 {
-                                    ((UnitComponent)queueable).UpdatePosition(new Vector2(x, y));
+                                    ((Civilian)queueable).UpdatePosition(new Vector2(x, y));
                                     com = new CommandButton(Game.GraphicsDevice, new TrainCommand((IUnit)queueable, (Building)tile), queueable, new Point(32));
-                                    float width = ((UnitComponent)queueable).Size.X;
-                                    float height = ((UnitComponent)queueable).Size.Y;
+                                    float width = ((Civilian)queueable).Size.X;
+                                    float height = ((Civilian)queueable).Size.Y;
                                     com.Scale = 2;
                                     overlay.AddComponent(com);
                                     x += 16 * scale;
@@ -232,7 +231,7 @@ namespace _0x46696E616C.CommandPattern
             float x = 591;//MaxX = 791
             float y = 359;//MaxY = 511
             float scale = 0.25f;
-            foreach (IQueueable<TextureValue> queueable in ((UnitComponent)tile).QueueableThings)
+            foreach (IQueueable<TextureValue> queueable in ((Civilian)tile).QueueableThings)
             {
                 if (queueable is Building)
                 {

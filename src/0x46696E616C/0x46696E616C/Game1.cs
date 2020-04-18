@@ -1,10 +1,11 @@
 ﻿using _0x46696E616C.Buildings;
 using _0x46696E616C.CommandPattern;
 using _0x46696E616C.CommandPattern.Commands;
+using _0x46696E616C.ConcreteImplementations;
+using _0x46696E616C.ConcreteImplementations.Resources;
 using _0x46696E616C.Input;
 using _0x46696E616C.MobHandler.Units;
 using _0x46696E616C.UIComponents;
-using _0x46696E616C.WorldManager.Resources;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -30,8 +31,6 @@ namespace _0x46696E616C
         Camera cam;
         CommandProccesor process;
         MouseKeyboard input;
-        Canvas canvas;
-        StyleSheet sheet;
         Overlay overlay;
         public Game1()
         {
@@ -80,7 +79,7 @@ namespace _0x46696E616C
             Vector2 startPoint = new Vector2(318, 98);
             cam = new Camera(this, input, world, startPoint);
             List<IUnit> units = new List<IUnit>();
-            units.Add(new UnitComponent(this, "Base unit", new Vector2(1, 1), 100, 100, startPoint + new Vector2(4, 4), BaseUnitState.Idle, TextureValue.Civilian, world, TextureValue.Civilian));
+            units.Add(new Civilian(this, "Base unit", new Vector2(1, 1), 100, 100, startPoint + new Vector2(4, 4), BaseUnitState.Idle, TextureValue.Civilian, world, TextureValue.Civilian));
             world.AddMob(units[0]);
             ((BasicUnit)units[0]).SetTeam(1);
             cc = new CommandComponent(this, startingResources, units, world);
@@ -88,11 +87,10 @@ namespace _0x46696E616C
             overlay = new Overlay(this, input, world, process);
             Center center = new Center(this, TextureValue.Center, startPoint, TextureValue.CenterIcon);
             center.SetTeam(cc.Team);
-            center.AddQueueable(((UnitComponent)units[units.Count-1]).NewInstace(100,startPoint));
+            center.AddQueueable(((Civilian)units[units.Count-1]).NewInstace(100,startPoint));
             center.PlacedTile();
             world.Place(center, startPoint);
             center.Subscribe(cc);
-            
             cam.Initialize();
             overlay.Initialize();
             process.Initialize();

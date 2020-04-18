@@ -5,9 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using _0x46696E616C.Buildings;
 using _0x46696E616C.CommandPattern.Commands;
+using _0x46696E616C.ConcreteImplementations;
+using _0x46696E616C.ConcreteImplementations.Resources;
 using _0x46696E616C.MobHandler;
 using _0x46696E616C.MobHandler.Units;
-using _0x46696E616C.WorldManager.Resources;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using NationBuilder.DataHandlerLibrary;
@@ -125,15 +126,15 @@ namespace _0x46696E616C.CommandPattern
         {
             foreach (IUnit unit in SelectedUnits)
             {
-                if (unit is UnitComponent)
+                if (unit is Civilian)
                 {
                     if (target is IHarvestable)
                     {
-                        ((UnitComponent)unit).Harvest(target);
+                        ((Civilian)unit).Harvest(target);
                     }
                     else
                     {
-                        ((UnitComponent)unit).Attack(target);
+                        ((Civilian)unit).Attack(target);
                     }
 
                 }
@@ -167,9 +168,9 @@ namespace _0x46696E616C.CommandPattern
         {
             foreach (IUnit unit in SelectedUnits)
             {
-                if (unit is UnitComponent)
+                if (unit is Civilian)
                 {
-                    ((UnitComponent)unit).Move(Position);
+                    ((Civilian)unit).Move(Position);
                 }
             }
         }
@@ -181,9 +182,9 @@ namespace _0x46696E616C.CommandPattern
         {
             foreach (IUnit unit in SelectedUnits)
             {
-                if (unit is UnitComponent)
+                if (unit is Civilian)
                 {
-                    ((UnitComponent)unit).Garrison(building);
+                    ((Civilian)unit).Garrison(building);
                 }
             }
         }
@@ -209,9 +210,10 @@ namespace _0x46696E616C.CommandPattern
                     {
                         foreach (IUnit unit in SelectedUnits)
                         {
-                            if (unit is UnitComponent)
+                            if (unit is Civilian)
                             {
-                                ((UnitComponent)unit).Build(selectedBuild);
+                                ((Civilian)unit).Build(selectedBuild);
+                                ((Civilian)unit).QueueBuild(selectedBuild);
                             }
                         }
                     }
@@ -258,9 +260,9 @@ namespace _0x46696E616C.CommandPattern
         {
             foreach (IUnit unit in units)
             {
-                if (unit is UnitComponent)
+                if (unit is Civilian)
                 {
-                    ((UnitComponent)unit).Update(gameTime);
+                    ((Civilian)unit).Update(gameTime);
                 }
             }
             timer += gameTime.ElapsedGameTime.Milliseconds;
@@ -291,14 +293,14 @@ namespace _0x46696E616C.CommandPattern
                     {
                         for (int j = 0; j < toBuild[i].GarrisonedUnits.Count; j++)
                         {
-                            ((UnitComponent)toBuild[i].GarrisonedUnits[j]).Harvest(world.FindNearest("Wood", toBuild[i].GarrisonedUnits[j].Position));
+                            ((Civilian)toBuild[i].GarrisonedUnits[j]).Harvest(world.FindNearest("Wood", toBuild[i].GarrisonedUnits[j].Position));
                         }
                     }
                     else if (toBuild[i].HasTag("Iron Collector"))
                     {
                         for (int j = 0; j < toBuild[i].GarrisonedUnits.Count; j++)
                         {
-                            ((UnitComponent)toBuild[i].GarrisonedUnits[j]).Harvest(world.FindNearest("Iron", toBuild[i].GarrisonedUnits[j].Position));
+                            ((Civilian)toBuild[i].GarrisonedUnits[j]).Harvest(world.FindNearest("Iron", toBuild[i].GarrisonedUnits[j].Position));
                         }
                     }
                     Buildings.Add(toBuild[i]);
@@ -336,9 +338,9 @@ namespace _0x46696E616C.CommandPattern
         {
             if (!Buildings.Contains(build))
                 Buildings.Add(build);
-            if (unit is UnitComponent)
+            if (unit is Civilian)
             {
-                unit = ((UnitComponent)unit).NewInstace(0, unit.Position);
+                unit = ((Civilian)unit).NewInstace(0, unit.Position);
             }
             build.trainingQueue.Enqueue((IQueueable<TextureValue>)unit);
         }
@@ -353,9 +355,9 @@ namespace _0x46696E616C.CommandPattern
                 if (item != null)
                 {
                     units.Add((IUnit)item);
-                    if (units[units.Count - 1] is UnitComponent)
+                    if (units[units.Count - 1] is Civilian)
                     {
-                        ((UnitComponent)units[units.Count - 1]).Move(Buildings[i].GetSpawn());
+                        ((Civilian)units[units.Count - 1]).Move(Buildings[i].GetSpawn());
                         world.AddMob(units[units.Count - 1]);
                     }
                 }
@@ -404,9 +406,9 @@ namespace _0x46696E616C.CommandPattern
             toBuild.Add(building);
             foreach (IUnit unit in SelectedUnits)
             {
-                if (unit is UnitComponent)
+                if (unit is Civilian)
                 {
-                    ((UnitComponent)unit).Build(building);
+                    ((Civilian)unit).Build(building);
                 }
             }
         }
