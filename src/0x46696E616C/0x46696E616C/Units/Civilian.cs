@@ -25,14 +25,14 @@ namespace _0x46696E616C.CommandPattern
     {
         IEntity Target;
         Vector2 TargetPosition;
-        Vector2 NextPoint;
+        Vector2 nextPoint;
         Vector2 zero;
         Vector2 xOne;
         Vector2 yOne;
         List<Vector2> waypoints;
         WorldHandler world;
-        A_Star astar;
-        Wallet UnitWallet;
+        A_Star aStar;
+        Wallet unitWallet;
         bool arrived;
         IEntity returnTarget;
         float timer = 0;
@@ -50,15 +50,15 @@ namespace _0x46696E616C.CommandPattern
             QueueableThings.Add(new SolarPanel(game, TextureValue.SolarPanel, Vector2.Zero, TextureValue.SolarPanelIcon));
             QueueableThings.Add(new SteelFactory(game, TextureValue.SteelFactory, Vector2.Zero, TextureValue.SteelFactoryIcon));
 
-            astar = new A_Star();
+            aStar = new A_Star();
             waypoints = new List<Vector2>();
             zero = Vector2.Zero;
             xOne = new Vector2(1, 0);
             yOne = new Vector2(0, 1);
             speed = 50;
             this.world = world;
-            UnitWallet = new UnitWallet(10);
-            NextPoint = TargetPosition = Position;
+            unitWallet = new UnitWallet(10);
+            nextPoint = TargetPosition = Position;
         }
 
         public override void Update(GameTime gameTime)
@@ -77,7 +77,7 @@ namespace _0x46696E616C.CommandPattern
         /// </summary>
         private void UnitInteraction()
         {
-            float dist = Vector2.Distance(TargetPosition, NextPoint);
+            float dist = Vector2.Distance(TargetPosition, nextPoint);
             if (Direction == zero && Target != null && !arrived && dist <= 1.1f)
             {
                 if (Target is Building && ((ModifiableTile)Target).TeamAssociation == this.TeamAssociation)
@@ -87,11 +87,11 @@ namespace _0x46696E616C.CommandPattern
                     {
                         if (((Building)Target).HasTag("Wood Collector") && ((Building)Target).HasTag("Iron Collector"))
                         {
-                            ((Building)Target).Collect(this.UnitWallet.Withdraw());
+                            ((Building)Target).Collect(this.unitWallet.Withdraw());
                         }
                         else if (((Building)Target).HasTag("Iron Collector"))
                         {
-                            ((Building)Target).Collect(this.UnitWallet.Withdraw(new Iron()));
+                            ((Building)Target).Collect(this.unitWallet.Withdraw(new Iron()));
                         }
                     }
                     arrived = true;
@@ -109,7 +109,7 @@ namespace _0x46696E616C.CommandPattern
                     {
                         Harvest(world.FindNearest(((HarvestableUnit)Target).type.GetType().Name.ToString(), this.Position));
                     }
-                    bool returnResources = UnitWallet.Deposit(wal);
+                    bool returnResources = unitWallet.Deposit(wal);
                     if (returnResources)//If the unit wallet is full return it to the nearest building that collects the type of the harvestable resource
                     {
                         ((HarvestableUnit)Target).Return(wal);
@@ -138,13 +138,13 @@ namespace _0x46696E616C.CommandPattern
         private void UpdateMove(GameTime gameTime)
         {
             Direction = zero;
-            if (Position.X < NextPoint.X - 0.5f)
+            if (Position.X < nextPoint.X - 0.5f)
                 Direction += xOne;
-            if (Position.X > NextPoint.X + 0.5f)
+            if (Position.X > nextPoint.X + 0.5f)
                 Direction -= xOne;
-            if (Position.Y < NextPoint.Y - 0.5f)
+            if (Position.Y < nextPoint.Y - 0.5f)
                 Direction += yOne;
-            if (Position.Y > NextPoint.Y + 0.5f)
+            if (Position.Y > nextPoint.Y + 0.5f)
                 Direction -= yOne;
             Position += Direction * 5 * gameTime.ElapsedGameTime.Milliseconds / 1000;
 
@@ -158,7 +158,7 @@ namespace _0x46696E616C.CommandPattern
             if (Direction == zero && waypoints.Count > 1)
             {
                 waypoints.Remove(waypoints[0]);
-                NextPoint = waypoints[0];
+                nextPoint = waypoints[0];
             }
         }
         /// <summary>
@@ -182,10 +182,10 @@ namespace _0x46696E616C.CommandPattern
             ResetUnit();
             waypoints.Clear();
             Position -= new Vector2(1, 0);
-            waypoints = astar.FindPath(this.Position, Position, world);
+            waypoints = aStar.FindPath(this.Position, Position, world);
             if (waypoints.Count > 0)
             {
-                NextPoint = waypoints[0];
+                nextPoint = waypoints[0];
             }
             TargetPosition = Position;
             arrived = false;

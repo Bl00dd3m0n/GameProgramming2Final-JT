@@ -62,9 +62,9 @@ namespace _0x46696E616C.UIComponents
         /// </summary>
         private void ComponentOverlay()
         {
-            if (cp.cc.selectedBuild != null)
+            if (cp.cc.SelectedBuild != null)
             {
-                Building build = cp.cc.selectedBuild;
+                Building build = cp.cc.SelectedBuild;
                 if (world.CheckPlacement(cp.CurrentPos, build.Size))
                 {
                     spriteBatch.Draw(ContentHandler.DrawnTexture(build.block.texture), (cp.CurrentPos * Tile.Zoom * 16) - (cp.camera.Position * Tile.Zoom * 16), null, Color.Green, 0, Vector2.Zero, Tile.Zoom, SpriteEffects.None, 0);

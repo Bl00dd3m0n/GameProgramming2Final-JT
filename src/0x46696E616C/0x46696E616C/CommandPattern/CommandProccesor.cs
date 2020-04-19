@@ -51,7 +51,7 @@ namespace _0x46696E616C.CommandPattern
             {
                 if (input.GetKeyDown(Keys.Escape))
                 {
-                    cc.selectedBuild = null;
+                    cc.SelectedBuild = null;
                     cc.SpawnMarker = null;
                 }
                 if (input.inputPos.Y >= 33 && input.inputPos.Y <= 345) // Overlay positioning - this should probably be more dynamic
@@ -76,9 +76,9 @@ namespace _0x46696E616C.CommandPattern
             if (input.LeftClick())
             {
 
-                if (cc.selectedBuild != null)
+                if (cc.SelectedBuild != null)
                 {
-                    return new BuildCommand(cc.selectedBuild, wh, (CurrentPos).ToPoint().ToVector2());
+                    return new BuildCommand(cc.SelectedBuild, wh, (CurrentPos).ToPoint().ToVector2());
                 }
                 else if(cc.SpawnMarker != null)
                 {

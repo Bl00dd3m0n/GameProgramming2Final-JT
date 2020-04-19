@@ -14,7 +14,6 @@ namespace UIProject
     public class StyleSheet
     {
         private string FilePath;
-        List<Component> page;
         Type[] componentTypes;
         SaveXml<List<Component>> save;
         public StyleSheet(string FilePath)
