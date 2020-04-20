@@ -11,7 +11,6 @@ using System.Threading.Tasks;
 using WorldManager;
 using WorldManager.Mobs.HarvestableUnits;
 using WorldManager.TileHandlerLibrary;
-//using MyVector2 = NationBuilder.TileHandlerLibrary.Vector2;
 
 namespace NationBuilder.WorldHandlerLibrary
 {

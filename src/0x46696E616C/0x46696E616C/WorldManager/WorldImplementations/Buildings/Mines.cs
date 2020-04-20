@@ -34,6 +34,7 @@ namespace _0x46696E616C.Buildings
             CurrentHealth = 0;
             tags.Add("Iron Collector");
             healthBar = new HealthBar(new Rectangle(new Point((int)position.X, (int)position.Y - 1), new Point((int)(Size.X * 16), (int)(Size.Y))));
+            BuildingDescription = "Used as a drop off point for iron ore";
         }
         public override Building NewInstace(Game game, TextureValue tex, Vector2 position, TextureValue Icon)
         {

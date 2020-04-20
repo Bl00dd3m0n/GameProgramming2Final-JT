@@ -140,19 +140,19 @@ namespace Util
                 if (i == 0)
                 {
                     Tile backtile = world.GetBackgroundTile(new Vector2(x, y));
-                    sb.Draw(ContentHandler.DrawnTexture(backtile.block.texture), (backtile.Position * Tile.Zoom * 16) - (position * Tile.Zoom * 16), null, Color.White, 0, new Vector2(0), Tile.Zoom, SpriteEffects.None, 0);
+                    sb.Draw(ContentHandler.DrawnTexture(backtile.block.texture), (backtile.Position * Tile.Zoom * 16) - (position * Tile.Zoom * 16), null, Color.White, 0, Vector2.Zero, Tile.Zoom, SpriteEffects.None, 0);
                 }
                 //Units are drawn second
                 else if (i == 1)
                 {
-                    ModifiableTile tile = (ModifiableTile)world.GetUnit(new Vector2(x, y));
+                     ModifiableTile tile = (ModifiableTile)world.GetUnit(new Vector2(x, y));
                     if (tile != null && tile.block.texture != TextureValue.None)
                     {
 
                         Texture2D texture = ContentHandler.DrawnTexture(tile.block.texture);
-                        ((BasicUnit)tile).UpdatePosition(new Vector2(tile.Position.X,tile.Position.Y));
+                        ((BasicUnit)tile).UpdatePosition(tile.Position);
                         DrawHealth(tile);
-                        sb.Draw(ContentHandler.DrawnTexture(tile.block.texture), (tile.Position * Tile.Zoom * 16) - (position * Tile.Zoom * 16), null, Color.White, 0, new Vector2(0), Tile.Zoom, SpriteEffects.None, 0);
+                        sb.Draw(ContentHandler.DrawnTexture(tile.block.texture), (tile.Position * Tile.Zoom * 16) - (position * Tile.Zoom * 16), null, Color.White, 0, Vector2.Zero, Tile.Zoom, SpriteEffects.None, 0);
                     }
                 }
                 //Draw buildings third
@@ -163,7 +163,7 @@ namespace Util
                     {
                         Texture2D texture = ContentHandler.DrawnTexture(decorTile.block.texture);
                         decorTile.UpdatePosition(decorTile.Position);
-                        sb.Draw(ContentHandler.DrawnTexture(decorTile.block.texture), (decorTile.Position * Tile.Zoom * 16) - (position * Tile.Zoom * 16), null, Color.White, 0, new Vector2(0), Tile.Zoom, SpriteEffects.None, 0);
+                        sb.Draw(ContentHandler.DrawnTexture(decorTile.block.texture), (decorTile.Position * Tile.Zoom * 16) - (position * Tile.Zoom * 16), null, Color.White, 0, Vector2.Zero, Tile.Zoom, SpriteEffects.None, 0);
                         DrawHealth(decorTile);
                     }
                 }
@@ -176,7 +176,7 @@ namespace Util
             {
                 if (tileWithHealth.healthBar.Health != null)
                 {
-                    sb.Draw(tileWithHealth.healthBar.Health, (tileWithHealth.healthBar.Position * Tile.Zoom * 16) - (position * Tile.Zoom * 16), null, Color.White, 0, new Vector2(0), Tile.Zoom, SpriteEffects.None, 0);
+                    sb.Draw(tileWithHealth.healthBar.Health, (tileWithHealth.healthBar.Position * Tile.Zoom * 16) - (position * Tile.Zoom * 16), null, Color.White, 0, Vector2.Zero, Tile.Zoom, SpriteEffects.None, 0);
                 }
             }
         }

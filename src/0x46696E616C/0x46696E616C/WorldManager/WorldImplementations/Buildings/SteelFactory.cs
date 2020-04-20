@@ -19,6 +19,10 @@ namespace _0x46696E616C.Buildings
 
         public SteelFactory(Game game, TextureValue texture, Vector2 position, TextureValue icon) : base(game, texture, position, icon)
         {
+            Cost = new Wallet();
+            Cost.Deposit(new Iron(), 200);
+            Cost.Deposit(new Wood(), 3000);
+            Cost.Deposit(new Money(), 100);
             productionTypes = new List<IResource>() { new Steel() };
             ProductionAMinute= new List<int>() { 1 };
             Cost = new Wallet();
@@ -27,6 +31,7 @@ namespace _0x46696E616C.Buildings
             Size = new Vector2(3, 3);
             TotalHealth = 0;
             CurrentHealth = 0;
+            BuildingDescription = "Used for production of steel, also costs iron for production";
         }
 
         public override Building NewInstace(Game game, TextureValue tex, Vector2 position, TextureValue Icon)

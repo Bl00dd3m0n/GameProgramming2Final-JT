@@ -39,25 +39,26 @@ namespace UIProject
 
         public override void Draw(GameTime gameTime)
         {
-            spriteBatch.Begin();
 
             for (int i = 0; i < components.Count; i++)
             {
-                if (((Button)components[i]).Clicked)
+                if (((Component)components[i]).drawComponent)
                 {
-                    spriteBatch.Draw(components[i].picture, components[i].Position, Color.LightGray);
-                }
-                else
-                {
-                    spriteBatch.Draw(components[i].picture, components[i].Position, null, components[i].color, 0, new Vector2(0), components[i].Scale, SpriteEffects.None, 0);
-                }
-                if (components[i].Text != null && components[i].Text != string.Empty)
-                {
-                    Vector2 position = components[i].Position + (components[i].Size.ToVector2() / 2) - (font.MeasureString(components[i].Text) / 2);
-                    spriteBatch.DrawString(font, components[i].Text, position, Color.Black);
+                    if (((Button)components[i]).Clicked)
+                    {
+                        spriteBatch.Draw(components[i].picture, components[i].Position, Color.LightGray);
+                    }
+                    else
+                    {
+                        spriteBatch.Draw(components[i].picture, components[i].Position, null, components[i].color, 0, new Vector2(0), components[i].Scale, SpriteEffects.None, 0);
+                    }
+                    if (components[i].Text != null && components[i].Text != string.Empty)
+                    {
+                        Vector2 position = components[i].Position + (components[i].Size.ToVector2() / 2) - (font.MeasureString(components[i].Text) / 2);
+                        spriteBatch.DrawString(font, components[i].Text, position, Color.Black);
+                    }
                 }
             }
-            spriteBatch.End();
             base.Draw(gameTime);
         }
         public virtual void AddComponent(IComponent component)

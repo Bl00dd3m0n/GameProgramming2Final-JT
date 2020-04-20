@@ -114,7 +114,10 @@ namespace WorldManager.TileHandlerLibrary
             else
             {
                 base.UpdatePosition(position);
-                healthBar = new HealthBar(new Rectangle(new Point((int)position.X, (int)position.Y - 1), new Point((int)(Size.X * 16), (int)(5))));
+                if (healthBar != null)
+                {
+                    healthBar = new HealthBar(new Rectangle(new Point((int)position.X, (int)position.Y - 1), new Point((int)(Size.X * 16), (int)(5))));
+                }
                 healthBar.UpdateHealth(this, Game.GraphicsDevice);
                 healthBar.Position = position;
             }

@@ -44,7 +44,11 @@ namespace WorldManager
                 return false;
             }
         }
-
+        /// <summary>
+        /// Not using at the moment
+        /// </summary>
+        /// <param name="worldName"></param>
+        /// <returns></returns>
         public override List<Region> LoadWorld(string worldName)
         {
             if (!locked) {

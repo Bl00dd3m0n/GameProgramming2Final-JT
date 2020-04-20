@@ -16,12 +16,13 @@ namespace _0x46696E616C.Buildings
             Cost.Deposit(new Wood(), 500);
             Cost.Deposit(new Money(), 100);
             energyCost = 20;
-            name = "FireWall";
+            name = "Firewall";
             Position = position;
             Size = new Vector2(1, 1);
             TotalHealth = 2000;
             CurrentHealth = 0;
             healthBar = new HealthBar(new Rectangle(new Point((int)position.X, (int)position.Y - 1), new Point((int)(Size.X * 16), (int)(Size.Y))));
+            BuildingDescription = "A wall used to keep enemies away from your buildings";
         }
         public override Building NewInstace(Game game, TextureValue tex, Vector2 position, TextureValue Icon)
         {

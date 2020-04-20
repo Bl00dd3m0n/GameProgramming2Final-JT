@@ -13,6 +13,7 @@ using WorldManager.MapData;
 using WorldManager.Buildings;
 using System.Collections;
 using _0x46696E616C.ConcreteImplementations;
+using _0x46696E616C.WorldManager.ConcreteImplementations.Resources;
 
 namespace _0x46696E616C.Buildings
 {
@@ -35,7 +36,8 @@ namespace _0x46696E616C.Buildings
         public IBuildingObserver worldComponent { get; protected set; }
 
         Vector2 spawnPoint { get; set; }
-
+        protected string BuildingDescription { get; set; }
+        Stats stats;
         public Building(Game game, TextureValue texture, Vector2 position, TextureValue Icon) : base(game, texture, position, Color.Blue)
         {
             Cost = new Wallet();
@@ -50,6 +52,7 @@ namespace _0x46696E616C.Buildings
             this.Icon = Icon;//if the texture values change this breaks it find a better way to do this
             QueueableThings = new List<IQueueable<TextureValue>>();
             trainingQueue = new Queue<IQueueable<TextureValue>>();
+            BuildingDescription = "";
         }
 
         public void Subscribe(IBuildingObserver observer)
@@ -81,7 +84,7 @@ namespace _0x46696E616C.Buildings
         {
             foreach (IUnit unit in GarrisonedUnits)
             {
-                if (unit.State == BaseUnitState.build)
+                if (unit.UnitState == BaseUnitState.build)
                 {
                     if (unit is BasicUnit)
                     {
@@ -140,6 +143,19 @@ namespace _0x46696E616C.Buildings
         public Vector2 GetSpawn()
         {
             return this.spawnPoint;
+        }
+
+        internal object Description()
+        {
+            string description = string.Empty;
+            description += $"{name}\n";
+            description += "Cost:\n";
+            foreach(string resource in Cost.ResourceString())
+            {
+                description += $"{resource}\n";
+            }
+            description += this.BuildingDescription;
+            return description;
         }
     }
 }

@@ -19,7 +19,7 @@ namespace _0x46696E616C.UIComponents
         public bool Clicked { get; set; }
         public static int value;
         //If the button gets clicked
-        public virtual void Click()
+        public override void Click()
         {
             Clicked = true;
         }
@@ -48,7 +48,11 @@ namespace _0x46696E616C.UIComponents
             this.picture = ContentHandler.DrawnTexture(queueableObject.Icon);
             this.command = command;
         }
-
         #endregion
+
+        public override string Description()
+        {
+            return command.Description();
+        }
     }
 }

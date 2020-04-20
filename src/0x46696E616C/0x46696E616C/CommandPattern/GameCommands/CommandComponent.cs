@@ -27,7 +27,7 @@ namespace _0x46696E616C.CommandPattern
 
         List<string> resourceStringList;
         private List<IUnit> units;
-        static int ID;
+        public static int ID { get; private set; }
         public int Team { get; private set; }
 
 
@@ -47,6 +47,7 @@ namespace _0x46696E616C.CommandPattern
 
         public Texture2D SpawnMarker;
         private int spawnMarkerBuilding;
+        public bool IsGameOver { get; private set; }
 
         public CommandComponent(Game game, Wallet startingResources) : base(game)
         {
@@ -75,6 +76,7 @@ namespace _0x46696E616C.CommandPattern
             ID++;
             this.Team = ID;
             this.world = world;
+            IsGameOver = false;
 
         }
         /// <summary>
@@ -228,14 +230,7 @@ namespace _0x46696E616C.CommandPattern
         //Returns the teams resources
         public List<string> Resources()
         {
-            resourceStringList.Clear();
-            resourceStringList.Add($"Wood:{resources.Count(new Wood())}");
-            resourceStringList.Add($"Energy:{resources.Count(new Energy())}");
-            resourceStringList.Add($"Iron:{resources.Count(new Iron())}");
-            resourceStringList.Add($"Likes:{resources.Count(new Likes())}");
-            resourceStringList.Add($"Money:{resources.Count(new Money())}");
-            resourceStringList.Add($"Steel:{resources.Count(new Steel())}");
-            return resourceStringList;
+            return resources.ResourceString();
         }
         //Gets the "world" time formatted
         public string Time()
@@ -276,6 +271,10 @@ namespace _0x46696E616C.CommandPattern
                 timer = 0;
             }
             CleanList();
+            if(buildings.Count > 0 && units.Count > 0)
+            {
+                IsGameOver = true;
+            } 
             base.Update(gameTime);
         }
         /// <summary>

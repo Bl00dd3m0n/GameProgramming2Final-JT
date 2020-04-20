@@ -9,5 +9,6 @@ namespace _0x46696E616C.CommandPattern
     interface ICommand
     {
         void Execute(CommandComponent uc);
+        string Description();
     }
 }

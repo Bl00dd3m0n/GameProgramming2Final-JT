@@ -43,6 +43,15 @@ namespace WorldManager
             }
             return false;
         }
+
+        internal void AddMobs(List<IUnit> units)
+        {
+            foreach(IUnit unit in units)
+            {
+                AddMob(unit);
+            }
+        }
+
         /// <summary>
         /// places a building of a position on the map
         /// </summary>
@@ -68,6 +77,12 @@ namespace WorldManager
         {
             return map.mapSize;
         }
+
+        internal IEntity FindNearest(int v, Vector2 position)
+        {
+            return map.GetTile(v, position);
+        }
+
         /// <summary>
         /// Gets the map as a texture
         /// </summary>
@@ -149,6 +164,10 @@ namespace WorldManager
         public IEntity FindNearest(string tag, Vector2 Position)
         {
             return map.GetTile(tag, Position);
+        }
+        public IEntity[] GetTiles(string tag)
+        {
+            return map.GetTile(tag);
         }
         /// <summary>
         /// Adds a mob to the list of mobs

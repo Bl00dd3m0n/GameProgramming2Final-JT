@@ -65,6 +65,7 @@ namespace WorldManager.MapData
             mapTexture.SetData(colors, 0, (int)((mapSize.X * mapSize.Y)));
 
         }
+
         /// <summary>
         /// places a building at a certain point
         /// </summary>
@@ -130,6 +131,52 @@ namespace WorldManager.MapData
                             {
                                 tile = (IEntity)tiles[x, y, 1];
                                 distance = Vector2.Distance(tiles[x, y, 1].Position, Position);
+                            }
+                        }
+                    }
+                }
+            }
+            return tile;
+        }
+        internal IEntity[] GetTile(string v)
+        {
+            List<IEntity> taggedTiles = new List<IEntity>();
+            for (int y = 0; y < mapSize.Y; y++)
+            {
+                for (int x = 0; x < mapSize.X; x++)
+                {
+                    if (tiles[x, y, 1] != null)
+                    {
+                        if (((ModifiableTile)tiles[x, y, 1]).HasTag(v))
+                        {
+                            taggedTiles.Add((IEntity)tiles[x, y, 1]);
+                        }
+                    }
+                }
+            }
+            return taggedTiles.ToArray();
+        }
+
+        internal IEntity GetTile(int v, Vector2 Position)
+        {
+            IEntity tile = null;
+            float distance = 0;
+            for (int y = 0; y < mapSize.Y; y++)
+            {
+                for (int x = 0; x < mapSize.X; x++)
+                {
+                    ModifiableTile modTile = null;
+                    if (tiles[x, y, 1] != null) modTile = (ModifiableTile)tiles[x, y, 1];
+                    else if (GetUnits(new Vector2(x, y)) != null)
+                        modTile = (ModifiableTile)GetUnits(new Vector2(x, y));
+                    if (modTile != null)
+                    {
+                        if (modTile.TeamAssociation.Equals(v))
+                        {
+                            if (Vector2.Distance(modTile.Position, Position) < distance || distance == 0)
+                            {
+                                tile = modTile;
+                                distance = Vector2.Distance(modTile.Position, Position);
                             }
                         }
                     }

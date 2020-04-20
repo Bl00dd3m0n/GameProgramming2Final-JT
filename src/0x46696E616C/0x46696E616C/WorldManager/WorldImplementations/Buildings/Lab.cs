@@ -23,6 +23,7 @@ namespace _0x46696E616C.Buildings
             TotalHealth = 1000;
             CurrentHealth = 0;
             healthBar = new HealthBar(new Rectangle(new Point((int)position.X, (int)position.Y - 1), new Point((int)(Size.X * 16), (int)(Size.Y))));
+            BuildingDescription = "Used to learn technology to improve production.";
         }
         public override Building NewInstace(Game game, TextureValue tex, Vector2 position, TextureValue Icon)
         {

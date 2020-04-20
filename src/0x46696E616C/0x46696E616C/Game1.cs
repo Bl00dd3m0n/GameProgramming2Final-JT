@@ -9,6 +9,7 @@ using _0x46696E616C.UIComponents;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MobHandler.HostileMobManager;
 using NationBuilder.DataHandlerLibrary;
 using NationBuilder.TileHandlerLibrary;
 using NationBuilder.WorldHandlerLibrary;
@@ -32,6 +33,7 @@ namespace _0x46696E616C
         CommandProccesor process;
         MouseKeyboard input;
         Overlay overlay;
+        WaveManager wave;
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -78,19 +80,30 @@ namespace _0x46696E616C
             //318,98 - Temp spawn point until I randomize it
             Vector2 startPoint = new Vector2(318, 98);
             cam = new Camera(this, input, world, startPoint);
+            //Adds a unit to start
             List<IUnit> units = new List<IUnit>();
-            units.Add(new Civilian(this, "Base unit", new Vector2(1, 1), 100, 100, startPoint + new Vector2(4, 4), BaseUnitState.Idle, TextureValue.Civilian, world, TextureValue.Civilian));
+            units.Add(new Civilian(this, "Base unit", new Vector2(1, 1), 100, 100, startPoint + new Vector2(4, 5), BaseUnitState.Idle, TextureValue.Civilian, world, TextureValue.Civilian));
             world.AddMob(units[0]);
             ((BasicUnit)units[0]).SetTeam(1);
+
+            //Game components
             cc = new CommandComponent(this, startingResources, units, world);
             process = new CommandProccesor(this, new List<IUnit>(), world, input, cc, cam);
             overlay = new Overlay(this, input, world, process);
+
+            //Center
             Center center = new Center(this, TextureValue.Center, startPoint, TextureValue.CenterIcon);
             center.SetTeam(cc.Team);
-            center.AddQueueable(((Civilian)units[units.Count-1]).NewInstace(100,startPoint));
+            center.SetSpawn(startPoint + center.Size + new Vector2(0, 1));
+            center.AddQueueable(((Civilian)units[units.Count - 1]).NewInstace(100, startPoint));
             center.PlacedTile();
             world.Place(center, startPoint);
             center.Subscribe(cc);
+            //Wave handler
+            wave = new WaveManager(this, world);
+
+            //Initializer
+            wave.Initialize();
             cam.Initialize();
             overlay.Initialize();
             process.Initialize();
@@ -115,10 +128,11 @@ namespace _0x46696E616C
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.X))
             {
-                    Exit();
+                Exit();
             }
-            if (this.IsActive)
+            if (this.IsActive && !cc.IsGameOver)
             {
+                wave.Update(gameTime);
                 cam.Update(gameTime);
                 process.Update(gameTime);
                 input.Update(gameTime);
@@ -135,7 +149,7 @@ namespace _0x46696E616C
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            if (this.IsActive)
+            if (this.IsActive && !cc.IsGameOver)
             {
                 GraphicsDevice.Clear(Color.Black);
                 // TODO: Add your drawing code here

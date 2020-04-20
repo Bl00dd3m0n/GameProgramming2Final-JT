@@ -28,6 +28,7 @@ namespace _0x46696E616C.Buildings
             tags.Add("Iron Collector");
             tags.Add("Wood Collector");
             healthBar = new HealthBar(new Rectangle(new Point((int)position.X, (int)position.Y - 1), new Point((int)(Size.X * 16), (int)(Size.Y))));
+            BuildingDescription = "The center allows the user to train Civilians";
         }
         public override Building NewInstace(Game game, TextureValue tex, Vector2 position, TextureValue Icon)
         {

@@ -31,5 +31,9 @@ namespace _0x46696E616C.CommandPattern.GameCommands
             uc.SetSpawnPoint(position, building);
             this.Log(uc);
         }
+        public override string Description()
+        {
+            return $"Click to get a flag placement for the spawn point of units trained in this \n building";
+        }
     }
 }

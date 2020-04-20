@@ -26,14 +26,16 @@ namespace _0x46696E616C.UIComponents
         CommandProccesor cp;
         Texture2D OverlayTexture;
         Texture2D CameraView;
+        DescriptionBox description;
+        Vector2 ZeroVector;
         public Overlay(Game game, InputHandler input, WorldHandler world, CommandProccesor command) : base(game)
         {
             cp = command;
             this.world= world;
             this.input = input;
             cp.overlay = this;
+            ZeroVector = Vector2.Zero;
         }
-
         public override void Draw(GameTime gameTime)
         {
             spriteBatch.Begin();
@@ -43,7 +45,7 @@ namespace _0x46696E616C.UIComponents
             DrawText();
             foreach (CommandButton button in components.Where(l => l is CommandButton))//For all queueable objects if you can afford it, it shows up normally if not it shows up red
             {
-                if(button.command is BuildSelectCommand)
+                if (button.command is BuildSelectCommand)
                 {
                     if (!cp.cc.CheckCost(((BuildSelectCommand)button.command).build))
                     {
@@ -54,8 +56,13 @@ namespace _0x46696E616C.UIComponents
                     }
                 }
             }
-            spriteBatch.End();
             base.Draw(gameTime);
+            if (description.drawComponent)
+            {
+                spriteBatch.Draw(description.picture, description.Position, description.color);
+                spriteBatch.DrawString(ContentHandler.Font, description.Text, description.Position, Color.White,0,Vector2.Zero, 1,SpriteEffects.None, 0);
+            }
+            spriteBatch.End();
         }
         /// <summary>
         /// Drawing for selected buildings and the spawn marker(Visual placement markers - Buildings/spawn markers)
@@ -67,15 +74,15 @@ namespace _0x46696E616C.UIComponents
                 Building build = cp.cc.SelectedBuild;
                 if (world.CheckPlacement(cp.CurrentPos, build.Size))
                 {
-                    spriteBatch.Draw(ContentHandler.DrawnTexture(build.block.texture), (cp.CurrentPos * Tile.Zoom * 16) - (cp.camera.Position * Tile.Zoom * 16), null, Color.Green, 0, Vector2.Zero, Tile.Zoom, SpriteEffects.None, 0);
+                    spriteBatch.Draw(ContentHandler.DrawnTexture(build.block.texture), (cp.CurrentPos * Tile.Zoom * 16) - (cp.camera.Position * Tile.Zoom * 16), null, Color.Green, 0, ZeroVector, Tile.Zoom, SpriteEffects.None, 0);
                 }
                 else
                 {
-                    spriteBatch.Draw(ContentHandler.DrawnTexture(build.block.texture), (cp.CurrentPos * Tile.Zoom * 16) - (cp.camera.Position * Tile.Zoom * 16), null, Color.Red, 0, Vector2.Zero, Tile.Zoom, SpriteEffects.None, 0);
+                    spriteBatch.Draw(ContentHandler.DrawnTexture(build.block.texture), (cp.CurrentPos * Tile.Zoom * 16) - (cp.camera.Position * Tile.Zoom * 16), null, Color.Red, 0, ZeroVector, Tile.Zoom, SpriteEffects.None, 0);
                 }
             } else if(cp.cc.SpawnMarker != null)
             {
-                spriteBatch.Draw(cp.cc.SpawnMarker, (cp.CurrentPos * Tile.Zoom * 16) - (cp.camera.Position * Tile.Zoom * 16), null, Color.Red, 0, Vector2.Zero, Tile.Zoom, SpriteEffects.None, 0);
+                spriteBatch.Draw(cp.cc.SpawnMarker, (cp.CurrentPos * Tile.Zoom * 16) - (cp.camera.Position * Tile.Zoom * 16), null, Color.Red, 0, ZeroVector, Tile.Zoom, SpriteEffects.None, 0);
             } 
         }
         /// <summary>
@@ -84,11 +91,26 @@ namespace _0x46696E616C.UIComponents
         /// <returns></returns>
         internal Command ClickCheck()
         {
-            if(((MouseKeyboard)input).LeftClick())
+            IComponent component = components.Find(x => x.bounds.Contains(input.inputPos));
+            if (component != null)
             {
-                if(components.Find(x=>x.bounds.Contains(input.inputPos)) != null)
+                if (component.Description() != null)
                 {
-                    IComponent component = components.Find(x => x.bounds.Contains(input.inputPos));
+                    if (component is CommandButton)
+                    {
+                        if (((CommandButton)component).command is BuildSelectCommand || ((CommandButton)component).command is TrainCommand || ((CommandButton)component).command is SetSpawnPointCommand)
+                        {
+                            description.Text = component.Description();
+                            description.drawComponent = true;
+                            description.Size = ContentHandler.Font.MeasureString(description.Text).ToPoint();
+                            description.Draw(GraphicsDevice);
+                            description.Position = input.inputPos - description.Size.ToVector2();
+                        }
+                    } 
+                }
+
+                if (((MouseKeyboard)input).LeftClick())
+                {
                     if (component is CommandButton)//If the user can afford to train/build things it returns the selected unit, if not it returns null
                     {
                         if (((CommandButton)component).command is BuildSelectCommand)
@@ -98,12 +120,16 @@ namespace _0x46696E616C.UIComponents
                             {
                                 return (Command)((CommandButton)component).command;
                             }
-                        } else
+                        }
+                        else
                         {
                             return (Command)((CommandButton)component).command;
                         }
                     }
                 }
+            } else
+            {
+                description.drawComponent = false;
             }
             return null;
         }
@@ -133,6 +159,8 @@ namespace _0x46696E616C.UIComponents
         {
             OverlayTexture = Game.Content.Load<Texture2D>("Overlay");
             DrawViewPortRepresentation();
+            description = new DescriptionBox(new Point(550,200));
+            description.Draw(GraphicsDevice);
             base.LoadContent();
         }
         /// <summary>
@@ -162,7 +190,7 @@ namespace _0x46696E616C.UIComponents
             float scale = 0.5f;
             Vector2 Position = new Vector2(0,GraphicsDevice.Viewport.Height)-new Vector2(-8, world.GetSize().Y * scale);
             spriteBatch.Draw(world.getMap(), Position, null, Color.White, 0, Vector2.Zero, scale, SpriteEffects.None, 0);
-            spriteBatch.Draw(CameraView, (cp.camera.Position*scale) + Position, null, Color.White, 0, Vector2.Zero, (scale/Tile.Zoom), SpriteEffects.None, 0);
+            spriteBatch.Draw(CameraView, (cp.camera.Position*scale) + Position, null, Color.White, 0, ZeroVector, (scale/Tile.Zoom), SpriteEffects.None, 0);
         }
     }
 }

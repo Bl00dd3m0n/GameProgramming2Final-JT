@@ -61,28 +61,34 @@
     <Compile Include="Path Finding\AstarAlgorithm\A_Star.cs" />
     <Compile Include="Path Finding\AstarAlgorithm\Node.cs" />
     <Compile Include="Path Finding\Formation.cs" />
+    <Compile Include="Stats.cs" />
     <Compile Include="TechManager\IQueueable.cs" />
     <Compile Include="TechManager\ITech.cs" />
     <Compile Include="TechManager\ITechObserver.cs" />
     <Compile Include="UIComponents\Button.cs" />
     <Compile Include="UIComponents\Canvas.cs" />
     <Compile Include="UIComponents\Component.cs" />
+    <Compile Include="UIComponents\DescriptionBox.cs" />
     <Compile Include="UIComponents\IComponent.cs" />
     <Compile Include="UIComponents\StyleSheet.cs" />
     <Compile Include="UIComponents\UnitButton.cs" />
-    <Compile Include="Units\Civilian.cs" />
+    <Compile Include="Units\AllyUnit\Civilian.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="UIComponents\CommandButton.cs" />
     <Compile Include="UIComponents\Overlay.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Units\HealthBar.cs" />
+    <Compile Include="Units\HostileMobManager\HeadlessHorseman.cs" />
+    <Compile Include="Units\HostileMobManager\HostileMob.cs" />
+    <Compile Include="Units\HostileMobManager\Mage.cs" />
     <Compile Include="Units\HostileMobManager\WaveDetails.cs" />
     <Compile Include="Units\HostileMobManager\WaveManager.cs" />
     <Compile Include="Units\Units\Dummy.cs" />
     <Compile Include="Units\Units\IDamagable.cs" />
     <Compile Include="Units\Units\IEntity.cs" />
     <Compile Include="Units\Units\IUnit.cs" />
+    <Compile Include="Util\ArtificialEnum.cs" />
     <Compile Include="Util\Camera.cs" />
     <Compile Include="Util\Input\InputHandler.cs" />
     <Compile Include="Util\MoveStackToTop.cs" />
@@ -103,6 +109,7 @@
     <Compile Include="WorldManager\WorldImplementations\Buildings\Building.cs" />
     <Compile Include="WorldManager\WorldImplementations\Buildings\Center.cs" />
     <Compile Include="WorldManager\WorldImplementations\Buildings\FireWall.cs" />
+    <Compile Include="WorldManager\WorldImplementations\Buildings\HostileBuidlings\Portal.cs" />
     <Compile Include="WorldManager\WorldImplementations\Buildings\IBuildingObserver.cs" />
     <Compile Include="WorldManager\WorldImplementations\Buildings\ICollectionCenter.cs" />
     <Compile Include="WorldManager\WorldImplementations\Buildings\InternetCafe.cs" />
@@ -118,7 +125,7 @@
     <Compile Include="WorldManager\WorldImplementations\HarvestableUnits\IHarvestable.cs" />
     <Compile Include="WorldManager\WorldImplementations\HarvestableUnits\IronVein.cs" />
     <Compile Include="WorldManager\WorldImplementations\HarvestableUnits\Tree.cs" />
-    <Compile Include="WorldManager\WorldImplementations\Mobs\BasicUnit.cs" />
+    <Compile Include="Units\Units\BasicUnit.cs" />
     <Compile Include="WorldManager\WorldImplementations\ModifiableTile.cs" />
     <Compile Include="WorldManager\WorldImplementations\Resources\Energy.cs" />
     <Compile Include="WorldManager\WorldImplementations\Resources\IResource.cs" />
@@ -146,7 +153,6 @@
     <None Include="app.manifest" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="CommandPattern\Commands\" />
     <Folder Include="TechManager\Technologies\" />
   </ItemGroup>
   <ItemGroup>

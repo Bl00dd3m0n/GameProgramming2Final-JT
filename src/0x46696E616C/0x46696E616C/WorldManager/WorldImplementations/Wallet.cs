@@ -166,5 +166,19 @@ namespace _0x46696E616C.ConcreteImplementations
         {
             return new Wallet(v);
         }
+
+        //Returns the teams resources
+        internal List<string> ResourceString()
+        {
+            List<string> resourceStringList = new List<string>();
+            resourceStringList.Clear();
+            resourceStringList.Add($"Wood:{Count(new Wood())}");
+            resourceStringList.Add($"Energy:{Count(new Energy())}");
+            resourceStringList.Add($"Iron:{Count(new Iron())}");
+            resourceStringList.Add($"Likes:{Count(new Likes())}");
+            resourceStringList.Add($"Money:{Count(new Money())}");
+            resourceStringList.Add($"Steel:{Count(new Steel())}");
+            return resourceStringList;
+        }
     }
 }

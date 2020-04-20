@@ -22,6 +22,7 @@ namespace _0x46696E616C.Buildings
             Size = new Vector2(2, 2);
             TotalHealth = 2000;
             healthBar = new HealthBar(new Rectangle(new Point((int)position.X, (int)position.Y - 1), new Point((int)(Size.X * 16), (int)(Size.Y))));
+            BuildingDescription = "Used to hold power if I implement power caps, also useless.";
         }
         public override Building NewInstace(Game game, TextureValue tex, Vector2 position, TextureValue Icon)
         {

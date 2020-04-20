@@ -231,6 +231,7 @@ namespace _0x46696E616C.CommandPattern
             float x = 591;//MaxX = 791
             float y = 359;//MaxY = 511
             float scale = 0.25f;
+            overlay.RemoveAllComponents(typeof(CommandButton));
             foreach (IQueueable<TextureValue> queueable in ((Civilian)tile).QueueableThings)
             {
                 if (queueable is Building)

@@ -21,5 +21,9 @@ namespace _0x46696E616C.CommandPattern.GameCommands
             uc.SelectBuild(build);
             this.Log(uc);
         }
+        public override string Description()
+        {
+            return $"{build.Description()}";
+        }
     }
 }

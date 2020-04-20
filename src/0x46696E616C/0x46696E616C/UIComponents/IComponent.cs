@@ -18,5 +18,6 @@ namespace UIProject
         Texture2D picture { get; }
         float Scale { get; }
         void Draw(GraphicsDevice gd);
+        string Description();
     }
 }

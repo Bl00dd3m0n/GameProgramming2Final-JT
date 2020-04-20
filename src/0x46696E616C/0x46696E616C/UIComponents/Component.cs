@@ -18,7 +18,7 @@ namespace UIProject
         public string Text { get; set; }
         public Rectangle bounds { get; set; }
         public Vector2 Textposition;
-
+        public bool drawComponent { get; set; }
         [XmlIgnore]
         public Texture2D picture { get; protected set; }
         [XmlIgnore]
@@ -40,6 +40,7 @@ namespace UIProject
             this.color = color;
             this.Position = position;
             this.bounds = new Rectangle(position.ToPoint(), size);
+            drawComponent = true;
         }
 
         protected Component(Vector2 position, Point size, Color color, string Text) : this(position, size, color)
@@ -69,6 +70,11 @@ namespace UIProject
         public virtual void Resize(Point size)
         {
             this.Size = size;
+        }
+
+        public virtual string Description()
+        {
+            return "";
         }
     }
 }
