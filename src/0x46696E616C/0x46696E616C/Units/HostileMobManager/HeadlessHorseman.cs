@@ -14,7 +14,7 @@ namespace _0x46696E616C.Units.HostileMobManager
 {
     class HeadlessHorseman : HostileMob
     {
-        public HeadlessHorseman(Game game, string name, Vector2 size, float totalHealth, float currentHealth, Vector2 position, BaseUnitState state, TextureValue texture, Color color, TextureValue icon, WorldHandler world) : base(game, name, size, totalHealth, currentHealth, position, state, texture, color, icon, world)
+        public HeadlessHorseman(string name, Vector2 size, float totalHealth, float currentHealth, Vector2 position, BaseUnitState state, TextureValue texture, Color color, TextureValue icon, WorldHandler world) : base(name, size, totalHealth, currentHealth, position, state, texture, color, icon, world)
         {
         }
     }

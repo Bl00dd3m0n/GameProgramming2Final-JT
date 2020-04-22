@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using WorldManager;
 using WorldManager.TileHandlerLibrary;
 using _0x46696E616C.CommandPattern.Commands;
+using _0x46696E616C.Util.Input;
 
 namespace Util
 {
@@ -33,21 +34,21 @@ namespace Util
         }
         Vector2 position;
         SpriteBatch sb;
-        MouseKeyboard input;
+        InputDefinitions input;
         Vector2 Dir;
 
-        public Camera(Game game, InputHandler input, WorldHandler worldHandler) : this(game, input, worldHandler, new Vector2(0, 0))
+        public Camera(Game game, InputDefinitions input, WorldHandler worldHandler) : this(game, input, worldHandler, new Vector2(0, 0))
         {
 
         }
 
-        public Camera(Game game, InputHandler input, WorldHandler worldHandler, Vector2 startPoint) : base(game)
+        public Camera(Game game, InputDefinitions input, WorldHandler worldHandler, Vector2 startPoint) : base(game)
         {
             Tile.Zoom = 3;
             MoveSpeed = 6.25f;
             this.position = startPoint;
             this.ViewPort = new Rectangle(position.ToPoint(), new Point(30, 16));
-            this.input = (MouseKeyboard)input;
+            this.input = input;
             Dir = new Vector2(0, 0);
             this.world = worldHandler;
             bounds = new Rectangle(new Vector2(0, 0).ToPoint(), (world.GetSize()).ToPoint());
@@ -65,7 +66,7 @@ namespace Util
         public override void Update(GameTime gameTime)
         {
             timer = gameTime.ElapsedGameTime.Milliseconds;
-            if (input.Updated)
+            if (input.Updated())
             {
                 AdjustCamera();
                 CameraPosition();
@@ -75,15 +76,14 @@ namespace Util
 
         private void AdjustCamera()
         {
-            if (input.scrollVal > input.prevScrollVal && Tile.Zoom < 3f)
+            if (input.CheckInput(Controls.ZoomIn) && Tile.Zoom < 3f)
             {
                 Tile.Zoom += 0.3f;
             }
-            else if (input.scrollVal < input.prevScrollVal && Tile.Zoom > 1f)
+            else if (input.CheckInput(Controls.ZoomOut) && Tile.Zoom > 1f)
             {
                 Tile.Zoom -= 0.3f;
             }
-            input.Scrolling();
         }
         /// <summary>
         /// Movement setup for the camera
@@ -92,13 +92,13 @@ namespace Util
         {
             Dir.X = 0;
             Dir.Y = 0;
-            if (input.CheckKeyDown(Keys.W) && bounds.Top < ViewPort.Top + (2 * Tile.Zoom))//TODO Solve Scrolling Offset
+            if (input.CheckInput(Controls.Up) && bounds.Top < ViewPort.Top + (2 * (4 - Tile.Zoom)))
                 Dir.Y = -1;
-            if (input.CheckKeyDown(Keys.S) && bounds.Bottom > ViewPort.Bottom)//TODO Solve Scrolling Offset
+            if (input.CheckInput(Controls.Down) && bounds.Bottom > ViewPort.Bottom - (2 / ((4 - Tile.Zoom) / 4)))
                 Dir.Y = 1;
-            if (input.CheckKeyDown(Keys.A) && bounds.Left < ViewPort.Left + 2)
+            if (input.CheckInput(Controls.Left) && bounds.Left < ViewPort.Left + (2 * (4 - (Tile.Zoom))))
                 Dir.X = -1;
-            if (input.CheckKeyDown(Keys.D) && bounds.Right > ViewPort.Right - 2)
+            if (input.CheckInput(Controls.Right) && bounds.Right > ViewPort.Right - (2/((4-Tile.Zoom)/8)))
                 Dir.X = 1;
             position += Dir * MoveSpeed * timer / 100;
             position = position.ToPoint().ToVector2();//Truncates the position to interger values
@@ -117,9 +117,9 @@ namespace Util
                 if (ViewPort.Top < 0) OverY = -ViewPort.Top;
                 if (ViewPort.Left < 0) OverX = -ViewPort.Left;
                 //draw the viewport of the map using the scale
-                for (int y = ViewPort.Top; y < ViewPort.Bottom * (1+(Tile.Zoom/scale)) + OverY; y++)
+                for (int y = ViewPort.Top; y < (ViewPort.Bottom * (4 - Tile.Zoom)) + (OverY * (4 - Tile.Zoom)); y++)
                 {
-                    for (int x = ViewPort.Left; x < ViewPort.Right * (1 + (Tile.Zoom / scale)); x++)
+                    for (int x = ViewPort.Left; x < (ViewPort.Right * (4 - Tile.Zoom)) + (OverX * (4 - Tile.Zoom)); x++)
                     {
                         DrawScreen(x, y, i);
                     }
@@ -145,12 +145,12 @@ namespace Util
                 //Units are drawn second
                 else if (i == 1)
                 {
-                     ModifiableTile tile = (ModifiableTile)world.GetUnit(new Vector2(x, y));
+                    ModifiableTile tile = (ModifiableTile)world.GetUnit(new Vector2(x, y));
                     if (tile != null && tile.block.texture != TextureValue.None)
                     {
 
                         Texture2D texture = ContentHandler.DrawnTexture(tile.block.texture);
-                        ((BasicUnit)tile).UpdatePosition(tile.Position);
+                        ((BasicUnit)tile).UpdatePosition(Game.GraphicsDevice, tile.Position);
                         DrawHealth(tile);
                         sb.Draw(ContentHandler.DrawnTexture(tile.block.texture), (tile.Position * Tile.Zoom * 16) - (position * Tile.Zoom * 16), null, Color.White, 0, Vector2.Zero, Tile.Zoom, SpriteEffects.None, 0);
                     }
@@ -162,7 +162,7 @@ namespace Util
                     if (decorTile != null && decorTile.block.texture != TextureValue.None)
                     {
                         Texture2D texture = ContentHandler.DrawnTexture(decorTile.block.texture);
-                        decorTile.UpdatePosition(decorTile.Position);
+                        decorTile.UpdatePosition(Game.GraphicsDevice, decorTile.Position);
                         sb.Draw(ContentHandler.DrawnTexture(decorTile.block.texture), (decorTile.Position * Tile.Zoom * 16) - (position * Tile.Zoom * 16), null, Color.White, 0, Vector2.Zero, Tile.Zoom, SpriteEffects.None, 0);
                         DrawHealth(decorTile);
                     }

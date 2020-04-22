@@ -13,7 +13,7 @@ namespace _0x46696E616C.Buildings
 {
     public class Center : Building, ICollectionCenter<Wallet>
     {
-        public Center(Game game, TextureValue texture, Vector2 position, TextureValue icon) : base(game, texture, position, icon)
+        public Center(TextureValue texture, Vector2 position, TextureValue icon) : base(texture, position, icon)
         {
             Cost = new Wallet();
             Cost.Deposit(new Steel(), 1000);
@@ -30,9 +30,9 @@ namespace _0x46696E616C.Buildings
             healthBar = new HealthBar(new Rectangle(new Point((int)position.X, (int)position.Y - 1), new Point((int)(Size.X * 16), (int)(Size.Y))));
             BuildingDescription = "The center allows the user to train Civilians";
         }
-        public override Building NewInstace(Game game, TextureValue tex, Vector2 position, TextureValue Icon)
+        public override Building NewInstace(TextureValue tex, Vector2 position, TextureValue Icon)
         {
-            return new Center(game, tex, position, Icon);
+            return new Center(tex, position, Icon);
         }
 
         public override void Collect(Wallet resource)

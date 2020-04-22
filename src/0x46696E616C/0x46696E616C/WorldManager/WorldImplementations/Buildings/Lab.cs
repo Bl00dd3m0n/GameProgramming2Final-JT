@@ -9,7 +9,7 @@ namespace _0x46696E616C.Buildings
 {
     public class Lab : Building
     {
-        public Lab(Game game, TextureValue texture, Vector2 position, TextureValue icon) : base(game, texture, position, icon)
+        public Lab(TextureValue texture, Vector2 position, TextureValue icon) : base(texture, position, icon)
         {
             Cost = new Wallet();
             Cost.Deposit(new Steel(), 10000);
@@ -25,9 +25,9 @@ namespace _0x46696E616C.Buildings
             healthBar = new HealthBar(new Rectangle(new Point((int)position.X, (int)position.Y - 1), new Point((int)(Size.X * 16), (int)(Size.Y))));
             BuildingDescription = "Used to learn technology to improve production.";
         }
-        public override Building NewInstace(Game game, TextureValue tex, Vector2 position, TextureValue Icon)
+        public override Building NewInstace(TextureValue tex, Vector2 position, TextureValue Icon)
         {
-            return new Lab(game, tex, position, Icon);
+            return new Lab(tex, position, Icon);
         }
     }
 }

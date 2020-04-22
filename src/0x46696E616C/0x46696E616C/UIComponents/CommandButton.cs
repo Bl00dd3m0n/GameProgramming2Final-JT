@@ -19,7 +19,7 @@ namespace _0x46696E616C.UIComponents
         public bool Clicked { get; set; }
         public static int value;
         //If the button gets clicked
-        public override void Click()
+        public override void Click(Game game)
         {
             Clicked = true;
         }
@@ -34,7 +34,6 @@ namespace _0x46696E616C.UIComponents
         protected CommandButton(ICommand command, Vector2 position, TextureValue picture, Point size) : base(position, size, Color.White)
         {
             this.bounds = new Rectangle(position.ToPoint(), Size);
-            this.color = color;
             this.Position = position;
             this.picture = ContentHandler.DrawnTexture(picture);
             this.command = command;
@@ -43,7 +42,6 @@ namespace _0x46696E616C.UIComponents
         protected CommandButton(ICommand command, IQueueable<TextureValue> queueableObject, Point Size)
         {
             this.bounds = new Rectangle(queueableObject.Position.ToPoint(), Size);
-            this.color = color;
             this.Position = queueableObject.Position;
             this.picture = ContentHandler.DrawnTexture(queueableObject.Icon);
             this.command = command;

@@ -13,7 +13,7 @@ namespace UIProject
     {
         public bool Clicked { get; set; }
         public static int value;
-        public virtual void Click()
+        public virtual void Click(Game game)
         {
             Clicked = true;
         }
@@ -29,9 +29,6 @@ namespace UIProject
 
         protected Button(Vector2 position, Point size, Color color) : base(position, size, color)
         {
-            this.Size = size;
-            this.color = color;
-            this.Position = position;
         }
 
         protected Button(Vector2 position, Point size, Color color, string Text) : this(position, size, color)

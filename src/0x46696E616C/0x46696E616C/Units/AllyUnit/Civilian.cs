@@ -31,19 +31,19 @@ namespace _0x46696E616C.CommandPattern
         bool arrived;
         IEntity returnTarget;
         float timer = 0;
-        public Civilian(Game game, string name, Vector2 size, float totalHealth, float currentHealth, Vector2 position, BaseUnitState state, TextureValue texture, WorldHandler world, TextureValue Icon) : base(game, name, size, totalHealth, currentHealth, position, state, texture, Color.Blue, Icon, world)
+        public Civilian(string name, Vector2 size, float totalHealth, float currentHealth, Vector2 position, BaseUnitState state, TextureValue texture, WorldHandler world, TextureValue Icon) : base(name, size, totalHealth, currentHealth, position, state, texture, Color.Blue, Icon, world)
         {
             QueueableThings = new List<IQueueable<TextureValue>>();
-            QueueableThings.Add(new Center(game, TextureValue.Center, Vector2.Zero, TextureValue.CenterIcon));
-            QueueableThings.Add(new FireWall(game, TextureValue.FireWall, Vector2.Zero, TextureValue.FireWallIcon));
-            QueueableThings.Add(new InternetCafe(game, TextureValue.InternetCafe, Vector2.Zero, TextureValue.InternetCafeIcon));
-            QueueableThings.Add(new Lab(game, TextureValue.Lab, Vector2.Zero, TextureValue.LabIcon));
-            QueueableThings.Add(new MediaCenter(game, TextureValue.MediaCenter, Vector2.Zero, TextureValue.MediaCenterIcon));
-            QueueableThings.Add(new Mines(game, TextureValue.Mines, Vector2.Zero, TextureValue.MinesIcon));
-            QueueableThings.Add(new PowerSupply(game, TextureValue.PowerSupply, Vector2.Zero, TextureValue.PowerSupplyIcon));
-            QueueableThings.Add(new ServerFarm(game, TextureValue.ServerFarm, Vector2.Zero, TextureValue.ServerFarmIcon));
-            QueueableThings.Add(new SolarPanel(game, TextureValue.SolarPanel, Vector2.Zero, TextureValue.SolarPanelIcon));
-            QueueableThings.Add(new SteelFactory(game, TextureValue.SteelFactory, Vector2.Zero, TextureValue.SteelFactoryIcon));
+            QueueableThings.Add(new Center(TextureValue.Center, Vector2.Zero, TextureValue.CenterIcon));
+            QueueableThings.Add(new FireWall(TextureValue.FireWall, Vector2.Zero, TextureValue.FireWallIcon));
+            QueueableThings.Add(new InternetCafe(TextureValue.InternetCafe, Vector2.Zero, TextureValue.InternetCafeIcon));
+            QueueableThings.Add(new Lab(TextureValue.Lab, Vector2.Zero, TextureValue.LabIcon));
+            QueueableThings.Add(new MediaCenter(TextureValue.MediaCenter, Vector2.Zero, TextureValue.MediaCenterIcon));
+            QueueableThings.Add(new Mines(TextureValue.Mines, Vector2.Zero, TextureValue.MinesIcon));
+            QueueableThings.Add(new PowerSupply(TextureValue.PowerSupply, Vector2.Zero, TextureValue.PowerSupplyIcon));
+            QueueableThings.Add(new ServerFarm(TextureValue.ServerFarm, Vector2.Zero, TextureValue.ServerFarmIcon));
+            QueueableThings.Add(new SolarPanel(TextureValue.SolarPanel, Vector2.Zero, TextureValue.SolarPanelIcon));
+            QueueableThings.Add(new SteelFactory(TextureValue.SteelFactory, Vector2.Zero, TextureValue.SteelFactoryIcon));
 
             waypoints = new List<Vector2>();
             zero = Vector2.Zero;
@@ -56,7 +56,7 @@ namespace _0x46696E616C.CommandPattern
             Description = "A basic unit able to Harvest resources, and build things\nMinimal Damage";
         }
 
-        public override void Update(GameTime gameTime)
+        public void Update(GameTime gameTime)
         {
             timer += gameTime.ElapsedGameTime.Milliseconds;
             UpdateMove(gameTime);
@@ -65,7 +65,6 @@ namespace _0x46696E616C.CommandPattern
                 UnitInteraction();
                 
             }
-            base.Update(gameTime);
         }
         /// <summary>
         /// Interact with each tile based on what type of tile it is if the unit is within 1 tile of their target.
@@ -232,7 +231,7 @@ namespace _0x46696E616C.CommandPattern
         /// <returns></returns>
         public override BasicUnit NewInstace(float currentHealth, Vector2 position)
         {
-            return new Civilian(this.Game, this.name, this.Size, this.TotalHealth, currentHealth, position, BaseUnitState.Idle, this.block.texture, this.world, this.Icon);
+            return new Civilian(this.name, this.Size, this.TotalHealth, currentHealth, position, BaseUnitState.Idle, this.block.texture, this.world, this.Icon);
         }
     }
 }

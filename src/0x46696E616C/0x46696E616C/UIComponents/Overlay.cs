@@ -8,6 +8,7 @@ using _0x46696E616C.CommandPattern;
 using _0x46696E616C.CommandPattern.GameCommands;
 using _0x46696E616C.Input;
 using _0x46696E616C.MobHandler.Units;
+using _0x46696E616C.Util.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using NationBuilder.DataHandlerLibrary;
@@ -22,16 +23,16 @@ namespace _0x46696E616C.UIComponents
     class Overlay : Canvas
     {
         WorldHandler world;
-        InputHandler input;
+        InputDefinitions input;
         CommandProccesor cp;
         Texture2D OverlayTexture;
         Texture2D CameraView;
         DescriptionBox description;
         Vector2 ZeroVector;
-        public Overlay(Game game, InputHandler input, WorldHandler world, CommandProccesor command) : base(game)
+        public Overlay(Game game, InputDefinitions input, WorldHandler world, CommandProccesor command) : base(game)
         {
             cp = command;
-            this.world= world;
+            this.world = world;
             this.input = input;
             cp.overlay = this;
             ZeroVector = Vector2.Zero;
@@ -49,18 +50,19 @@ namespace _0x46696E616C.UIComponents
                 {
                     if (!cp.cc.CheckCost(((BuildSelectCommand)button.command).build))
                     {
-                        button.color = Color.Red;
-                    } else
+                        button.Color = Color.Red;
+                    }
+                    else
                     {
-                        button.color = Color.White;
+                        button.Color = Color.White;
                     }
                 }
             }
-            base.Draw(gameTime);
+            base.Draw(spriteBatch);
             if (description.drawComponent)
             {
-                spriteBatch.Draw(description.picture, description.Position, description.color);
-                spriteBatch.DrawString(ContentHandler.Font, description.Text, description.Position, Color.White,0,Vector2.Zero, 1,SpriteEffects.None, 0);
+                spriteBatch.Draw(description.picture, description.Position, description.Color);
+                spriteBatch.DrawString(ContentHandler.Font, description.Text, description.Position, Color.White, 0, Vector2.Zero, 1, SpriteEffects.None, 0);
             }
             spriteBatch.End();
         }
@@ -80,10 +82,11 @@ namespace _0x46696E616C.UIComponents
                 {
                     spriteBatch.Draw(ContentHandler.DrawnTexture(build.block.texture), (cp.CurrentPos * Tile.Zoom * 16) - (cp.camera.Position * Tile.Zoom * 16), null, Color.Red, 0, ZeroVector, Tile.Zoom, SpriteEffects.None, 0);
                 }
-            } else if(cp.cc.SpawnMarker != null)
+            }
+            else if (cp.cc.SpawnMarker != null)
             {
                 spriteBatch.Draw(cp.cc.SpawnMarker, (cp.CurrentPos * Tile.Zoom * 16) - (cp.camera.Position * Tile.Zoom * 16), null, Color.Red, 0, ZeroVector, Tile.Zoom, SpriteEffects.None, 0);
-            } 
+            }
         }
         /// <summary>
         /// The command processor calls the overlay to see if a button was clicked with a command if a command button was clicked return the command
@@ -91,7 +94,7 @@ namespace _0x46696E616C.UIComponents
         /// <returns></returns>
         internal Command ClickCheck()
         {
-            IComponent component = components.Find(x => x.bounds.Contains(input.inputPos));
+            IComponent component = components.Find(x => x.bounds.Contains(input.InputPos));
             if (component != null)
             {
                 if (component.Description() != null)
@@ -104,12 +107,12 @@ namespace _0x46696E616C.UIComponents
                             description.drawComponent = true;
                             description.Size = ContentHandler.Font.MeasureString(description.Text).ToPoint();
                             description.Draw(GraphicsDevice);
-                            description.Position = input.inputPos - description.Size.ToVector2();
+                            description.Position = input.InputPos - description.Size.ToVector2();
                         }
-                    } 
+                    }
                 }
 
-                if (((MouseKeyboard)input).LeftClick())
+                if (input.CheckInput(Controls.Select))
                 {
                     if (component is CommandButton)//If the user can afford to train/build things it returns the selected unit, if not it returns null
                     {
@@ -127,7 +130,8 @@ namespace _0x46696E616C.UIComponents
                         }
                     }
                 }
-            } else
+            }
+            else
             {
                 description.drawComponent = false;
             }
@@ -136,7 +140,7 @@ namespace _0x46696E616C.UIComponents
 
         private void DrawSelectionDetails()
         {
-            
+
         }
         /// <summary>
         /// For now it just draws the resource text
@@ -146,7 +150,7 @@ namespace _0x46696E616C.UIComponents
             List<string> resources = cp.cc.Resources();
             foreach (string resource in resources)
             {
-                spriteBatch.DrawString(ContentHandler.Font, resource, new Vector2((resources.FindIndex(l => l == resource)*115)+13, 5), Color.White);
+                spriteBatch.DrawString(ContentHandler.Font, resource, new Vector2((resources.FindIndex(l => l == resource) * 115) + 13, 5), Color.White);
             }
         }
 
@@ -159,7 +163,7 @@ namespace _0x46696E616C.UIComponents
         {
             OverlayTexture = Game.Content.Load<Texture2D>("Overlay");
             DrawViewPortRepresentation();
-            description = new DescriptionBox(new Point(550,200));
+            description = new DescriptionBox(new Point(550, 200));
             description.Draw(GraphicsDevice);
             base.LoadContent();
         }
@@ -169,12 +173,12 @@ namespace _0x46696E616C.UIComponents
         private void DrawViewPortRepresentation()
         {
 
-            Color[] bounds = new Color[cp.camera.Size.X*cp.camera.Size.Y];
-            for(int y = 0; y < cp.camera.Size.Y;y++)
+            Color[] bounds = new Color[cp.camera.Size.X * cp.camera.Size.Y];
+            for (int y = 0; y < cp.camera.Size.Y; y++)
             {
                 for (int x = 0; x < cp.camera.Size.X; x++)
                 {
-                    if(x == 0 || y== 0 || x == cp.camera.Size.X-1 || y == cp.camera.Size.Y - 1)
+                    if (x == 0 || y == 0 || x == cp.camera.Size.X - 1 || y == cp.camera.Size.Y - 1)
                     {
                         bounds[x + y * cp.camera.Size.X] = Color.White;
                     }
@@ -188,9 +192,9 @@ namespace _0x46696E616C.UIComponents
         {
             //Draw the worlds map scaled down
             float scale = 0.5f;
-            Vector2 Position = new Vector2(0,GraphicsDevice.Viewport.Height)-new Vector2(-8, world.GetSize().Y * scale);
+            Vector2 Position = new Vector2(0, GraphicsDevice.Viewport.Height) - new Vector2(-8, world.GetSize().Y * scale);
             spriteBatch.Draw(world.getMap(), Position, null, Color.White, 0, Vector2.Zero, scale, SpriteEffects.None, 0);
-            spriteBatch.Draw(CameraView, (cp.camera.Position*scale) + Position, null, Color.White, 0, ZeroVector, (scale/Tile.Zoom), SpriteEffects.None, 0);
+            spriteBatch.Draw(CameraView, (cp.camera.Position * scale) + Position, null, Color.White, 0, ZeroVector, (scale / Tile.Zoom), SpriteEffects.None, 0);
         }
     }
 }

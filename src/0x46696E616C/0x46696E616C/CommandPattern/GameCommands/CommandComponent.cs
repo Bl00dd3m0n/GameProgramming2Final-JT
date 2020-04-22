@@ -158,7 +158,7 @@ namespace _0x46696E616C.CommandPattern
         internal void SelectBuild(Building build)
         {
             SpawnMarker = null;
-            this.SelectedBuild = build.NewInstace(Game, build.block.texture, build.Position, build.Icon);
+            this.SelectedBuild = build.NewInstace(build.block.texture, build.Position, build.Icon);
             SelectedBuild.SetTeam(this.Team);
             SelectedBuild.Subscribe(this);
         }
@@ -204,7 +204,7 @@ namespace _0x46696E616C.CommandPattern
             {
                 if (wh.Place(SelectedBuild, Position))
                 {
-                    SelectedBuild.UpdatePosition(Position);
+                    SelectedBuild.UpdatePosition(Game.GraphicsDevice, Position);
                     SelectedBuild.PlacedTile();
 
                     toBuild.Add(SelectedBuild);
@@ -225,7 +225,7 @@ namespace _0x46696E616C.CommandPattern
                     resources.Deposit(wallet);
                 }
             }
-            SelectBuild(SelectedBuild.NewInstace(Game, SelectedBuild.block.texture, Position, SelectedBuild.Icon));
+            SelectBuild(SelectedBuild.NewInstace(SelectedBuild.block.texture, Position, SelectedBuild.Icon));
         }
         //Returns the teams resources
         public List<string> Resources()
@@ -271,7 +271,7 @@ namespace _0x46696E616C.CommandPattern
                 timer = 0;
             }
             CleanList();
-            if(buildings.Count > 0 && units.Count > 0)
+            if(buildings.Count == 0 && units.Count == 0)
             {
                 IsGameOver = true;
             } 
@@ -350,7 +350,7 @@ namespace _0x46696E616C.CommandPattern
         {
             for (int i = 0; i < buildings.Count; i++)
             {
-                IQueueable<TextureValue> item = buildings[i].Train();
+                IQueueable<TextureValue> item = buildings[i].Train(Game.GraphicsDevice);
                 if (item != null)
                 {
                     units.Add((IUnit)item);

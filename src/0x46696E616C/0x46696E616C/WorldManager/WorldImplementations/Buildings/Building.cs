@@ -14,6 +14,7 @@ using WorldManager.Buildings;
 using System.Collections;
 using _0x46696E616C.ConcreteImplementations;
 using _0x46696E616C.WorldManager.ConcreteImplementations.Resources;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace _0x46696E616C.Buildings
 {
@@ -37,8 +38,7 @@ namespace _0x46696E616C.Buildings
 
         Vector2 spawnPoint { get; set; }
         protected string BuildingDescription { get; set; }
-        Stats stats;
-        public Building(Game game, TextureValue texture, Vector2 position, TextureValue Icon) : base(game, texture, position, Color.Blue)
+        public Building(TextureValue texture, Vector2 position, TextureValue Icon) : base(texture, position, Color.Blue)
         {
             Cost = new Wallet();
             name = "Building";
@@ -60,7 +60,7 @@ namespace _0x46696E616C.Buildings
             worldComponent = observer;
         }
 
-        public IQueueable<TextureValue> Train()
+        public IQueueable<TextureValue> Train(GraphicsDevice gd)
         {
             if (trainingQueue.Count > 0)
             {
@@ -69,7 +69,7 @@ namespace _0x46696E616C.Buildings
                 {
                     if (trainingObject is BasicUnit)
                     {
-                        ((BasicUnit)trainingObject).UpdatePosition(spawnPoint);
+                        ((BasicUnit)trainingObject).UpdatePosition(gd, spawnPoint);
                         ((BasicUnit)trainingObject).PlacedTile();
                         ((BasicUnit)trainingObject).SetTeam(this.TeamAssociation);
                     }
@@ -110,19 +110,19 @@ namespace _0x46696E616C.Buildings
         {
 
         }
-        public override void UpdatePosition(Vector2 position)
+        public override void UpdatePosition(GraphicsDevice gd, Vector2 position)
         {
             if (!placed)
             {
                 spawnPoint = position - (new Vector2(0, -1) * this.Size);
             }
-            base.UpdatePosition(position);
+            base.UpdatePosition(gd, position);
         }
         public override void Die()
         {
             base.Die();
         }
-        public virtual Building NewInstace(Game game, TextureValue tex, Vector2 position, TextureValue Icon)
+        public virtual Building NewInstace(TextureValue tex, Vector2 position, TextureValue Icon)
         {
             throw new NotImplementedException();
         }

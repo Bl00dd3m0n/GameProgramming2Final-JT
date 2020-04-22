@@ -15,7 +15,7 @@ namespace _0x46696E616C.Buildings
 
         public List<IResource> productionTypes { get; protected set; }
 
-        public InternetCafe(Game game, TextureValue texture, Vector2 position, TextureValue icon) : base(game, texture, position, icon)
+        public InternetCafe(TextureValue texture, Vector2 position, TextureValue icon) : base(texture, position, icon)
         {
             ProductionAMinute = new List<int>() { 5, 1 };
             productionTypes = new List<IResource>() { new Money(), new Likes() };
@@ -32,9 +32,9 @@ namespace _0x46696E616C.Buildings
             healthBar = new HealthBar(new Rectangle(new Point((int)position.X, (int)position.Y - 1), new Point((int)(Size.X * 16), (int)(Size.Y))));
             BuildingDescription = "Internet Cafe used for units to generate money and likes in.";
         }
-        public override Building NewInstace(Game game, TextureValue tex, Vector2 position, TextureValue Icon)
+        public override Building NewInstace(TextureValue tex, Vector2 position, TextureValue Icon)
         {
-            return new InternetCafe(game, tex, position, Icon);
+            return new InternetCafe(tex, position, Icon);
         }
     }
 }

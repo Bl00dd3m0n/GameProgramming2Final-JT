@@ -23,23 +23,23 @@ namespace MobHandler.HostileMobManager
             this.world = world;
             Wave = 0;
             List<IUnit> tempUnits = new List<IUnit>();
-            tempUnits.Add(new HeadlessHorseman(game, "Headless Horseman", new Vector2(1), 1000, 1000, new Vector2(318, 120), BaseUnitState.Idle, TextureValue.HeadlessHorseman, Color.Red, TextureValue.HeadlessHorseman, world));
-            tempUnits.Add(new Mage(game, "Mage", new Vector2(1), 1000, 1000, new Vector2(318, 120), BaseUnitState.Idle, TextureValue.Mage, Color.Red, TextureValue.Mage, world));
+            tempUnits.Add(new HeadlessHorseman("Headless Horseman", new Vector2(1), 1000, 1000, new Vector2(318, 120), BaseUnitState.Idle, TextureValue.HeadlessHorseman, Color.Red, TextureValue.HeadlessHorseman, world));
+            tempUnits.Add(new Mage("Mage", new Vector2(1), 1000, 1000, new Vector2(318, 120), BaseUnitState.Idle, TextureValue.Mage, Color.Red, TextureValue.Mage, world));
             ((HostileMob)tempUnits[0]).SetTeam(CommandComponent.ID+1);
             ((HostileMob)tempUnits[1]).SetTeam(CommandComponent.ID+1);
             WaveDetails wave = new WaveDetails(tempUnits);
-            StartWave(wave);
+            //StartWave(wave);
         }
 
         public override void Update(GameTime gameTime)
         {
-            foreach(IUnit unit in units)
+            /*foreach(IUnit unit in units)
             {
                 if (unit is BasicUnit)//Always should be but just in case
                 {
                     ((BasicUnit)unit).Update(gameTime);
                 }
-            }
+            }*/
             base.Update(gameTime);
         }
 

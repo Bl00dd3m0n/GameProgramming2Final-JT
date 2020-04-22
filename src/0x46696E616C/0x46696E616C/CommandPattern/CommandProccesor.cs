@@ -5,7 +5,9 @@ using _0x46696E616C.Input;
 using _0x46696E616C.MobHandler;
 using _0x46696E616C.MobHandler.Units;
 using _0x46696E616C.UIComponents;
+using _0x46696E616C.Util.Input;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using NationBuilder.DataHandlerLibrary;
 using NationBuilder.TileHandlerLibrary;
@@ -26,7 +28,7 @@ namespace _0x46696E616C.CommandPattern
     class CommandProccesor : GameComponent
     {
         WorldHandler wh;
-        MouseKeyboard input;
+        InputDefinitions input;
         internal CommandComponent cc { get; private set; }
         public Camera camera { get; private set; }
         List<ICommand> commands;
@@ -34,7 +36,7 @@ namespace _0x46696E616C.CommandPattern
         public Vector2 CurrentPos { get; private set; }
         public Overlay overlay { get; set; }
 
-        public CommandProccesor(Game game, List<IUnit> startingUnits, WorldHandler wh, MouseKeyboard input, CommandComponent command, Camera camera) : base(game)
+        public CommandProccesor(Game game, List<IUnit> startingUnits, WorldHandler wh, InputDefinitions input, CommandComponent command, Camera camera) : base(game)
         {
             this.cc = command;
             this.wh = wh;
@@ -45,16 +47,16 @@ namespace _0x46696E616C.CommandPattern
         }
         public override void Update(GameTime gameTime)
         {
-            CurrentPos = ConvertToWorldSpace(input.inputPos);
+            CurrentPos = ConvertToWorldSpace(input.InputPos);
             Command command = null;
-            if (input is MouseKeyboard && Game.IsActive)
+            if (Game.IsActive)
             {
-                if (input.GetKeyDown(Keys.Escape))
+                if (input.CheckInput(Controls.Deselect))
                 {
                     cc.SelectedBuild = null;
                     cc.SpawnMarker = null;
                 }
-                if (input.inputPos.Y >= 33 && input.inputPos.Y <= 345) // Overlay positioning - this should probably be more dynamic
+                if (input.InputPos.Y >= 33 && input.InputPos.Y <= 345) // Overlay positioning - this should probably be more dynamic
                 {
                     command = OnMapAction(CurrentPos);
                 }
@@ -73,7 +75,7 @@ namespace _0x46696E616C.CommandPattern
 
         private Command OnMapAction(Vector2 currentPos)
         {
-            if (input.LeftClick())
+            if (input.CheckInput(Controls.Select))
             {
 
                 if (cc.SelectedBuild != null)
@@ -123,7 +125,7 @@ namespace _0x46696E616C.CommandPattern
                             {
                                 if (queueable is Civilian)
                                 {
-                                    ((Civilian)queueable).UpdatePosition(new Vector2(x, y));
+                                    ((Civilian)queueable).UpdatePosition(Game.GraphicsDevice, new Vector2(x, y));
                                     com = new CommandButton(Game.GraphicsDevice, new TrainCommand((IUnit)queueable, (Building)tile), queueable, new Point(32));
                                     float width = ((Civilian)queueable).Size.X;
                                     float height = ((Civilian)queueable).Size.Y;
@@ -144,7 +146,7 @@ namespace _0x46696E616C.CommandPattern
                     }
                 }
             }
-            else if (input.RightClick())
+            else if (input.CheckInput(Controls.Interact))
             {
                 Tile tile = wh.GetTile(CurrentPos);
                 if (tile is ReferenceTile)
@@ -179,10 +181,10 @@ namespace _0x46696E616C.CommandPattern
                     }
                 }
             }
-            else if (input.LeftRelease())
+            else if (input.CheckRelease(Controls.Select))
             {
-                Vector2 startPoint = ConvertToWorldSpace(input.selectionStart);
-                Vector2 endPoint = ConvertToWorldSpace(input.selectionEnd);
+                Vector2 startPoint = ConvertToWorldSpace(input.StartPosition);
+                Vector2 endPoint = ConvertToWorldSpace(input.EndPosition);
                 List<IUnit> unitSelection = new List<IUnit>();
                 Vector2 tempStart = startPoint;
                 Vector2 tempEnd = endPoint;
@@ -236,7 +238,7 @@ namespace _0x46696E616C.CommandPattern
             {
                 if (queueable is Building)
                 {
-                    ((Building)queueable).UpdatePosition(new Vector2(x, y));
+                    ((Building)queueable).UpdatePosition(Game.GraphicsDevice, new Vector2(x, y));
                     Component com = new CommandButton(Game.GraphicsDevice, new BuildSelectCommand((Building)queueable), new Vector2(x,y), queueable.Icon, new Point(32));
                     float width = ((Building)queueable).Size.X;
                     float height = ((Building)queueable).Size.Y;

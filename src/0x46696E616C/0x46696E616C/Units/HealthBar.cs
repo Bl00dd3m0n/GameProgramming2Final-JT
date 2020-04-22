@@ -1,6 +1,7 @@
 ﻿using _0x46696E616C.MobHandler.Units;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,7 @@ namespace _0x46696E616C.MobHandler
 {
     public class HealthBar
     {
+        [JsonIgnore]
         public Texture2D Health { get; private set; }
         public Rectangle Bounds { get; protected set; }
         private Vector2 position;

@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using _0x46696E616C.Util.Input;
+using MainMenu.Component;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
@@ -33,24 +35,48 @@ namespace UIProject
 
         public override void Update(GameTime gameTime)
         {
-
             base.Update(gameTime);
         }
 
-        public override void Draw(GameTime gameTime)
+        public virtual Button CheckClick(Point point, InputDefinitions input)
         {
+            foreach (IComponent component in components)
+            {
+                if (component.bounds.Contains(point))
+                {
+                    if (component is PageButton)
+                    {
+                        ((PageButton)component).Click(Game, this);
+                        return (Button)component;
+                    }
+                    else if (component is InputButton)
+                    {
+                        ((InputButton)component).Click(input, Game);
+                        return (Button)component;
+                    }
+                    else if (component is Button)
+                    {
+                        ((Button)component).Click(Game);
+                        return (Button)component;
+                    }
+                }
+            }
+            return null;
+        }
 
+        public void Draw(SpriteBatch spriteBatch)
+        {
             for (int i = 0; i < components.Count; i++)
             {
                 if (((Component)components[i]).drawComponent)
                 {
-                    if (((Button)components[i]).Clicked)
+                    if (components[i] is Button && ((Button)components[i]).Clicked)
                     {
                         spriteBatch.Draw(components[i].picture, components[i].Position, Color.LightGray);
                     }
-                    else
+                    else if (components[i].picture != null)
                     {
-                        spriteBatch.Draw(components[i].picture, components[i].Position, null, components[i].color, 0, new Vector2(0), components[i].Scale, SpriteEffects.None, 0);
+                        spriteBatch.Draw(components[i].picture, components[i].Position, null, components[i].Color, 0, new Vector2(0), components[i].Scale, SpriteEffects.None, 0);
                     }
                     if (components[i].Text != null && components[i].Text != string.Empty)
                     {
@@ -59,7 +85,6 @@ namespace UIProject
                     }
                 }
             }
-            base.Draw(gameTime);
         }
         public virtual void AddComponent(IComponent component)
         {

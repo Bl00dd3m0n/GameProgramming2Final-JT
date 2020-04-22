@@ -12,6 +12,7 @@ using Vector2 = Microsoft.Xna.Framework.Vector2;
 using _0x46696E616C.MobHandler.Units;
 using _0x46696E616C.MobHandler;
 using WorldManager.MapData;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace WorldManager.TileHandlerLibrary
 {
@@ -58,7 +59,7 @@ namespace WorldManager.TileHandlerLibrary
 
         public bool built { get; protected set; }
 
-        public ModifiableTile(Game game, TextureValue texture, Vector2 position, Color color) : base(game, texture, position, color)
+        public ModifiableTile(TextureValue texture, Vector2 position, Color color) : base(texture, position, color)
         {
             built = false;
             MapWatcher = new List<IMapObserver>();
@@ -106,19 +107,19 @@ namespace WorldManager.TileHandlerLibrary
         /// Don't update harvestable units
         /// </summary>
         /// <param name="position"></param>
-        public override void UpdatePosition(Vector2 position)
+        public override void UpdatePosition(GraphicsDevice gd, Vector2 position)
         {
             if (this is IHarvestable)
             {
             }
             else
             {
-                base.UpdatePosition(position);
+                base.UpdatePosition(gd, position);
                 if (healthBar != null)
                 {
                     healthBar = new HealthBar(new Rectangle(new Point((int)position.X, (int)position.Y - 1), new Point((int)(Size.X * 16), (int)(5))));
                 }
-                healthBar.UpdateHealth(this, Game.GraphicsDevice);
+                healthBar.UpdateHealth(this, gd);
                 healthBar.Position = position;
             }
         }

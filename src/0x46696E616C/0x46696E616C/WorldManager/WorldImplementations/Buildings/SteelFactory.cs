@@ -17,7 +17,7 @@ namespace _0x46696E616C.Buildings
 
         public List<IResource> productionTypes { get; private set; }
 
-        public SteelFactory(Game game, TextureValue texture, Vector2 position, TextureValue icon) : base(game, texture, position, icon)
+        public SteelFactory(TextureValue texture, Vector2 position, TextureValue icon) : base(texture, position, icon)
         {
             Cost = new Wallet();
             Cost.Deposit(new Iron(), 200);
@@ -34,9 +34,9 @@ namespace _0x46696E616C.Buildings
             BuildingDescription = "Used for production of steel, also costs iron for production";
         }
 
-        public override Building NewInstace(Game game, TextureValue tex, Vector2 position, TextureValue Icon)
+        public override Building NewInstace(TextureValue tex, Vector2 position, TextureValue Icon)
         {
-            return new SteelFactory(game, tex, position, Icon);
+            return new SteelFactory(tex, position, Icon);
         }
     }
 }

@@ -6,6 +6,7 @@ using _0x46696E616C.ConcreteImplementations.Resources;
 using _0x46696E616C.Input;
 using _0x46696E616C.MobHandler.Units;
 using _0x46696E616C.UIComponents;
+using _0x46696E616C.Util.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -24,21 +25,18 @@ namespace _0x46696E616C
     /// <summary>
     /// This is the main type for your game.
     /// </summary>
-    public class Game1 : Game
+    public class ActualGame : DrawableGameComponent
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         CommandComponent cc;
         Camera cam;
         CommandProccesor process;
-        MouseKeyboard input;
+        InputDefinitions input;
         Overlay overlay;
         WaveManager wave;
-        public Game1()
+        public ActualGame(Game game) : base(game)
         {
-            graphics = new GraphicsDeviceManager(this);
-            //this.graphics.IsFullScreen = true;
-            Content.RootDirectory = "Content";
         }
 
         /// <summary>
@@ -47,7 +45,7 @@ namespace _0x46696E616C
         /// related content.  Calling base.Initialize will enumerate through any components
         /// and initialize them as well.
         /// </summary>
-        protected override void Initialize()
+        public override void Initialize()
         {
             // TODO: Add your initialization logic here
 
@@ -64,9 +62,9 @@ namespace _0x46696E616C
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             // TODO: use this.Content to load your game content here
-            ContentHandler.LoadContent(this);
+            ContentHandler.LoadContent(Game);
             //Create a new world
-            WorldHandler world = new WorldHandler(this, "TempWorld");
+            WorldHandler world = new WorldHandler(Game, "TempWorld");
             //Initialize the new wallet to start with....this can probably be moved to a file
             Wallet startingResources = new Wallet();
             startingResources.Deposit(new Wood(), 500);
@@ -76,23 +74,23 @@ namespace _0x46696E616C
             startingResources.Deposit(new Iron(), 500);
             startingResources.Deposit(new Energy(), 500);
             //creates a new input handler instance
-            input = new MouseKeyboard(this, spriteBatch);
+            input = new InputDefinitions(Game);
             //318,98 - Temp spawn point until I randomize it
             Vector2 startPoint = new Vector2(318, 98);
-            cam = new Camera(this, input, world, startPoint);
+            cam = new Camera(Game, input, world, startPoint);
             //Adds a unit to start
             List<IUnit> units = new List<IUnit>();
-            units.Add(new Civilian(this, "Base unit", new Vector2(1, 1), 100, 100, startPoint + new Vector2(4, 5), BaseUnitState.Idle, TextureValue.Civilian, world, TextureValue.Civilian));
+            units.Add(new Civilian("Base unit", new Vector2(1, 1), 100, 100, startPoint + new Vector2(4, 5), BaseUnitState.Idle, TextureValue.Civilian, world, TextureValue.Civilian));
             world.AddMob(units[0]);
             ((BasicUnit)units[0]).SetTeam(1);
 
             //Game components
-            cc = new CommandComponent(this, startingResources, units, world);
-            process = new CommandProccesor(this, new List<IUnit>(), world, input, cc, cam);
-            overlay = new Overlay(this, input, world, process);
+            cc = new CommandComponent(Game, startingResources, units, world);
+            process = new CommandProccesor(Game, new List<IUnit>(), world, input, cc, cam);
+            overlay = new Overlay(Game, input, world, process);
 
             //Center
-            Center center = new Center(this, TextureValue.Center, startPoint, TextureValue.CenterIcon);
+            Center center = new Center(TextureValue.Center, startPoint, TextureValue.CenterIcon);
             center.SetTeam(cc.Team);
             center.SetSpawn(startPoint + center.Size + new Vector2(0, 1));
             center.AddQueueable(((Civilian)units[units.Count - 1]).NewInstace(100, startPoint));
@@ -100,14 +98,14 @@ namespace _0x46696E616C
             world.Place(center, startPoint);
             center.Subscribe(cc);
             //Wave handler
-            wave = new WaveManager(this, world);
+            wave = new WaveManager(Game, world);
 
             //Initializer
             wave.Initialize();
             cam.Initialize();
             overlay.Initialize();
             process.Initialize();
-            input.Initialize();
+            world.Save("WorldCheck.wrld");
         }
 
         /// <summary>
@@ -124,13 +122,13 @@ namespace _0x46696E616C
         /// checking for collisions, gathering input, and playing audio.
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
-        protected override void Update(GameTime gameTime)
+        public override void Update(GameTime gameTime)
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.X))
             {
-                Exit();
+                Game.Exit();
             }
-            if (this.IsActive && !cc.IsGameOver)
+            if (Game.IsActive && !cc.IsGameOver)
             {
                 wave.Update(gameTime);
                 cam.Update(gameTime);
@@ -147,20 +145,20 @@ namespace _0x46696E616C
         /// This is called when the game should draw itself.
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
-        protected override void Draw(GameTime gameTime)
+        public override void Draw(GameTime gameTime)
         {
-            if (this.IsActive && !cc.IsGameOver)
-            {
-                GraphicsDevice.Clear(Color.Black);
-                // TODO: Add your drawing code here
 
+            GraphicsDevice.Clear(Color.Black);
+            // TODO: Add your drawing code here
+            if (Game.IsActive && !cc.IsGameOver)
+            {
                 cam.Draw(gameTime);
                 overlay.Draw(gameTime);
                 spriteBatch.Begin();
                 spriteBatch.DrawString(ContentHandler.Font, cc.Time(), new Vector2(700, 0), Color.White);
                 if (debug)
                 {
-                    spriteBatch.DrawString(ContentHandler.Font, $"{cam.Position.ToPoint() + (input.inputPos / (Tile.Zoom * 16)).ToPoint()}", new Vector2(0, 20), Color.White);
+                    spriteBatch.DrawString(ContentHandler.Font, $"{cam.Position.ToPoint() + (input.InputPos / (Tile.Zoom * 16)).ToPoint()}", new Vector2(0, 20), Color.White);
                     spriteBatch.DrawString(ContentHandler.Font, $"{cam.Position.ToPoint()} {Tile.Zoom}", new Vector2(0, 40), Color.White);
                     spriteBatch.DrawString(ContentHandler.Font, $"{cam.Position.ToPoint()} {Tile.Zoom}", new Vector2(0, 40), Color.White);
                     spriteBatch.DrawString(ContentHandler.Font, $"{2f / Tile.Zoom}", new Vector2(0, 60), Color.White);

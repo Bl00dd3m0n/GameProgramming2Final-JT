@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,9 +15,9 @@ namespace UIProject
         {
             this.unit = unit;
         }
-        public override void Click()
+        public override void Click(Game game)
         {
-            base.Click();
+            base.Click(game);
         }
     }
 }

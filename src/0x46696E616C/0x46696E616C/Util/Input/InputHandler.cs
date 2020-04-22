@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using _0x46696E616C.Util.Input;
+using MainMenu.Component;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using NationBuilder.DataHandlerLibrary;
@@ -11,19 +13,17 @@ namespace _0x46696E616C.Input
 {
     public class InputHandler : GameComponent
     {
-        public Vector2 inputPos { get; protected set; }
+        public Vector2 InputPos { get; protected set; }
         public Vector2 selectionStart { get; protected set; }
         public Vector2 selectionEnd { get; protected set; }
-        protected SpriteBatch spriteBatch;
         protected float clickTimer;
-        public InputHandler(Game game, SpriteBatch sb) : base(game)
+        public InputHandler(Game game) : base(game)
         {
-            this.spriteBatch = sb;
         }
 
         protected void UpdateCursorPosition(Vector2 position)
         {
-            this.inputPos = position;
+            this.InputPos = position;
         }
 
 
@@ -40,11 +40,12 @@ namespace _0x46696E616C.Input
         bool Select;
         List<Keys> PressedKeys;
         public float scrollVal { get { return mouse.ScrollWheelValue; } }
-        public float prevScrollVal { get; private set;  }
+        public float prevScrollVal { get; private set; }
         public bool Updated { get; private set; }
-
+        bool Subscribed;
         bool leftButtonPressed, leftButtonReleased, rightButtonPressed;
-        public MouseKeyboard(Game game, SpriteBatch sb) : base(game, sb)
+        List<InputButton> listenForPress;
+        public MouseKeyboard(Game game) : base(game)
         {
 
             keyBoard = Keyboard.GetState();
@@ -53,6 +54,7 @@ namespace _0x46696E616C.Input
             prevMouseState = mouse;
             PressedKeys = new List<Keys>();
             leftButtonPressed = rightButtonPressed = false;
+            listenForPress = new List<InputButton>();
         }
 
         public override void Update(GameTime gameTime)
@@ -60,14 +62,49 @@ namespace _0x46696E616C.Input
             clickTimer += gameTime.ElapsedGameTime.Milliseconds;
             if (Game.IsActive)//Stops updating inputs if the player is outside the game
             {
+                if (listenForPress.Count > 0 && !Subscribed) CheckForInput();
                 UpdateKeyBoardState();
                 UpdateMouseState();
                 UpdateCursorPosition(mouse.Position.ToVector2());
             }
             Pressed = false;
             base.Update(gameTime);
+            Subscribed = false;
         }
 
+        private void CheckForInput()
+        {
+            List<MouseKeyboardBindings> controls = new List<MouseKeyboardBindings>();
+            if (LeftClick())
+            {
+                controls.Add(new MouseKeyboardBindings(MouseInput.LeftClick));
+            }
+            else if (RightClick())
+            {
+                controls.Add(new MouseKeyboardBindings(MouseInput.RightClick));
+            }
+            else if (scrollVal > prevScrollVal)
+            {
+                controls.Add(new MouseKeyboardBindings(MouseInput.ScrollUp));
+            }
+            else if (scrollVal < prevScrollVal)
+            {
+                controls.Add(new MouseKeyboardBindings(MouseInput.ScrollDown));
+            }
+            else if (keyBoard.GetPressedKeys().Length > 0)
+            {
+                foreach (Keys key in keyBoard.GetPressedKeys())
+                    controls.Add(new MouseKeyboardBindings(key));
+            }
+            if (controls.Count > 0)
+            {
+                foreach (InputButton button in listenForPress)
+                {
+                    button.UpdateControl(controls[0]);
+                }
+                listenForPress.Clear();
+            }
+        }
 
         public bool Scrolling()
         {
@@ -78,6 +115,14 @@ namespace _0x46696E616C.Input
             }
             return false;
         }
+
+        internal void Subscribe(InputButton inputButton)
+        {
+            listenForPress.Clear();
+            listenForPress.Add(inputButton);
+            Subscribed = true;
+        }
+
         private void UpdateMouseState()
         {
             mouse = Mouse.GetState();
@@ -89,13 +134,13 @@ namespace _0x46696E616C.Input
                 if (mouse.LeftButton == ButtonState.Pressed)
                 {
                     clickTimer = 0;
-                    selectionStart = inputPos;
+                    selectionStart = InputPos;
                     leftButtonPressed = true;
                 }
                 if (mouse.LeftButton == ButtonState.Released && prevMouseState.LeftButton == ButtonState.Pressed && clickTimer / 1000 >= 0.2)
                 {
                     leftButtonReleased = true;
-                    selectionEnd = inputPos;
+                    selectionEnd = InputPos;
                     clickTimer = 0;
                 }
                 if (mouse.RightButton == ButtonState.Pressed)
@@ -139,7 +184,7 @@ namespace _0x46696E616C.Input
         /// <returns></returns>
         public bool GetKeyDown(Keys key)
         {
-            if(Updated && PressedKeys.Contains(key))
+            if (Updated && PressedKeys.Contains(key))
             {
                 return true;
             }
@@ -152,7 +197,7 @@ namespace _0x46696E616C.Input
         }
 
         public bool LeftClick()
-        {   
+        {
             return leftButtonPressed;
         }
         public bool LeftRelease()

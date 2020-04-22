@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace _0x46696E616C
+namespace MainMenu
 {
 #if WINDOWS || LINUX
     /// <summary>
@@ -14,7 +14,7 @@ namespace _0x46696E616C
         [STAThread]
         static void Main()
         {
-            using (var game = new 0x46696E616CGame())
+            using (var game = new Game1())
                 game.Run();
         }
     }

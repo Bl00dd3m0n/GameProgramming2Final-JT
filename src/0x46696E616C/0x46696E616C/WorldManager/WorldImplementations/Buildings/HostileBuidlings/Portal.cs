@@ -1,6 +1,7 @@
 ﻿using _0x46696E616C.Buildings;
 using _0x46696E616C.MobHandler;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using NationBuilder.TileHandlerLibrary;
 using System;
 using System.Collections.Generic;
@@ -14,7 +15,7 @@ namespace _0x46696E616C.WorldManager.WorldImplementations.Buildings.HostileBuidl
 {
     class Portal : Building
     {
-        public Portal(Game game, TextureValue texture, Vector2 position, TextureValue Icon) : base(game, texture, position, Icon)
+        public Portal( TextureValue texture, Vector2 position, TextureValue Icon) : base(texture, position, Icon)
         {
             energyCost = 0;
             name = "Center";
@@ -27,9 +28,9 @@ namespace _0x46696E616C.WorldManager.WorldImplementations.Buildings.HostileBuidl
             BuildingDescription = "The center allows the user to train Civilians";
         }
 
-        public override Building NewInstace(Game game, TextureValue tex, Vector2 position, TextureValue Icon)
+        public override Building NewInstace( TextureValue tex, Vector2 position, TextureValue Icon)
         {
-            return new Portal(game, tex, position, Icon);
+            return new Portal(tex, position, Icon);
         }
 
         public override void AddQueueable(IQueueable<TextureValue> item)
@@ -52,9 +53,9 @@ namespace _0x46696E616C.WorldManager.WorldImplementations.Buildings.HostileBuidl
             base.SetTeam(team);
         }
 
-        public override void UpdatePosition(Vector2 position)
+        public override void UpdatePosition(GraphicsDevice gd, Vector2 position)
         {
-            base.UpdatePosition(position);
+            base.UpdatePosition(gd, position);
         }
     }
 }

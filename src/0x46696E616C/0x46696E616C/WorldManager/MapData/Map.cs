@@ -12,17 +12,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WorldManager.TileHandlerLibrary;
-
+using Newtonsoft.Json;
 namespace WorldManager.MapData
 {
     public class Map : IMapObserver
     {
         public Vector2 mapSize { get; private set; }
-        Tile[,,] tiles;
+        [JsonIgnore]
+        public Tile[,,] tiles;
+        [JsonIgnore]
         public Texture2D mapTexture { get; private set; }
-        long Seed;
-        WorldGeneration wg;
-        List<IEntity> mobs;
+        long Seed { get; set; }
+        WorldGeneration wg { get; set; }
+        public List<IEntity> mobs { get; private set; }
 
         public Map(Game game, Vector2 mapSize, long Seed)
         {

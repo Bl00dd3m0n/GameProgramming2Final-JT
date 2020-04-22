@@ -21,7 +21,7 @@ namespace WorldManager.Mobs.HarvestableUnits
 
         public IResource type { get; private set; }
 
-        protected HarvestableUnit(Game game, TextureValue texture, IResource type, string name, Vector2 size, float totalHealth, float currentHealth, Vector2 position, Color color) : base(game, texture, position, color)
+        protected HarvestableUnit(TextureValue texture, IResource type, string name, Vector2 size, float totalHealth, float currentHealth, Vector2 position, Color color) : base(texture, position, color)
         {
             this.type = type;
             this.name = name;

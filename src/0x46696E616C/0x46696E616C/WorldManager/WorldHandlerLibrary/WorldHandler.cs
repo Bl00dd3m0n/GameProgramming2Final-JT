@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using NationBuilder.TileHandlerLibrary;
 using NationBuilder.WorldHandlerLibrary;
+using SaveManager;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,15 +20,14 @@ namespace WorldManager
     {
         Map map;
         Game game;
-        Save save;
         long Seed;
-
+        SaveJson<Map> save;
         public WorldHandler(Game game, string WorldName)
         {
             Seed = 14153456352343;
             map = new Map(game, new Vector2(game.GraphicsDevice.Viewport.Width/2, game.GraphicsDevice.Viewport.Height/2), Seed);
             map.GenerateMap(game.GraphicsDevice);
-            save = Save.save;
+            save = new SaveJson<Map>();
             this.game = game;
         }
         /// <summary>
@@ -176,6 +176,14 @@ namespace WorldManager
         public void AddMob(IEntity unit)
         {
             map.AddMob(unit);
+        }
+        public void Save(string FilePath)
+        {
+            save.SaveToJson(map,FilePath);
+        }
+        public void Load(string FilePath)
+        {
+            map = save.LoadFromJson(FilePath);
         }
     }
 }

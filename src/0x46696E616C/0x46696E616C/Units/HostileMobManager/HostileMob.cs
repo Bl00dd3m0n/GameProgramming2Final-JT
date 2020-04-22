@@ -2,6 +2,7 @@
 using _0x46696E616C.CommandPattern.Commands;
 using _0x46696E616C.MobHandler.Units;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 using NationBuilder.TileHandlerLibrary;
 using System;
 using System.Collections.Generic;
@@ -18,17 +19,21 @@ namespace _0x46696E616C.Units.HostileMobManager
         List<Vector2> waypoints;
         IEntity Target;
         WorldHandler world;
-        public HostileMob(Game game, string name, Vector2 size, float totalHealth, float currentHealth, Vector2 position, BaseUnitState state, TextureValue texture, Color color, TextureValue icon, WorldHandler world) : base(game, name, size, totalHealth, currentHealth, position, state, texture, color, icon, world)
+        public HostileMob(string name, Vector2 size, float totalHealth, float currentHealth, Vector2 position, BaseUnitState state, TextureValue texture, Color color, TextureValue icon, WorldHandler world) : base(name, size, totalHealth, currentHealth, position, state, texture, color, icon, world)
         {
             waypoints = new List<Vector2>();
             speed = 50;
             this.world = world;
             AttackPower = 100;
         }
-        public override void Update(GameTime gameTime)
+        public void Update(GameTime gameTime)
         {
             UpdateMove(gameTime);
             Interact();
+            if (Keyboard.GetState().IsKeyDown(Keys.U))
+            {
+                FindTarget();
+            }
             base.Update();
         }
         public void Interact()
@@ -37,14 +42,11 @@ namespace _0x46696E616C.Units.HostileMobManager
             {
                 if (TargetPosition.ToPoint() == Position.ToPoint() && UnitState == BaseUnitState.attack)
                 {
-                    if (Target != null)
+                    Target.Damage(this.AttackPower);
+                    if (((ModifiableTile)Target).State == tileState.dead)
                     {
-                        Target.Damage(this.AttackPower);
-                        if (((ModifiableTile)Target).State == tileState.dead)
-                        {
-                            Target = null;
-                            FindTarget();
-                        }
+                        Target = null;
+                        FindTarget();
                     }
                 }
             }

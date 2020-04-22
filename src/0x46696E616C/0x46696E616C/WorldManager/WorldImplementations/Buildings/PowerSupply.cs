@@ -10,7 +10,7 @@ namespace _0x46696E616C.Buildings
 {
     public class PowerSupply : Building
     {
-        public PowerSupply(Game game, TextureValue texture, Vector2 position, TextureValue icon) : base(game, texture, position, icon)
+        public PowerSupply(TextureValue texture, Vector2 position, TextureValue icon) : base(texture, position, icon)
         {
             Cost = new Wallet();
             Cost.Deposit(new Steel(), 1000);
@@ -24,9 +24,9 @@ namespace _0x46696E616C.Buildings
             healthBar = new HealthBar(new Rectangle(new Point((int)position.X, (int)position.Y - 1), new Point((int)(Size.X * 16), (int)(Size.Y))));
             BuildingDescription = "Used to hold power if I implement power caps, also useless.";
         }
-        public override Building NewInstace(Game game, TextureValue tex, Vector2 position, TextureValue Icon)
+        public override Building NewInstace(TextureValue tex, Vector2 position, TextureValue Icon)
         {
-            return new PowerSupply(game, tex, position, Icon);
+            return new PowerSupply(tex, position, Icon);
         }
     }
 }

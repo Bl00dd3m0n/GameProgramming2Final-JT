@@ -4,6 +4,7 @@ using _0x46696E616C.ConcreteImplementations;
 using _0x46696E616C.MobHandler.Units;
 using _0x46696E616C.Units;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using NationBuilder.TileHandlerLibrary;
 using System;
 using System.Collections.Generic;
@@ -47,7 +48,7 @@ namespace _0x46696E616C.CommandPattern.Commands
         WorldHandler world;
 
         //TODO List of commands needed to be implemented for the units
-        public BasicUnit(Game game, string name, Vector2 size, float totalHealth, float currentHealth, Vector2 position, BaseUnitState state, TextureValue texture, Color color, TextureValue icon, WorldHandler world) : base(game, texture, position, color)
+        public BasicUnit(string name, Vector2 size, float totalHealth, float currentHealth, Vector2 position, BaseUnitState state, TextureValue texture, Color color, TextureValue icon, WorldHandler world) : base(texture, position, color)
         {
             Cost = new Wallet();// TODO charge for units
             this.name = name;
@@ -73,14 +74,14 @@ namespace _0x46696E616C.CommandPattern.Commands
             UnitState = BaseUnitState.Idle;
         }
 
-        public override void UpdatePosition(Vector2 position)
+        public override void UpdatePosition(GraphicsDevice gd, Vector2 position)
         {
-            base.UpdatePosition(position);
+            base.UpdatePosition(gd,position);
         }
 
         public virtual BasicUnit NewInstace(float currentHealth, Vector2 position)
         {
-            return new BasicUnit(this.Game, this.name, this.Size, this.TotalHealth, currentHealth, position, BaseUnitState.Idle, this.block.texture, this.tileColor, this.Icon, world);
+            return new BasicUnit(this.name, this.Size, this.TotalHealth, currentHealth, position, BaseUnitState.Idle, this.block.texture, this.tileColor, this.Icon, world);
         }
 
 
