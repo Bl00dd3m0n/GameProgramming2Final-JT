@@ -13,6 +13,8 @@ using System.Text;
 using System.Threading.Tasks;
 using WorldManager.TileHandlerLibrary;
 using Newtonsoft.Json;
+using _0x46696E616C.CommandPattern.Commands;
+
 namespace WorldManager.MapData
 {
     public class Map : IMapObserver
@@ -75,9 +77,9 @@ namespace WorldManager.MapData
         /// <param name="position"></param>
         internal void PlaceBlock(ModifiableTile building, Vector2 position)
         {
-            for (int y = 0; y <= building.Size.Y; y++)
+            for (int y = 0; y < building.Size.Y; y++)
             {
-                for (int x = 0; x <= building.Size.X; x++)
+                for (int x = 0; x < building.Size.X; x++)
                 {
                     try
                     {
@@ -91,6 +93,7 @@ namespace WorldManager.MapData
                         {
                             tiles[(int)position.X + x, (int)position.Y + y, 1] = new ReferenceTile((ModifiableTile)tiles[(int)position.X, (int)position.Y, 1]);
                             ((ModifiableTile)tiles[(int)position.X + x, (int)position.Y + y, 1]).Subscribe(this);
+                            ((ModifiableTile)tiles[(int)position.X, (int)position.Y, 1]).Subscribe((ReferenceTile)tiles[(int)position.X + x, (int)position.Y + y, 1]);
                         }
                     }
                     catch (IndexOutOfRangeException ex)
@@ -140,6 +143,31 @@ namespace WorldManager.MapData
             }
             return tile;
         }
+
+        internal List<IUnit> GetUnits(int v)
+        {
+            return mobs.Where(l=>((BasicUnit)l).TeamAssociation == v).Cast<IUnit>().ToList();
+        }
+
+        internal IEntity[] GetTile(int team)
+        {
+            List<IEntity> taggedTiles = new List<IEntity>();
+            for (int y = 0; y < mapSize.Y; y++)
+            {
+                for (int x = 0; x < mapSize.X; x++)
+                {
+                    if (tiles[x, y, 1] != null)
+                    {
+                        if (((ModifiableTile)tiles[x, y, 1]).TeamAssociation.Equals(team))
+                        {
+                            taggedTiles.Add((IEntity)tiles[x, y, 1]);
+                        }
+                    }
+                }
+            }
+            return taggedTiles.ToArray();
+        }
+
         internal IEntity[] GetTile(string v)
         {
             List<IEntity> taggedTiles = new List<IEntity>();

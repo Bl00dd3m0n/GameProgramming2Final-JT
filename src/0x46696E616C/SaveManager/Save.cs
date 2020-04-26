@@ -1,11 +1,10 @@
-﻿using NationBuilder.WorldHandlerLibrary;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WorldManager
+namespace SaveManager
 {
     public class Save
     {
@@ -35,22 +34,22 @@ namespace WorldManager
             
         }
 
-        public virtual bool SaveWorld(List<Region> region, string worldName)
+        public virtual bool SaveToFile(string Path, string StringToSave)
         {
             try
             {
                 return true;
-            } catch(Exception ex)
+            } catch(Exception)
             {
                 return false;
             }
         }
-        public virtual List<Region> LoadWorld(string worldName)
+        public virtual string LoadFromFile(string Path)
         {
             try
             {
-                return new List<Region>();
-            } catch(Exception ex)
+                return "";
+            } catch(Exception)
             {
                 return null;
             }

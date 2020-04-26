@@ -22,8 +22,8 @@ namespace UIProject
             set
             {
                 color = value;
-                if (graphics != null)
-                    Draw(graphics);
+                //if (graphics != null) { }
+                    //Draw(graphics);I don't think this will be needed to added again but for updating color this will be needed I think
             }
         }
         public Color TextColor { get; set; }
@@ -61,7 +61,7 @@ namespace UIProject
         }
         #endregion
         /// <summary>
-        /// 
+        /// Draws the component
         /// </summary>
         public virtual void Draw(GraphicsDevice gd)
         {

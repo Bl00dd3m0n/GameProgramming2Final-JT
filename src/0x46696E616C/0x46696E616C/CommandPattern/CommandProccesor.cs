@@ -4,7 +4,10 @@ using _0x46696E616C.CommandPattern.GameCommands;
 using _0x46696E616C.Input;
 using _0x46696E616C.MobHandler;
 using _0x46696E616C.MobHandler.Units;
+using _0x46696E616C.TechManager.Stats;
 using _0x46696E616C.UIComponents;
+using _0x46696E616C.Units;
+using _0x46696E616C.Units.HostileMobManager;
 using _0x46696E616C.Util.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -47,7 +50,7 @@ namespace _0x46696E616C.CommandPattern
         }
         public override void Update(GameTime gameTime)
         {
-            CurrentPos = ConvertToWorldSpace(input.InputPos);
+            CurrentPos = camera.ConvertToWorldSpace(input.InputPos);
             Command command = null;
             if (Game.IsActive)
             {
@@ -108,7 +111,11 @@ namespace _0x46696E616C.CommandPattern
                     }
                     if (tile != null)
                     {
-                        overlay.RemoveAllComponents(typeof(CommandButton));
+                        overlay.RemoveAllComponents();
+                        if (tile is IEntity)
+                        {
+                            SelectedUnitDisplay(tile);
+                        }
                         if (tile is Civilian)
                         {
                             AddUnitQueueables(tile);
@@ -183,8 +190,9 @@ namespace _0x46696E616C.CommandPattern
             }
             else if (input.CheckRelease(Controls.Select))
             {
-                Vector2 startPoint = ConvertToWorldSpace(input.StartPosition);
-                Vector2 endPoint = ConvertToWorldSpace(input.EndPosition);
+
+                Vector2 startPoint = camera.ConvertToWorldSpace(input.StartPosition);
+                Vector2 endPoint = camera.ConvertToWorldSpace(input.EndPosition);
                 List<IUnit> unitSelection = new List<IUnit>();
                 Vector2 tempStart = startPoint;
                 Vector2 tempEnd = endPoint;
@@ -195,7 +203,7 @@ namespace _0x46696E616C.CommandPattern
                 int endY = (int)startPoint.Y == startY ? (int)endPoint.Y : (int)startPoint.Y; //if the start point is the start point stay the same if not flip
                 int endX = (int)startPoint.X == startX ? (int)endPoint.X : (int)startPoint.X; //^
                 #endregion
-                
+
                 for (int y = (int)startY; y < endY; y++)
                 {
                     for (int x = (int)startX; x < endX; x++)
@@ -204,6 +212,7 @@ namespace _0x46696E616C.CommandPattern
                         if (unit != null)
                         {
                             unitSelection.Add(unit);
+
                         }
                     }
                 }
@@ -217,6 +226,8 @@ namespace _0x46696E616C.CommandPattern
                 if (UnitsTheSame && unitSelection.Count > 0)
                 {
                     AddUnitQueueables((Tile)unitSelection[0]);
+                    if (unitSelection.Count == 1) SelectedUnitDisplay((ModifiableTile)unitSelection[0]);
+                    else displaySelectedUnits(unitSelection);
                 }
                 if (unitSelection.Count > 0)
                 {
@@ -224,6 +235,50 @@ namespace _0x46696E616C.CommandPattern
                 }
             }
             return null;
+        }
+
+        private void displaySelectedUnits(List<IUnit> units)
+        {
+            overlay.RemoveAllComponents();
+            Component com = null;
+            float comX = 217;
+            foreach (IUnit unit in units)
+            {
+                com = new ImageBox(((ModifiableTile)unit).block.texture, new Vector2(comX, 359), new Point(1, 1), Color.White);
+                com.Scale = 1;
+                overlay.AddComponent(com);
+                com = new ImageBox(unit.healthBar.Health, new Vector2(comX, 359 + 19), new Point(1, 1), Color.White);
+                com.Scale = 1;
+                overlay.AddComponent(com);
+                comX += (unit.Size.X * 16) + 5;
+            }
+        }
+
+        private void SelectedUnitDisplay(ModifiableTile tile)
+        {
+            Component com = new ImageBox(tile.block.texture, new Vector2(227, 359), (tile.Size * 16).ToPoint(), Color.White);
+            com.Scale = 2 / (tile.Size.X);
+            overlay.AddComponent(com);
+            float y = 380;
+            for (int i = 0; i < tile.stats.Count; i++)
+            {
+                if (tile.stats[i] is Health)
+                {
+                    com = new ImageBox(tile.healthBar.Health, new Vector2(227, 359 + 32), new Point((int)com.Scale, 1), Color.White);
+                    com.Scale = 2;
+                    overlay.AddComponent(com);
+                    com = com = new Label(new Vector2(217 + 32, 359 + 64), $"{tile.CurrentHealth}/{tile.TotalHealth}", Color.White);
+                }
+                else
+                {
+                    //com = new ImageBox(tile.stats[i].Texture, new Vector2(217, y), new Point(1, 1), Color.White);When stats get textures
+                    com = new Label(new Vector2(330, y), tile.stats[i].Value.ToString(), Color.White);
+                    com.Scale = 1;
+                }
+                com.drawComponent = true;
+                overlay.AddComponent(com);
+                y += 12 + 5;
+            }
         }
 
         private void AddUnitQueueables(Tile tile)
@@ -234,29 +289,27 @@ namespace _0x46696E616C.CommandPattern
             float y = 359;//MaxY = 511
             float scale = 0.25f;
             overlay.RemoveAllComponents(typeof(CommandButton));
-            foreach (IQueueable<TextureValue> queueable in ((Civilian)tile).QueueableThings)
+            if (!(tile is HostileMob))
             {
-                if (queueable is Building)
+                foreach (IQueueable<TextureValue> queueable in ((Civilian)tile).QueueableThings)
                 {
-                    ((Building)queueable).UpdatePosition(Game.GraphicsDevice, new Vector2(x, y));
-                    Component com = new CommandButton(Game.GraphicsDevice, new BuildSelectCommand((Building)queueable), new Vector2(x,y), queueable.Icon, new Point(32));
-                    float width = ((Building)queueable).Size.X;
-                    float height = ((Building)queueable).Size.Y;
-                    com.Scale = 0.25f;
-                    overlay.AddComponent(com);
-                    x += 128 * scale;
-                    if (x + 128 * scale > 791)
+                    if (queueable is Building)
                     {
-                        x = 591;
-                        y += 128 * scale;
+                        ((Building)queueable).UpdatePosition(Game.GraphicsDevice, new Vector2(x, y));
+                        Component com = new CommandButton(Game.GraphicsDevice, new BuildSelectCommand((Building)queueable), new Vector2(x, y), queueable.Icon, new Point(32));
+                        float width = ((Building)queueable).Size.X;
+                        float height = ((Building)queueable).Size.Y;
+                        com.Scale = 0.25f;
+                        overlay.AddComponent(com);
+                        x += 128 * scale;
+                        if (x + 128 * scale > 791)
+                        {
+                            x = 591;
+                            y += 128 * scale;
+                        }
                     }
                 }
             }
-        }
-
-        private Vector2 ConvertToWorldSpace(Vector2 position)
-        {
-            return camera.Position + (position / (Tile.Zoom * 16));
         }
     }
 }

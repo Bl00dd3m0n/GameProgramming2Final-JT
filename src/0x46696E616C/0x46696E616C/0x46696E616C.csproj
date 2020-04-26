@@ -42,6 +42,7 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Util\Collision\CollisionHandler.cs" />
     <Compile Include="CommandPattern\Command.cs" />
     <Compile Include="CommandPattern\GameCommands\BuildSelectCommand.cs" />
     <Compile Include="CommandPattern\GameCommands\CommandComponent.cs" />
@@ -62,16 +63,27 @@
     <Compile Include="Path Finding\AstarAlgorithm\A_Star.cs" />
     <Compile Include="Path Finding\AstarAlgorithm\Node.cs" />
     <Compile Include="Path Finding\Formation.cs" />
-    <Compile Include="Stats.cs" />
     <Compile Include="TechManager\IQueueable.cs" />
     <Compile Include="TechManager\ITech.cs" />
     <Compile Include="TechManager\ITechObserver.cs" />
+    <Compile Include="TechManager\Stats\AttackPower.cs" />
+    <Compile Include="TechManager\Stats\BuildPower.cs" />
+    <Compile Include="TechManager\Stats\HarvestPower.cs" />
+    <Compile Include="TechManager\Stats\Health.cs" />
+    <Compile Include="TechManager\Stats\InventorySpace.cs" />
+    <Compile Include="TechManager\Stats\Range.cs" />
+    <Compile Include="TechManager\Stats\Stat.cs" />
+    <Compile Include="TechManager\Stats\Stats.cs" />
+    <Compile Include="TechManager\Technologies\DamageUpgrade.cs" />
+    <Compile Include="TechManager\Technologies\StatTech.cs" />
+    <Compile Include="TechManager\Technologies\Technology.cs" />
     <Compile Include="UIComponents\Button.cs" />
     <Compile Include="UIComponents\Canvas.cs" />
     <Compile Include="UIComponents\Component.cs" />
     <Compile Include="UIComponents\DescriptionBox.cs" />
     <Compile Include="UIComponents\ExitButton.cs" />
     <Compile Include="UIComponents\IComponent.cs" />
+    <Compile Include="UIComponents\ImageBox.cs" />
     <Compile Include="UIComponents\InputButton.cs" />
     <Compile Include="UIComponents\Label.cs" />
     <Compile Include="UIComponents\PageButton.cs" />
@@ -83,6 +95,13 @@
     <Compile Include="UIComponents\CommandButton.cs" />
     <Compile Include="UIComponents\Overlay.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Units\Attacks\Aoe.cs" />
+    <Compile Include="Units\Attacks\Attack.cs" />
+    <Compile Include="Units\Attacks\Heal.cs" />
+    <Compile Include="Units\Attacks\Melee.cs" />
+    <Compile Include="Units\Attacks\Projectile.cs" />
+    <Compile Include="Units\Attacks\ProjectileManager.cs" />
+    <Compile Include="Units\Attacks\Ranged.cs" />
     <Compile Include="Units\HealthBar.cs" />
     <Compile Include="Units\HostileMobManager\HeadlessHorseman.cs" />
     <Compile Include="Units\HostileMobManager\HostileMob.cs" />
@@ -94,6 +113,7 @@
     <Compile Include="Units\Units\IEntity.cs" />
     <Compile Include="Units\Units\IUnit.cs" />
     <Compile Include="Util\Camera.cs" />
+    <Compile Include="Util\Collision\ICollider.cs" />
     <Compile Include="Util\Input\InputDefinitions.cs" />
     <Compile Include="Util\Input\InputHandler.cs" />
     <Compile Include="Util\Input\MouseKeyboardBindings.cs" />
@@ -102,13 +122,11 @@
     <Compile Include="WorldManager\MapData\IMapObserver.cs" />
     <Compile Include="WorldManager\MapData\Map.cs" />
     <Compile Include="WorldManager\OpenSimplex.cs" />
-    <Compile Include="WorldManager\Save.cs" />
     <Compile Include="WorldManager\TileHandlerLibrary\BackGroundTile.cs" />
     <Compile Include="WorldManager\TileHandlerLibrary\BlockData.cs" />
     <Compile Include="WorldManager\TileHandlerLibrary\ReferenceTile.cs" />
     <Compile Include="WorldManager\TileHandlerLibrary\Tile.cs" />
     <Compile Include="WorldManager\TileHandlerLibrary\TileHandler.cs" />
-    <Compile Include="WorldManager\WindowsSave.cs" />
     <Compile Include="WorldManager\WorldHandlerLibrary\Region.cs" />
     <Compile Include="WorldManager\WorldHandlerLibrary\WorldGeneration.cs" />
     <Compile Include="WorldManager\WorldHandlerLibrary\WorldHandler.cs" />
@@ -120,6 +138,7 @@
     <Compile Include="WorldManager\WorldImplementations\Buildings\ICollectionCenter.cs" />
     <Compile Include="WorldManager\WorldImplementations\Buildings\InternetCafe.cs" />
     <Compile Include="WorldManager\WorldImplementations\Buildings\IProductionCenter.cs" />
+    <Compile Include="WorldManager\WorldImplementations\Buildings\IResourceCharge.cs" />
     <Compile Include="WorldManager\WorldImplementations\Buildings\Lab.cs" />
     <Compile Include="WorldManager\WorldImplementations\Buildings\MediaCenter.cs" />
     <Compile Include="WorldManager\WorldImplementations\Buildings\Mines.cs" />
@@ -162,9 +181,7 @@
     <None Include="app.manifest" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="TechManager\Technologies\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\SaveManager\SaveManager.csproj">
       <Project>{cf14c12f-0548-453b-a169-d53e87aae273}</Project>

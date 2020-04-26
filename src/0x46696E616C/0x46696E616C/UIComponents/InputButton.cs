@@ -12,14 +12,13 @@ namespace MainMenu.Component
     {
         public Controls control { get; set; }
         InputDefinitions input;
-        SaveJson<Dictionary<Controls,MouseKeyboardBindings>> saveControls;
         
         public InputButton(GraphicsDevice gd, Vector2 position, Point size, Color color, string text, Game game, Controls control, InputDefinitions input) : this(position, size, color, text, game)
         {
             this.control = control;
         }
 
-        protected InputButton() : this(new Vector2(0), new Point(0), Color.Green, "Exit", null)
+        protected InputButton() : this(new Vector2(0), new Point(0), Color.Green, "Input", null)
         {
             
         }

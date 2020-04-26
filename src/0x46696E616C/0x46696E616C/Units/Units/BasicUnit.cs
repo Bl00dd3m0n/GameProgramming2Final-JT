@@ -2,11 +2,14 @@
 using _0x46696E616C.Buildings;
 using _0x46696E616C.ConcreteImplementations;
 using _0x46696E616C.MobHandler.Units;
+using _0x46696E616C.TechManager.Stats;
 using _0x46696E616C.Units;
+using _0x46696E616C.Units.Attacks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using NationBuilder.TileHandlerLibrary;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -26,9 +29,6 @@ namespace _0x46696E616C.CommandPattern.Commands
             set;
         }
         protected float speed { get; set; }
-        public float BuildPower { get; protected set; }
-        public float HarvestPower { get; protected set; }
-        public float AttackPower { get; protected set; }
         public List<IQueueable<TextureValue>> QueueableThings { get; protected set; }
         public Stack<Building> toBuild { get; protected set; }
 
@@ -37,8 +37,8 @@ namespace _0x46696E616C.CommandPattern.Commands
         public Wallet Cost { get; protected set; }
 
         public string Description { get; protected set; }
-
-        List<Vector2> waypoints;
+        protected AttackType attack;
+        protected List<Vector2> waypoints;
         protected Vector2 TargetPosition;
         protected Vector2 nextPoint;
         protected Vector2 zero;
@@ -46,20 +46,18 @@ namespace _0x46696E616C.CommandPattern.Commands
         protected Vector2 yOne;
         A_Star aStar;
         WorldHandler world;
-
+        protected float range;
         //TODO List of commands needed to be implemented for the units
-        public BasicUnit(string name, Vector2 size, float totalHealth, float currentHealth, Vector2 position, BaseUnitState state, TextureValue texture, Color color, TextureValue icon, WorldHandler world) : base(texture, position, color)
+        public BasicUnit(string name, Vector2 size, float totalHealth, float currentHealth, Vector2 position, BaseUnitState state, TextureValue texture, Color color, TextureValue icon, WorldHandler world, float range) : base(texture, position, color)
         {
             Cost = new Wallet();// TODO charge for units
             this.name = name;
             this.Size = size;
-            this.TotalHealth = totalHealth;
+            stats.Add(new Health("Health", totalHealth));
+            stats.Add(new Range("Range", 1.1f));
             this.CurrentHealth = currentHealth;
             this.Position = position;
             this.UnitState = state;
-            this.BuildPower = 10;
-            this.HarvestPower = 1;
-            this.AttackPower = 1;
             Direction = new Vector2(0, 0);
             speed = 0;
             this.Icon = icon;
@@ -72,6 +70,8 @@ namespace _0x46696E616C.CommandPattern.Commands
             yOne = new Vector2(0, 1);
             speed = 50;
             UnitState = BaseUnitState.Idle;
+            attack = new Melee(range);
+            this.range = range;
         }
 
         public override void UpdatePosition(GraphicsDevice gd, Vector2 position)
@@ -81,13 +81,18 @@ namespace _0x46696E616C.CommandPattern.Commands
 
         public virtual BasicUnit NewInstace(float currentHealth, Vector2 position)
         {
-            return new BasicUnit(this.name, this.Size, this.TotalHealth, currentHealth, position, BaseUnitState.Idle, this.block.texture, this.tileColor, this.Icon, world);
+            return new BasicUnit(this.name, this.Size, this.TotalHealth, currentHealth, position, BaseUnitState.Idle, this.block.texture, this.tileColor, this.Icon, world, this.range);
         }
 
 
         public void Update(ITech tech)
         {
             throw new NotImplementedException();
+        }
+
+        public virtual void Update(GameTime gameTime)
+        {
+            UpdateMove(gameTime);
         }
 
         /// <summary>
@@ -97,22 +102,23 @@ namespace _0x46696E616C.CommandPattern.Commands
         protected virtual void UpdateMove(GameTime gameTime)
         {
             Direction = zero;
-            if (Position.X <= nextPoint.X - 0.5f)
+            float distance = Vector2.Distance(Position, nextPoint);
+            if (Position.X <= nextPoint.X && distance > 0.5f)
             {
                 Direction += xOne;
                 this.Direction = Direction;
             }
-            if (Position.X >= nextPoint.X + 0.5f)
+            if (Position.X >= nextPoint.X && distance > 0.5f)
             {
                 Direction -= xOne;
                 this.Direction = Direction;
             }
-            if (Position.Y <= nextPoint.Y - 0.5f)
+            if (Position.Y <= nextPoint.Y && distance > 0.5f)
             {
                 Direction += yOne;
                 this.Direction = Direction;
             }
-            if (Position.Y >= nextPoint.Y + 0.5f)
+            if (Position.Y >= nextPoint.Y && distance > 0.5f)
             {
                 Direction -= yOne;
                 this.Direction = Direction;
@@ -123,7 +129,7 @@ namespace _0x46696E616C.CommandPattern.Commands
             {
                 Move(TargetPosition);
             }
-            else
+            else if(Direction != zero)
             {
                 Position = TempPosition;
             }
@@ -146,9 +152,9 @@ namespace _0x46696E616C.CommandPattern.Commands
         /// <param name="Position"></param>
         public virtual void Move(Vector2 Position)
         {
-            waypoints.Clear();
             Position -= new Vector2(1, 0);
-            waypoints = aStar.FindPath(this.Position, Position, world);
+            waypoints.Clear();
+            waypoints = aStar.FindPath(this.Position, Position, world, waypoints);
             if (waypoints.Count > 0)
             {
                 nextPoint = waypoints[0];

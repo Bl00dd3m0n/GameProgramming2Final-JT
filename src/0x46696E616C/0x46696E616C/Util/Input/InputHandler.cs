@@ -32,12 +32,10 @@ namespace _0x46696E616C.Input
     public class MouseKeyboard : InputHandler
     {
         bool Pressed;
-        Dictionary<string, Keys> keyBinds;
         KeyboardState keyBoard;
         KeyboardState prevKeyState;
         MouseState mouse;
         MouseState prevMouseState;
-        bool Select;
         List<Keys> PressedKeys;
         public float scrollVal { get { return mouse.ScrollWheelValue; } }
         public float prevScrollVal { get; private set; }
@@ -86,10 +84,12 @@ namespace _0x46696E616C.Input
             else if (scrollVal > prevScrollVal)
             {
                 controls.Add(new MouseKeyboardBindings(MouseInput.ScrollUp));
+                Scrolling();
             }
             else if (scrollVal < prevScrollVal)
             {
                 controls.Add(new MouseKeyboardBindings(MouseInput.ScrollDown));
+                Scrolling();
             }
             else if (keyBoard.GetPressedKeys().Length > 0)
             {
@@ -118,6 +118,10 @@ namespace _0x46696E616C.Input
 
         internal void Subscribe(InputButton inputButton)
         {
+            foreach (InputButton button in listenForPress)
+            {
+                button.Clicked = false;
+            }
             listenForPress.Clear();
             listenForPress.Add(inputButton);
             Subscribed = true;

@@ -27,7 +27,7 @@ namespace NationBuilder.TileHandlerLibrary
         ServerFarm,
         SolarPanel,
         SteelFactory,
-
+        Portal,
         //Units
         Civilian,
 
@@ -47,9 +47,14 @@ namespace NationBuilder.TileHandlerLibrary
         SolarPanelIcon,
         SteelFactoryIcon,
         PowerSupplyIcon,
-        Portal,
+
+        //Hostile Mobs
         HeadlessHorseman,
         Mage,
+
+        //Projectiles
+        FireBall,
+        Arrow
     }
     [Serializable]
     public struct BlockData

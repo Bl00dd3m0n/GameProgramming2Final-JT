@@ -15,6 +15,7 @@ using System.Collections;
 using _0x46696E616C.ConcreteImplementations;
 using _0x46696E616C.WorldManager.ConcreteImplementations.Resources;
 using Microsoft.Xna.Framework.Graphics;
+using _0x46696E616C.TechManager.Stats;
 
 namespace _0x46696E616C.Buildings
 {
@@ -28,23 +29,34 @@ namespace _0x46696E616C.Buildings
         public int energyCost { get; protected set; }
 
         public List<IUnit> GarrisonedUnits { get; set; }
+
         public Queue<IQueueable<TextureValue>> trainingQueue { get; set; }
+
         public List<IQueueable<TextureValue>> QueueableThings { get; protected set; }
+
         public TextureValue Icon { get; protected set; }
+
         public override Vector2 Position { get { return base.Position; } }
-        Color teamColor; //Maybe implement this
+
+        Color teamColor; //TODO Maybe implement this
+
         IQueueable<TextureValue> trainingObject;
+
         public IBuildingObserver worldComponent { get; protected set; }
 
+        public List<ITechObserver> techObservers;
+
         Vector2 spawnPoint { get; set; }
+
         protected string BuildingDescription { get; set; }
+
         public Building(TextureValue texture, Vector2 position, TextureValue Icon) : base(texture, position, Color.Blue)
         {
             Cost = new Wallet();
             name = "Building";
             Position = new Vector2(0, 0);
             Size = new Vector2(0, 0);
-            TotalHealth = 0;
+            stats.Add(new Health("Health", 0));
             CurrentHealth = 0;
             energyCost = 0;
             healthBar = new HealthBar(new Rectangle(this.Position.ToPoint() - new Point(0, (int)(this.Size.Y * 16 + 1)), Size.ToPoint()));
@@ -53,11 +65,17 @@ namespace _0x46696E616C.Buildings
             QueueableThings = new List<IQueueable<TextureValue>>();
             trainingQueue = new Queue<IQueueable<TextureValue>>();
             BuildingDescription = "";
+            techObservers = new List<ITechObserver>();
         }
 
         public void Subscribe(IBuildingObserver observer)
         {
             worldComponent = observer;
+        }
+
+        public void Subscribe(ITechObserver observer)
+        {
+            techObservers.Add(observer);
         }
 
         public IQueueable<TextureValue> Train(GraphicsDevice gd)
@@ -88,7 +106,7 @@ namespace _0x46696E616C.Buildings
                 {
                     if (unit is BasicUnit)
                     {
-                        CurrentHealth += ((BasicUnit)unit).BuildPower;
+                        CurrentHealth += ((BasicUnit)unit).stats[typeof(BuildPower)].Value;
                     }
                     if (CurrentHealth > TotalHealth)
                         CurrentHealth = TotalHealth;
@@ -106,10 +124,6 @@ namespace _0x46696E616C.Buildings
             base.Damage(amount);
         }
 
-        public void Destroy()
-        {
-
-        }
         public override void UpdatePosition(GraphicsDevice gd, Vector2 position)
         {
             if (!placed)
@@ -124,8 +138,9 @@ namespace _0x46696E616C.Buildings
         }
         public virtual Building NewInstace(TextureValue tex, Vector2 position, TextureValue Icon)
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException();//This never should be hit
         }
+
         public virtual void Deposit(Wallet wallet)
         {
 

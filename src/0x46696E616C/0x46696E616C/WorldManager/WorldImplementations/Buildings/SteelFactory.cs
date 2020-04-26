@@ -6,11 +6,17 @@ using System.Collections.Generic;
 using _0x46696E616C.WorldManager.ConcreteImplementations.Resources;
 using _0x46696E616C.ConcreteImplementations.Resources;
 using _0x46696E616C.ConcreteImplementations;
+using _0x46696E616C.WorldManager.WorldImplementations.Buildings;
+using _0x46696E616C.TechManager.Stats;
 
 namespace _0x46696E616C.Buildings
 {
-    public class SteelFactory : Building, IProductionCenter
+    public class SteelFactory : Building, IProductionCenter, IResourceCharge
     {
+        public List<int> ChargeAMinute { get; protected set; }
+
+        public List<IResource> ChargeTypes { get; protected set; }
+
 
 
         public List<int> ProductionAMinute { get; private set; }
@@ -24,12 +30,13 @@ namespace _0x46696E616C.Buildings
             Cost.Deposit(new Wood(), 3000);
             Cost.Deposit(new Money(), 100);
             productionTypes = new List<IResource>() { new Steel() };
-            ProductionAMinute= new List<int>() { 1 };
-            Cost = new Wallet();
+            ProductionAMinute= new List<int>() { 60 };
+            ChargeAMinute = new List<int>() { 5, 60 };
+            ChargeTypes = new List<IResource>() { new Energy(), new Iron() };
             name = "Steel Factory";
             Position = position;
             Size = new Vector2(3, 3);
-            TotalHealth = 0;
+            stats.Add(new Health("Health", 200));
             CurrentHealth = 0;
             BuildingDescription = "Used for production of steel, also costs iron for production";
         }

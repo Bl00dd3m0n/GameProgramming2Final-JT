@@ -1,4 +1,5 @@
 ﻿using _0x46696E616C.ConcreteImplementations;
+using _0x46696E616C.TechManager.Stats;
 using Microsoft.Xna.Framework.Graphics;
 using MobHandler;
 using System;

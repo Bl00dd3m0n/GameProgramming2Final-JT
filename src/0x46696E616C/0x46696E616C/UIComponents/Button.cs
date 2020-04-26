@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
+using _0x46696E616C;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -12,7 +13,6 @@ namespace UIProject
     public class Button : Component
     {
         public bool Clicked { get; set; }
-        public static int value;
         public virtual void Click(Game game)
         {
             Clicked = true;

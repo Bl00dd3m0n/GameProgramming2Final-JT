@@ -13,27 +13,38 @@ namespace SaveManager
         public void SaveToXml(T value, string path)
         {
             XmlSerializer ser = new XmlSerializer(typeof(T));
-            using (StreamWriter writer = new StreamWriter(File.Open(path, FileMode.Create, FileAccess.Write)))
+            using (MemoryStream ms = new MemoryStream())
             {
-                ser.Serialize(writer, value);
+                using (StreamWriter writer = new StreamWriter(ms, Encoding.UTF32))
+                {
+                    ser.Serialize(writer, value);
+                    byte[] utf8EncodedXml = ms.ToArray();
+                    Save.save.SaveToFile(path, System.Text.Encoding.UTF8.GetString(utf8EncodedXml));
+                }
             }
         }
 
         public void SaveToXml(T value, string path, Type[] types)
         {
             XmlSerializer ser = new XmlSerializer(typeof(T), types);
-            using (StreamWriter writer = new StreamWriter(File.Open(path, FileMode.Create, FileAccess.Write)))
+            using (MemoryStream ms = new MemoryStream())
             {
-                ser.Serialize(writer, value);
+                using (StreamWriter writer = new StreamWriter(ms, Encoding.UTF32))
+                {
+                    ser.Serialize(writer, value);
+                    byte[] utf8EncodedXml = ms.ToArray();
+                    Save.save.SaveToFile(path, Encoding.UTF8.GetString(utf8EncodedXml));
+                }
             }
         }
 
         public T LoadFromXml(string path, Type[] types)
         {
             XmlSerializer ser = new XmlSerializer(typeof(T), types);
-            using (StreamReader writer = new StreamReader(File.Open(path, FileMode.Open, FileAccess.Read)))
+            string deserialize = Save.save.LoadFromFile(path);
+            using (MemoryStream ms = new MemoryStream(Encoding.UTF8.GetBytes(deserialize)))
             {
-                T test = (T)ser.Deserialize(writer);
+                T test = (T)ser.Deserialize(ms);
                 return test;
             }
         }

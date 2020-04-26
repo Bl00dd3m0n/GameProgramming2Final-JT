@@ -16,8 +16,6 @@ namespace _0x46696E616C.UIComponents
     class CommandButton : Button
     {
         public ICommand command;
-        public bool Clicked { get; set; }
-        public static int value;
         //If the button gets clicked
         public override void Click(Game game)
         {
@@ -37,6 +35,7 @@ namespace _0x46696E616C.UIComponents
             this.Position = position;
             this.picture = ContentHandler.DrawnTexture(picture);
             this.command = command;
+            this.Size = size;
         }
 
         protected CommandButton(ICommand command, IQueueable<TextureValue> queueableObject, Point Size)

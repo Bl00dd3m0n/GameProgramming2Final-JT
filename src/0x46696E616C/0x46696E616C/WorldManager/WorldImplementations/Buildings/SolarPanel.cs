@@ -6,6 +6,7 @@ using _0x46696E616C.MobHandler;
 using _0x46696E616C.WorldManager.ConcreteImplementations.Resources;
 using _0x46696E616C.ConcreteImplementations.Resources;
 using _0x46696E616C.ConcreteImplementations;
+using _0x46696E616C.TechManager.Stats;
 
 namespace _0x46696E616C.Buildings
 {
@@ -27,7 +28,7 @@ namespace _0x46696E616C.Buildings
             name = "Solar Panel";
             Position = position;
             Size = new Vector2(2, 4);
-            TotalHealth = 200;
+            stats.Add(new Health("Health", 200));
             CurrentHealth = 0;
             healthBar = new HealthBar(new Rectangle(new Point((int)position.X, (int)position.Y-1), new Point((int)(Size.X*16), (int)(Size.Y))));
             BuildingDescription = "Generates power for the system.";

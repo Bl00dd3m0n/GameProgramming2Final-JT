@@ -16,10 +16,9 @@ namespace _0x46696E616C.Util.Input
     public enum Controls { Select, Interact, ZoomIn, ZoomOut, Deselect, Up, Down, Left, Right }
     public class InputDefinitions
     {
-        [JsonIgnore]
+        
         Dictionary<Controls, MouseKeyboardBindings> inputs;
-
-        public Dictionary<Controls, MouseKeyboardBindings> Input { get; set; }
+        public Dictionary<Controls, MouseKeyboardBindings> Input { get { return inputs; } set { inputs = value; } }
         [JsonIgnore]
         MouseKeyboard input;
         [JsonIgnore]
@@ -43,7 +42,7 @@ namespace _0x46696E616C.Util.Input
 
         public InputDefinitions()
         {
-            if (!StartedLoad)
+            if (!StartedLoad) // Prevents this from getting called when a new instance of input definitions is called
             {
                 JsonControls = new SaveJson<InputDefinitions>();
                 if (File.Exists(SaveFile))//TODO Tie this to a file singleton so it isn't windows based

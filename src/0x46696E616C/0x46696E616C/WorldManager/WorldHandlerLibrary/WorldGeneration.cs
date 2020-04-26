@@ -16,8 +16,6 @@ namespace NationBuilder.WorldHandlerLibrary
 {
     public class WorldGeneration
     {
-        Random ran;
-        string worldName;
         Game game;
         OpenSimplexNoise ElevationNoise;
         OpenSimplexNoise MoistureNoise;
@@ -26,7 +24,6 @@ namespace NationBuilder.WorldHandlerLibrary
         public WorldGeneration(Game game, string WorldName, long Seed, Vector2 MapSize)
         {
             this.game = game;
-            this.worldName = WorldName;
             ElevationNoise = new OpenSimplexNoise(Seed);
             MoistureNoise = new OpenSimplexNoise(Seed - 10);
             this.MapSize = MapSize;

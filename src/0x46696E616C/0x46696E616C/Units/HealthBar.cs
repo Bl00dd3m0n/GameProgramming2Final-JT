@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace _0x46696E616C.MobHandler
 {
+    
     public class HealthBar
     {
         [JsonIgnore]

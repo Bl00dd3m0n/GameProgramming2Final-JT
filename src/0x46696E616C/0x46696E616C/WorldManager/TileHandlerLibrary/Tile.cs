@@ -16,8 +16,13 @@ namespace NationBuilder.TileHandlerLibrary
         private Vector2 position;
         protected bool placed;
         public Color tileColor { get; protected set; }
+        internal float fCost;
         
-        
+        internal void SetCost(float fCost)
+        {
+            this.fCost = fCost; 
+        }
+
         public virtual Vector2 Position
         {
             get { return position; }

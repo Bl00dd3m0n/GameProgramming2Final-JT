@@ -5,6 +5,7 @@ using _0x46696E616C.ConcreteImplementations;
 using _0x46696E616C.ConcreteImplementations.Resources;
 using _0x46696E616C.MobHandler;
 using _0x46696E616C.MobHandler.Units;
+using _0x46696E616C.TechManager.Stats;
 using Microsoft.Xna.Framework;
 using NationBuilder.TileHandlerLibrary;
 using System;
@@ -15,7 +16,6 @@ using System.Threading.Tasks;
 using TechHandler;
 using Util;
 using WorldManager;
-using WorldManager.Buildings;
 using WorldManager.Mobs.HarvestableUnits;
 using WorldManager.TileHandlerLibrary;
 using Vector2 = Microsoft.Xna.Framework.Vector2;
@@ -25,13 +25,12 @@ namespace _0x46696E616C.CommandPattern
     internal class Civilian : BasicUnit, ICommandComponent
     {
         IEntity Target;
-        List<Vector2> waypoints;
         WorldHandler world;
         Wallet unitWallet;
         bool arrived;
         IEntity returnTarget;
         float timer = 0;
-        public Civilian(string name, Vector2 size, float totalHealth, float currentHealth, Vector2 position, BaseUnitState state, TextureValue texture, WorldHandler world, TextureValue Icon) : base(name, size, totalHealth, currentHealth, position, state, texture, Color.Blue, Icon, world)
+        public Civilian(string name, Vector2 size, float totalHealth, float currentHealth, Vector2 position, BaseUnitState state, TextureValue texture, WorldHandler world, TextureValue Icon, float range) : base(name, size, totalHealth, currentHealth, position, state, texture, Color.Blue, Icon, world, range)
         {
             QueueableThings = new List<IQueueable<TextureValue>>();
             QueueableThings.Add(new Center(TextureValue.Center, Vector2.Zero, TextureValue.CenterIcon));
@@ -44,26 +43,32 @@ namespace _0x46696E616C.CommandPattern
             QueueableThings.Add(new ServerFarm(TextureValue.ServerFarm, Vector2.Zero, TextureValue.ServerFarmIcon));
             QueueableThings.Add(new SolarPanel(TextureValue.SolarPanel, Vector2.Zero, TextureValue.SolarPanelIcon));
             QueueableThings.Add(new SteelFactory(TextureValue.SteelFactory, Vector2.Zero, TextureValue.SteelFactoryIcon));
-
+            stats.Add(new BuildPower("Build Power", 10));
+            stats.Add(new AttackPower("Attack Power", 10));
+            stats.Add(new HarvestPower("Harvest Power", 2));
+            stats.Add(new InventorySpace("Inventory Space", 10));
             waypoints = new List<Vector2>();
             zero = Vector2.Zero;
             xOne = new Vector2(1, 0);
             yOne = new Vector2(0, 1);
+            
             speed = 50;
             this.world = world;
-            unitWallet = new UnitWallet(10);
+            unitWallet = new UnitWallet(this);
+            tags.Add("HasInventoryCap");
+            tags.Add("CanAttack");
+            tags.Add("HasHealth");
             nextPoint = TargetPosition = Position;
             Description = "A basic unit able to Harvest resources, and build things\nMinimal Damage";
         }
 
-        public void Update(GameTime gameTime)
+        public override void Update(GameTime gameTime)
         {
             timer += gameTime.ElapsedGameTime.Milliseconds;
-            UpdateMove(gameTime);
+            base.Update(gameTime);
             if (timer / 1000 >= 1)
             {
                 UnitInteraction();
-                
             }
         }
         /// <summary>
@@ -72,7 +77,7 @@ namespace _0x46696E616C.CommandPattern
         private void UnitInteraction()
         {
             float dist = Vector2.Distance(TargetPosition, nextPoint);
-            if (Direction == zero && Target != null && !arrived && dist <= 1.1f)
+            if (Direction == zero && Target != null && !arrived && dist <= stats[typeof(Range)].Value)
             {
                 if (Target is Building && ((ModifiableTile)Target).TeamAssociation == this.TeamAssociation)
                 {
@@ -98,7 +103,7 @@ namespace _0x46696E616C.CommandPattern
                 else if (Target is IHarvestable)
                 {
                     Type type = ((HarvestableUnit)Target).type.GetType();
-                    Wallet wal = ((HarvestableUnit)Target).Harvest(this.HarvestPower);
+                    Wallet wal = ((HarvestableUnit)Target).Harvest(stats[typeof(HarvestPower)].Value);
                     if (((HarvestableUnit)Target).State == tileState.dead) //When the source dies find a new thing to harvest
                     {
                         Harvest(world.FindNearest(((HarvestableUnit)Target).type.GetType().Name.ToString(), this.Position));
@@ -118,7 +123,7 @@ namespace _0x46696E616C.CommandPattern
                 //Attack the unit if it isn't part of their team
                 else if(((ModifiableTile)Target).TeamAssociation != this.TeamAssociation)
                 {
-                    Target.Damage(this.AttackPower);
+                    Target.Damage(this.stats[typeof(AttackPower)].Value);
                     if (((ModifiableTile)Target).State == tileState.dead) Target = null;
                 }
                 timer = 0;// Only reset the timer if the unit does something that way the player instantly acts when they get to the position
@@ -231,7 +236,7 @@ namespace _0x46696E616C.CommandPattern
         /// <returns></returns>
         public override BasicUnit NewInstace(float currentHealth, Vector2 position)
         {
-            return new Civilian(this.name, this.Size, this.TotalHealth, currentHealth, position, BaseUnitState.Idle, this.block.texture, this.world, this.Icon);
+            return new Civilian(this.name, this.Size, this.TotalHealth, currentHealth, position, BaseUnitState.Idle, this.block.texture, this.world, this.Icon, this.range);
         }
     }
 }

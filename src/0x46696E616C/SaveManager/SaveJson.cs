@@ -12,21 +12,14 @@ namespace SaveManager
     {
         public void SaveToJson(T value, string path)
         {
-            
             string json = JsonConvert.SerializeObject(value);
-            using (StreamWriter writer = new StreamWriter(File.Open(path, FileMode.Create, FileAccess.Write)))//TODO Abstract saving to a singleton
-            {
-                writer.Write(json);
-            }
+            Save.save.SaveToFile(path, json);
         }
 
         public T LoadFromJson(string path)
         {
             string json = "";
-            using (StreamReader reader = new StreamReader(File.Open(path, FileMode.Open, FileAccess.Read)))// TODO File read to a singleton
-            {
-                json += reader.ReadLine();
-            }
+            json = Save.save.LoadFromFile(path);
             T thisObject = JsonConvert.DeserializeObject<T>(json);
             return thisObject;
         }

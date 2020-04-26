@@ -1,6 +1,7 @@
 ﻿using _0x46696E616C;
 using _0x46696E616C.ConcreteImplementations;
 using _0x46696E616C.MobHandler;
+using _0x46696E616C.TechManager.Stats;
 using _0x46696E616C.WorldManager.ConcreteImplementations.Resources;
 using Microsoft.Xna.Framework;
 using MobHandler;
@@ -26,10 +27,10 @@ namespace WorldManager.Mobs.HarvestableUnits
             this.type = type;
             this.name = name;
             this.Size = size;
-            this.TotalHealth = totalHealth;
+            stats = new Stats(new List<Stat>() { new Health("Health", totalHealth) });
             this.CurrentHealth = currentHealth;
             this.Position = position;
-            healthBar = new HealthBar(new Rectangle(position.ToPoint()-new Point(0, (int)(size.Y*16+1)), size.ToPoint()));
+            healthBar = new HealthBar(new Rectangle(position.ToPoint() - new Point(0, (int)(size.Y * 16 + 1)), size.ToPoint()));
         }
 
 
@@ -53,7 +54,12 @@ namespace WorldManager.Mobs.HarvestableUnits
 
         public void Return(Wallet wal)
         {
-            this.CurrentHealth+= wal.Count(type);
+            this.CurrentHealth += wal.Count(type);
+        }
+
+        internal Wallet Harvest(Stat stat)
+        {
+            throw new NotImplementedException();
         }
     }
 }

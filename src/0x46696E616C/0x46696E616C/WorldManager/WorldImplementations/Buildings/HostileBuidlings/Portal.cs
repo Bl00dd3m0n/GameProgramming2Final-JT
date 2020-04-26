@@ -1,5 +1,7 @@
 ﻿using _0x46696E616C.Buildings;
 using _0x46696E616C.MobHandler;
+using _0x46696E616C.TechManager.Stats;
+using _0x46696E616C.WorldManager.ConcreteImplementations.Resources;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using NationBuilder.TileHandlerLibrary;
@@ -18,14 +20,14 @@ namespace _0x46696E616C.WorldManager.WorldImplementations.Buildings.HostileBuidl
         public Portal( TextureValue texture, Vector2 position, TextureValue Icon) : base(texture, position, Icon)
         {
             energyCost = 0;
-            name = "Center";
+            name = "Portal";
             Position = position;
             Size = new Vector2(4, 4);
-            TotalHealth = 5000;
+            stats.Add(new Health("Health", 5000));
             CurrentHealth = 5000;
             tags.Add("Portal");
             healthBar = new HealthBar(new Rectangle(new Point((int)position.X, (int)position.Y - 1), new Point((int)(Size.X * 16), (int)(Size.Y))));
-            BuildingDescription = "The center allows the user to train Civilians";
+            BuildingDescription = "The Portal summons waves";
         }
 
         public override Building NewInstace( TextureValue tex, Vector2 position, TextureValue Icon)
@@ -40,6 +42,7 @@ namespace _0x46696E616C.WorldManager.WorldImplementations.Buildings.HostileBuidl
 
         public override void Damage(float amount)
         {
+            base.Damage(amount);
             //TODO implement destruction a way to destroy it....requires more than just flat damage
         }
 

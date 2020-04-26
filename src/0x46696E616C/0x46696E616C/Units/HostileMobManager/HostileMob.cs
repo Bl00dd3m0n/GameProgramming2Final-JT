@@ -1,6 +1,7 @@
 ﻿using _0x46696E616C.AstarAlgorithm;
 using _0x46696E616C.CommandPattern.Commands;
 using _0x46696E616C.MobHandler.Units;
+using _0x46696E616C.TechManager.Stats;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using NationBuilder.TileHandlerLibrary;
@@ -16,23 +17,26 @@ namespace _0x46696E616C.Units.HostileMobManager
 {
     class HostileMob : BasicUnit
     {
-        List<Vector2> waypoints;
         IEntity Target;
         WorldHandler world;
-        public HostileMob(string name, Vector2 size, float totalHealth, float currentHealth, Vector2 position, BaseUnitState state, TextureValue texture, Color color, TextureValue icon, WorldHandler world) : base(name, size, totalHealth, currentHealth, position, state, texture, color, icon, world)
+        float checkPosTimer;
+        float InteractTimer;
+        public HostileMob(string name, Vector2 size, float totalHealth, float currentHealth, Vector2 position, BaseUnitState state, TextureValue texture, Color color, TextureValue icon, WorldHandler world, float range) : base(name, size, totalHealth, currentHealth, position, state, texture, color, icon, world, range)
         {
             waypoints = new List<Vector2>();
             speed = 50;
             this.world = world;
-            AttackPower = 100;
+            stats.Add(new AttackPower("Attack", 100));
+            tags.Add("CanAttack");
         }
-        public void Update(GameTime gameTime)
+        public override void Update(GameTime gameTime)
         {
             UpdateMove(gameTime);
-            Interact();
-            if (Keyboard.GetState().IsKeyDown(Keys.U))
+            InteractTimer += gameTime.ElapsedGameTime.Milliseconds;
+            if (InteractTimer/1000 >= 1)
             {
-                FindTarget();
+                Interact();
+                InteractTimer = 0;
             }
             base.Update();
         }
@@ -40,9 +44,9 @@ namespace _0x46696E616C.Units.HostileMobManager
         {
             if (Target != null)
             {
-                if (TargetPosition.ToPoint() == Position.ToPoint() && UnitState == BaseUnitState.attack)
+                if (Vector2.Distance(Target.Position.ToPoint().ToVector2() - new Vector2(1, 0), Position.ToPoint().ToVector2()) < stats[typeof(Range)].Value && UnitState == BaseUnitState.attack)
                 {
-                    Target.Damage(this.AttackPower);
+                    attack.Attack(Target, this, stats[typeof(AttackPower)].Value);
                     if (((ModifiableTile)Target).State == tileState.dead)
                     {
                         Target = null;
@@ -62,6 +66,22 @@ namespace _0x46696E616C.Units.HostileMobManager
         protected override void UpdateMove(GameTime gameTime)
         {
             base.UpdateMove(gameTime);
+            checkPosTimer += gameTime.ElapsedGameTime.Milliseconds;
+            if(waypoints.Count() > 0 && Vector2.Distance(Position,Target.Position) < range)
+            {
+                waypoints.Clear();
+            }
+            if(checkPosTimer/1000 >= 1)
+            {
+                if(Target != null && Target.Position.ToPoint() - new Point(1,0) != TargetPosition.ToPoint())
+                {
+                    //Move(Target.Position);
+                } else if(Target == null)
+                {
+                    FindTarget();
+                }
+                checkPosTimer = 0;
+            }
         }
         /// <summary>
         /// if the unit has hit a waypoint go to the next one

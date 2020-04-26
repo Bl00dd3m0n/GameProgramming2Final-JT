@@ -14,6 +14,17 @@ namespace _0x46696E616C.AstarAlgorithm
     public class A_Star
     {
 
+        public List<Vector2> FindPath(Vector2 StartPosition, Vector2 EndPosition, WorldHandler world, List<Vector2> waypoints)
+        {
+            if(waypoints.Count > 0  && waypoints[waypoints.Count-1] == EndPosition)
+            {
+                return waypoints;
+            } else
+            {
+                return FindPath(StartPosition, EndPosition, world);
+            }
+        }
+
         /// <summary>
         /// A* Algorithm implementation
         /// </summary>

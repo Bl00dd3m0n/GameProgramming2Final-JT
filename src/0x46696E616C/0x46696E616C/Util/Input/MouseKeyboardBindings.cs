@@ -7,13 +7,25 @@ using System.Threading.Tasks;
 
 namespace _0x46696E616C.Util.Input
 {
-        
-    public enum MouseInput { LeftClick, RightClick, ScrollUp, ScrollDown}
+
+    public enum MouseInput { LeftClick, RightClick, ScrollUp, ScrollDown }
     public class MouseKeyboardBindings
     {
-        public bool isMouseType { get; private set; }
-        public MouseInput mouse { get; set; }
-        public Keys keys { get; set; }
+        public bool isMouseType
+        {
+            get;
+            set;
+        }
+        public MouseInput mouse
+        {
+            get;
+            set;
+        }
+        public Keys keys
+        {
+            get;
+            set;
+        }
         public MouseKeyboardBindings()
         {
 

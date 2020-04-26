@@ -3,6 +3,7 @@ using MainMenu.Component;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using NationBuilder.DataHandlerLibrary;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,7 +30,13 @@ namespace UIProject
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            font = Game.Content.Load<SpriteFont>("Ariel");
+            if (ContentHandler.Font == null)
+            {
+                font = Game.Content.Load<SpriteFont>("Ariel");
+            } else
+            {
+                font = ContentHandler.Font;
+            }
             base.LoadContent();
         }
 

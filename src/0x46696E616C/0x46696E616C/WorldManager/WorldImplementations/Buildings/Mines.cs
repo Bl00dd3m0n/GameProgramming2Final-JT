@@ -8,11 +8,16 @@ using System;
 using _0x46696E616C.ConcreteImplementations;
 using _0x46696E616C.ConcreteImplementations.Resources;
 using _0x46696E616C.WorldManager.ConcreteImplementations.Resources;
+using _0x46696E616C.WorldManager.WorldImplementations.Buildings;
+using _0x46696E616C.TechManager.Stats;
 
 namespace _0x46696E616C.Buildings
 {
-    public class Mines : Building
+    public class Mines : Building, IResourceCharge
     {
+        public List<int> ChargeAMinute { get; protected set; }
+
+        public List<IResource> ChargeTypes { get; protected set; }
 
         public List<int> ProductionAMinute { get; protected set; }
 
@@ -26,11 +31,12 @@ namespace _0x46696E616C.Buildings
             Cost.Deposit(new Iron(), 20);
             Cost.Deposit(new Wood(), 200);
             Cost.Deposit(new Money(), 100);
-            energyCost = 5;
+            ChargeAMinute = new List<int>() { 0 };
+            ChargeTypes = new List<IResource>() { new Energy() };
             name = "Mines";
             Position = position;
             Size = new Vector2(1, 1);
-            TotalHealth = 200;
+            stats.Add(new Health("Health", 200));
             CurrentHealth = 0;
             tags.Add("Iron Collector");
             healthBar = new HealthBar(new Rectangle(new Point((int)position.X, (int)position.Y - 1), new Point((int)(Size.X * 16), (int)(Size.Y))));

@@ -1,5 +1,6 @@
 ﻿using _0x46696E616C.Buildings;
 using _0x46696E616C.MobHandler.Units;
+using _0x46696E616C.Util.Collision;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using NationBuilder.TileHandlerLibrary;
@@ -22,6 +23,7 @@ namespace WorldManager
         Game game;
         long Seed;
         SaveJson<Map> save;
+        CollisionHandler collider;
         public WorldHandler(Game game, string WorldName)
         {
             Seed = 14153456352343;
@@ -29,6 +31,11 @@ namespace WorldManager
             map.GenerateMap(game.GraphicsDevice);
             save = new SaveJson<Map>();
             this.game = game;
+        }
+
+        public void AddCollision(CollisionHandler collision)
+        {
+            this.collider = collision;
         }
         /// <summary>
         /// If the world has a tile at this position
@@ -51,7 +58,18 @@ namespace WorldManager
                 AddMob(unit);
             }
         }
-
+        /// <summary>
+        /// Adds a mob to the list of mobs
+        /// </summary>
+        /// <param name="unit"></param>
+        public void AddMob(IEntity unit)
+        {
+            map.AddMob(unit);
+            if (collider != null && unit is ICollider)
+            {
+                collider.AddCollider((ICollider)unit);
+            }
+        }
         /// <summary>
         /// places a building of a position on the map
         /// </summary>
@@ -63,6 +81,10 @@ namespace WorldManager
             if(CheckPlacement(position, building.Size))
             {
                 map.PlaceBlock(building, position);
+                if (collider != null)
+                {
+                    collider.AddCollider(building);
+                }
                 return true;
             } else
             {
@@ -98,17 +120,11 @@ namespace WorldManager
         /// <returns></returns>
         public bool CheckPlacement(Building building)
         {
-            return CheckPlacement(building.Position, building.Size);
+            return Colliding(building.Position, building.Size, null);
         }
-        /// <summary>
-        /// goes through each tile and checks if there is a tile if there is a tile it returns false
-        /// </summary>
-        /// <param name="position"></param>
-        /// <param name="size"></param>
-        /// <returns></returns>
-        public bool CheckPlacement(Vector2 position, Vector2 size)
+
+        public bool Colliding(Vector2 position, Vector2 size, ICollider check)
         {
-            
             int StartX = 0;
             int StartY = 0;
             if (position.X + StartX >= 0 && position.Y + StartY >= 0)
@@ -117,15 +133,35 @@ namespace WorldManager
                 {
                     for (int x = 0; x < size.X; x++)
                     {
-                        if (GetTile(new Vector2(position.X + x, position.Y + y)) != null)
+                        if (GetTile(new Vector2(position.X + x, position.Y + y)) != null) {
+                            if (check != null)
+                            {
+                                if(check is ICollider && GetTile(new Vector2(position.X + x, position.Y + y)) is ICollider)
+                                {
+                                    check.Collision(GetTile(new Vector2(position.X + x, position.Y + y)));
+                                }
+                            }
                             return false;
+                        }
                     }
                 }
                 return true;
-            } else
+            }
+            else
             {
                 return false;
             }
+        }
+
+        /// <summary>
+        /// goes through each tile and checks if there is a tile if there is a tile it returns false
+        /// </summary>
+        /// <param name="position"></param>
+        /// <param name="size"></param>
+        /// <returns></returns>
+        public bool CheckPlacement(Vector2 position, Vector2 size)
+        {
+            return Colliding(position,size, null);
         }
 
         /// <summary>
@@ -169,21 +205,21 @@ namespace WorldManager
         {
             return map.GetTile(tag);
         }
-        /// <summary>
-        /// Adds a mob to the list of mobs
-        /// </summary>
-        /// <param name="unit"></param>
-        public void AddMob(IEntity unit)
+
+        public IEntity[] GetTiles(int team)
         {
-            map.AddMob(unit);
+            return map.GetTile(team);
         }
+
         public void Save(string FilePath)
         {
-            save.SaveToJson(map,FilePath);
+            //save.SaveToJson(map,FilePath);
         }
         public void Load(string FilePath)
         {
-            map = save.LoadFromJson(FilePath);
+            //map = save.LoadFromJson(FilePath);
         }
+
+        internal List<IUnit> GetUnits(int v) => map.GetUnits(v);
     }
 }

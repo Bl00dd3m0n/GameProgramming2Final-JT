@@ -1,23 +1,18 @@
-﻿using _0x46696E616C;
-using _0x46696E616C.Units;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using NationBuilder.TileHandlerLibrary;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Vector2 = Microsoft.Xna.Framework.Vector2;
-//using MyVector2 = NationBuilder.TileHandlerLibrary.Vector2;
 using _0x46696E616C.MobHandler.Units;
 using _0x46696E616C.MobHandler;
 using WorldManager.MapData;
 using Microsoft.Xna.Framework.Graphics;
+using _0x46696E616C.TechManager.Stats;
+using _0x46696E616C.Util.Collision;
+using _0x46696E616C.Units.Attacks;
 
 namespace WorldManager.TileHandlerLibrary
 {
     public enum tileState { whole, damaged, dead }
-    public abstract class ModifiableTile : Tile, IEntity
+    public abstract class ModifiableTile : Tile, IEntity, ICollider
     {
         public tileState State { get; private set; }
 
@@ -25,24 +20,28 @@ namespace WorldManager.TileHandlerLibrary
 
         public Vector2 Size { get; protected set; }
 
-        public float TotalHealth { get; protected set; }
+        public float TotalHealth { get { return stats[typeof(Health)].Value; } }
 
         protected float currentHealth;
+
+        public Stats stats { get; protected set; }
+
         /// <summary>
         /// returns the current health and can only be set if the health is less than or equal to the total health
         /// </summary>
-        public float CurrentHealth {
+        public float CurrentHealth
+        {
             get
             {
                 return currentHealth;
             }
             set
             {
-                if(CurrentHealth <= TotalHealth)//Doesn't let you build past full health
+                if (CurrentHealth <= TotalHealth)//Doesn't let you build past full health
                 {
                     currentHealth = value;
                 }
-                else if(currentHealth >= TotalHealth && !built)
+                else if (currentHealth >= TotalHealth && !built)
                 {
                     built = true;
                 }
@@ -61,9 +60,10 @@ namespace WorldManager.TileHandlerLibrary
 
         public ModifiableTile(TextureValue texture, Vector2 position, Color color) : base(texture, position, color)
         {
+            stats = new Stats();
             built = false;
             MapWatcher = new List<IMapObserver>();
-            healthBar = new HealthBar(new Rectangle(this.Position.ToPoint()-new Point(0,(int)(this.Size.Y*16+1)), Size.ToPoint()));
+            healthBar = new HealthBar(new Rectangle(this.Position.ToPoint() - new Point(0, (int)(this.Size.Y * 16 + 1)), Size.ToPoint()));
             tags = new List<string>();
         }
 
@@ -82,26 +82,39 @@ namespace WorldManager.TileHandlerLibrary
         {
             MapWatcher.Add(map);
         }
+
         public virtual void Update()
         {
 
         }
         public virtual void Damage(float value)
         {
-            CurrentHealth -= value;
-            if(CurrentHealth <= 0)
+            if (this is ReferenceTile)
             {
-                Die();
+                ((ReferenceTile)this).tile.Damage(value);
+            }
+            else
+            {
+                CurrentHealth -= value;
+                if (CurrentHealth <= 0)
+                {
+                    Die();
+                }
             }
         }
 
         public virtual void Die()
         {
             State = tileState.dead;
-            foreach(IMapObserver map in MapWatcher)
+            foreach (IMapObserver map in MapWatcher)
             {
                 map.Update(this);
+                if (map is ReferenceTile)
+                {
+                    ((ReferenceTile)map).Die();
+                }
             }
+            MapWatcher.RemoveAll(l => l is ReferenceTile && ((ReferenceTile)l).State == tileState.dead);
         }
         /// <summary>
         /// Don't update harvestable units
@@ -115,7 +128,7 @@ namespace WorldManager.TileHandlerLibrary
             else
             {
                 base.UpdatePosition(gd, position);
-                if (healthBar != null)
+                if (healthBar.Health == null)
                 {
                     healthBar = new HealthBar(new Rectangle(new Point((int)position.X, (int)position.Y - 1), new Point((int)(Size.X * 16), (int)(5))));
                 }
@@ -128,6 +141,18 @@ namespace WorldManager.TileHandlerLibrary
         {
             if (tags.Contains(v)) return true;
             return false;
+        }
+
+        public void Collision(ICollider tile)
+        {
+            if (tile is Projectile)
+            {
+                if (((Projectile)tile).Shooter.TeamAssociation != this.TeamAssociation)
+                {
+                    Damage(((Projectile)tile).Damage);
+                    ((Projectile)tile).Hit();
+                }
+            }
         }
     }
 }

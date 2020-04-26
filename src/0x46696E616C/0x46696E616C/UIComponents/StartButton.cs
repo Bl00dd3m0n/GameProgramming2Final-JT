@@ -12,6 +12,7 @@ namespace MainMenu.Component
 {
     public class StartButton : Button
     {
+        ActualGame game;
         #region Constructors
     
         public StartButton(GraphicsDevice gd, Vector2 position, Point size, Color color, string text, Game game) : base(gd, position, size, color, text)
@@ -30,10 +31,12 @@ namespace MainMenu.Component
         #endregion
         public override void Click(Game thisGame)
         {
-            ActualGame game = new ActualGame(thisGame);
-            game.Initialize();
-            thisGame.Components.Add(game);
+            game = new ActualGame(thisGame);
             base.Click(thisGame);
+        }
+        public ActualGame LoadedGame()
+        {
+            return game;
         }
     }
 }

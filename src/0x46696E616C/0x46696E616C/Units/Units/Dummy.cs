@@ -1,5 +1,6 @@
 ﻿using _0x46696E616C.MobHandler;
 using _0x46696E616C.MobHandler.Units;
+using _0x46696E616C.TechManager.Stats;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -33,6 +34,7 @@ namespace MobHandler.Units
 
         public float CurrentHealth { get; private set; }
 
+        public Stats stats { get; private set; }
 
         public void Damage(float value)
         {

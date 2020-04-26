@@ -113,7 +113,6 @@ namespace Util
             {
                 int OverX = 0;
                 int OverY = 0;
-                float scale = 3;
                 if (ViewPort.Top < 0) OverY = -ViewPort.Top;
                 if (ViewPort.Left < 0) OverX = -ViewPort.Left;
                 //draw the viewport of the map using the scale
@@ -134,37 +133,38 @@ namespace Util
 
         private void DrawScreen(int x, int y, int i)
         {
+            Tile tile = null;
             if (x >= 0 && x < bounds.Width && y >= 0 && y < bounds.Height)
             {
                 //Background tiles are drawn first
                 if (i == 0)
                 {
-                    Tile backtile = world.GetBackgroundTile(new Vector2(x, y));
-                    sb.Draw(ContentHandler.DrawnTexture(backtile.block.texture), (backtile.Position * Tile.Zoom * 16) - (position * Tile.Zoom * 16), null, Color.White, 0, Vector2.Zero, Tile.Zoom, SpriteEffects.None, 0);
+                    tile = world.GetBackgroundTile(new Vector2(x, y));
+                    sb.Draw(ContentHandler.DrawnTexture(tile.block.texture), (tile.Position * Tile.Zoom * 16) - (position * Tile.Zoom * 16), null, Color.White, 0, Vector2.Zero, Tile.Zoom, SpriteEffects.None, 0);
                 }
                 //Units are drawn second
                 else if (i == 1)
                 {
-                    ModifiableTile tile = (ModifiableTile)world.GetUnit(new Vector2(x, y));
+                    tile = (ModifiableTile)world.GetUnit(new Vector2(x, y));
                     if (tile != null && tile.block.texture != TextureValue.None)
                     {
 
                         Texture2D texture = ContentHandler.DrawnTexture(tile.block.texture);
                         ((BasicUnit)tile).UpdatePosition(Game.GraphicsDevice, tile.Position);
-                        DrawHealth(tile);
                         sb.Draw(ContentHandler.DrawnTexture(tile.block.texture), (tile.Position * Tile.Zoom * 16) - (position * Tile.Zoom * 16), null, Color.White, 0, Vector2.Zero, Tile.Zoom, SpriteEffects.None, 0);
+                        DrawHealth((ModifiableTile)tile);
                     }
                 }
                 //Draw buildings third
                 else
                 {
-                    ModifiableTile decorTile = world.GetTile(new Vector2(x, y));
-                    if (decorTile != null && decorTile.block.texture != TextureValue.None)
+                    tile = world.GetTile(new Vector2(x, y));
+                    if (tile != null && tile.block.texture != TextureValue.None)
                     {
-                        Texture2D texture = ContentHandler.DrawnTexture(decorTile.block.texture);
-                        decorTile.UpdatePosition(Game.GraphicsDevice, decorTile.Position);
-                        sb.Draw(ContentHandler.DrawnTexture(decorTile.block.texture), (decorTile.Position * Tile.Zoom * 16) - (position * Tile.Zoom * 16), null, Color.White, 0, Vector2.Zero, Tile.Zoom, SpriteEffects.None, 0);
-                        DrawHealth(decorTile);
+                        Texture2D texture = ContentHandler.DrawnTexture(tile.block.texture);
+                        tile.UpdatePosition(Game.GraphicsDevice, tile.Position);
+                        sb.Draw(ContentHandler.DrawnTexture(tile.block.texture), (tile.Position * Tile.Zoom * 16) - (position * Tile.Zoom * 16), null, Color.White, 0, Vector2.Zero, Tile.Zoom, SpriteEffects.None, 0);
+                        DrawHealth((ModifiableTile)tile);
                     }
                 }
             }
@@ -179,6 +179,10 @@ namespace Util
                     sb.Draw(tileWithHealth.healthBar.Health, (tileWithHealth.healthBar.Position * Tile.Zoom * 16) - (position * Tile.Zoom * 16), null, Color.White, 0, Vector2.Zero, Tile.Zoom, SpriteEffects.None, 0);
                 }
             }
+        }
+        public Vector2 ConvertToWorldSpace(Vector2 position)
+        {
+            return Position + (position / (Tile.Zoom * 16));
         }
     }
 }
