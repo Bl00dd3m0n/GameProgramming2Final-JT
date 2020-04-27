@@ -54,7 +54,14 @@ namespace NationBuilder.TileHandlerLibrary
 
         //Projectiles
         FireBall,
-        Arrow
+        Arrow,
+
+        //Stats UI
+        Chest,
+        Damage,
+        Range,
+        HarvestPower,
+        BuildPower,
     }
     [Serializable]
     public struct BlockData

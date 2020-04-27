@@ -23,7 +23,7 @@ namespace _0x46696E616C.Buildings
         public Lab(TextureValue texture, Vector2 position, TextureValue icon) : base(texture, position, icon)
         {
             QueueableThings = new List<IQueueable<TextureValue>>();
-            QueueableThings.Add(new DamageUpgrade());
+            QueueableThings.Add(new DamageUpgrade(new AttackPower("Power", 10), TextureValue.Damage, new Vector2()));
             Cost = new Wallet();
             Cost.Deposit(new Steel(), 1000);
             Cost.Deposit(new Wood(), 2000);
