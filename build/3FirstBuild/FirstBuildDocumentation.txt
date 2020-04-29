@@ -33,3 +33,7 @@ Zoom in(Scroll Up) - Scrolls into the screen
 Zoom out(Scroll Down) - Scrolls out
 Deselect(Escape) - Deselects the selected building
 Up/Down/Left/Right(W/S/A/D)- Move the camera 
+
+Note:
+I used Json.Net so if there is a missing dependency it's probably this
+
