@@ -18,7 +18,7 @@ using WorldManager.TileHandlerLibrary;
 
 namespace _0x46696E616C.Units.Attacks
 {
-    class ProjectileManager : DrawableGameComponent
+    public class ProjectileManager : DrawableGameComponent
     {
         List<Projectile> projectiles;
         List<Projectile> HitProjectiles;

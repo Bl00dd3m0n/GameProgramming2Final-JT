@@ -7,6 +7,8 @@ using _0x46696E616C.WorldManager.ConcreteImplementations.Resources;
 using _0x46696E616C.ConcreteImplementations.Resources;
 using _0x46696E616C.ConcreteImplementations;
 using _0x46696E616C.TechManager.Stats;
+using WorldManager;
+using _0x46696E616C.Units.Attacks;
 
 namespace _0x46696E616C.Buildings
 {
@@ -16,7 +18,7 @@ namespace _0x46696E616C.Buildings
 
         public List<IResource> productionTypes { get; protected set; }
 
-        public SolarPanel(TextureValue texture, Vector2 position, TextureValue icon) : base(texture, position, icon)
+        public SolarPanel(TextureValue texture, Vector2 position, TextureValue icon, WorldHandler world, ProjectileManager proj) : base(texture, position, icon, world, proj)
         {
             ProductionAMinute = new List<int>() { 60 };
             productionTypes = new List<IResource>() { new Energy() };
@@ -33,9 +35,10 @@ namespace _0x46696E616C.Buildings
             healthBar = new HealthBar(new Rectangle(new Point((int)position.X, (int)position.Y-1), new Point((int)(Size.X*16), (int)(Size.Y))));
             BuildingDescription = "Generates power for the system.";
         }
+
         public override Building NewInstace(TextureValue tex, Vector2 position, TextureValue Icon)
         {
-            return new SolarPanel( tex, position, Icon);
+            return new SolarPanel(tex, position, Icon, world, proj);
         }
     }
 }

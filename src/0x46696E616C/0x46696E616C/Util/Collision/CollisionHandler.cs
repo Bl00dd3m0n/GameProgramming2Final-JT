@@ -18,15 +18,16 @@ namespace _0x46696E616C.Util.Collision
         List<ICollider> deletedColliders;
         WorldHandler world;
         float timer;
+        Rectangle checkColliderRect;
+        Rectangle colliderRect;
         public CollisionHandler(Game game, WorldHandler world) : base(game)
         {
             this.world = world;
             colliders = new List<ICollider>();
+            deletedColliders = new List<ICollider>();
         }
         public override void Update(GameTime gameTime)
         {
-            deletedColliders = new List<ICollider>();
-            timer += gameTime.ElapsedGameTime.Milliseconds;
             foreach (ICollider collider in colliders)
             {
                 Colliding(collider);
@@ -48,23 +49,18 @@ namespace _0x46696E616C.Util.Collision
         }
         public void Colliding(ICollider checkingCollider)
         {
-            if (timer / 1000 >= 1f)
+            foreach (ICollider collider in colliders)
             {
-                timer = 0;
-                foreach (ICollider collider in colliders)
+                if (collider != checkingCollider)
                 {
-                    if (collider != checkingCollider)
+                    if (CheckCollision(checkingCollider, collider))
                     {
-                        if (CheckCollision(checkingCollider, collider))
+                        checkingCollider.Collision(collider);
+                        if (collider is Projectile && checkingCollider is ModifiableTile)
                         {
-                            checkingCollider.Collision(collider);
-                            deletedColliders.Add(collider);
-                            if (collider is Projectile && checkingCollider is ModifiableTile)
+                            if (((Projectile)collider).Shooter.TeamAssociation != ((ModifiableTile)checkingCollider).TeamAssociation)
                             {
-                                if (((Projectile)collider).Shooter.TeamAssociation != ((ModifiableTile)checkingCollider).TeamAssociation)
-                                {
-                                    deletedColliders.Add(collider);
-                                }
+                                deletedColliders.Add(collider);
                             }
                         }
                     }
@@ -74,7 +70,9 @@ namespace _0x46696E616C.Util.Collision
 
         private bool CheckCollision(ICollider checkingCollider, ICollider collider)
         {
-            if(checkingCollider.Position.X <= collider.Position.X && checkingCollider.Position.X+checkingCollider.Size.X >= collider.Position.X && checkingCollider.Position.Y <= collider.Position.Y && checkingCollider.Position.Y +checkingCollider.Size.Y >= collider.Position.Y)
+            colliderRect = new Rectangle(collider.Position.ToPoint(), collider.Size.ToPoint());
+            checkColliderRect = new Rectangle(checkingCollider.Position.ToPoint(), checkingCollider.Size.ToPoint());
+            if(checkColliderRect.Contains(colliderRect))
             {
                 return true;
             }

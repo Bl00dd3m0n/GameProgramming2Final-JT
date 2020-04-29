@@ -8,6 +8,8 @@ using _0x46696E616C.WorldManager.WorldImplementations.Buildings;
 using _0x46696E616C.WorldManager.ConcreteImplementations.Resources;
 using System.Collections.Generic;
 using _0x46696E616C.TechManager.Stats;
+using WorldManager;
+using _0x46696E616C.Units.Attacks;
 
 namespace _0x46696E616C.Buildings
 {
@@ -16,13 +18,12 @@ namespace _0x46696E616C.Buildings
         public List<int> ChargeAMinute { get; protected set; }
 
         public List<IResource> ChargeTypes { get; protected set; }
-
-        public FireWall(TextureValue texture, Vector2 position, TextureValue icon) : base(texture, position, icon)
+        public FireWall(TextureValue texture, Vector2 position, TextureValue icon, WorldHandler world, ProjectileManager proj) : base(texture, position, icon, world,proj)
         {
             Cost = new Wallet();
             Cost.Deposit(new Steel(), 50);
             Cost.Deposit(new Wood(), 10);
-            Cost.Deposit(new Money(), 100);
+            Cost.Deposit(new Money(), 0);
             ChargeAMinute = new List<int>() { 20 };
             ChargeTypes = new List<IResource>() { new Energy() };
             name = "Firewall";
@@ -35,7 +36,7 @@ namespace _0x46696E616C.Buildings
         }
         public override Building NewInstace( TextureValue tex, Vector2 position, TextureValue Icon)
         {
-            return new FireWall( tex, position, Icon);
+            return new FireWall( tex, position, Icon, world, proj);
         }
     }
 }

@@ -10,6 +10,8 @@ using _0x46696E616C.ConcreteImplementations.Resources;
 using _0x46696E616C.WorldManager.ConcreteImplementations.Resources;
 using _0x46696E616C.WorldManager.WorldImplementations.Buildings;
 using _0x46696E616C.TechManager.Stats;
+using WorldManager;
+using _0x46696E616C.Units.Attacks;
 
 namespace _0x46696E616C.Buildings
 {
@@ -23,7 +25,7 @@ namespace _0x46696E616C.Buildings
 
         public List<IResource> productionTypes { get; protected set; }
 
-        public Mines(TextureValue texture, Vector2 position, TextureValue icon) : base(texture, position, icon)
+        public Mines(TextureValue texture, Vector2 position, TextureValue icon, WorldHandler world, ProjectileManager proj) : base(texture, position, icon, world, proj)
         {
             ProductionAMinute = new List<int>() { 0 };
             productionTypes = new List<IResource>() { new Iron() };
@@ -42,9 +44,11 @@ namespace _0x46696E616C.Buildings
             healthBar = new HealthBar(new Rectangle(new Point((int)position.X, (int)position.Y - 1), new Point((int)(Size.X * 16), (int)(Size.Y))));
             BuildingDescription = "Used as a drop off point for iron ore";
         }
+
+
         public override Building NewInstace(TextureValue tex, Vector2 position, TextureValue Icon)
         {
-            return new Mines(tex, position, Icon);
+            return new Mines(tex, position, Icon, world, proj);
         }
 
         public override void Collect(Wallet resource)

@@ -1,6 +1,7 @@
 ﻿using _0x46696E616C.Buildings;
 using _0x46696E616C.MobHandler;
 using _0x46696E616C.TechManager.Stats;
+using _0x46696E616C.Units.Attacks;
 using _0x46696E616C.WorldManager.ConcreteImplementations.Resources;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -11,13 +12,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TechHandler;
+using WorldManager;
 using WorldManager.MapData;
 
 namespace _0x46696E616C.WorldManager.WorldImplementations.Buildings.HostileBuidlings
 {
     class Portal : Building
     {
-        public Portal( TextureValue texture, Vector2 position, TextureValue Icon) : base(texture, position, Icon)
+        public Portal(TextureValue texture, Vector2 position, TextureValue icon, WorldHandler world, ProjectileManager proj) : base(texture, position, icon, world, proj)
         {
             energyCost = 0;
             name = "Portal";
@@ -32,7 +34,7 @@ namespace _0x46696E616C.WorldManager.WorldImplementations.Buildings.HostileBuidl
 
         public override Building NewInstace( TextureValue tex, Vector2 position, TextureValue Icon)
         {
-            return new Portal(tex, position, Icon);
+            return new Portal(tex, position, Icon, world,proj);
         }
 
         public override void AddQueueable(IQueueable<TextureValue> item)

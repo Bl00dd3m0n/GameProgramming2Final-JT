@@ -62,6 +62,8 @@ namespace NationBuilder.TileHandlerLibrary
         Range,
         HarvestPower,
         BuildPower,
+        Ballista,
+        Priest,
     }
     [Serializable]
     public struct BlockData

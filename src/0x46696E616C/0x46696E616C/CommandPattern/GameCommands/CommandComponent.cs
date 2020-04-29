@@ -11,6 +11,7 @@ using _0x46696E616C.MobHandler;
 using _0x46696E616C.MobHandler.Units;
 using _0x46696E616C.TechManager.Stats;
 using _0x46696E616C.TechManager.Technologies;
+using _0x46696E616C.Units.AllyUnit;
 using _0x46696E616C.WorldManager.WorldImplementations.Buildings;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -84,7 +85,13 @@ namespace _0x46696E616C.CommandPattern
             else
             {
                 SpawnMarker = ContentHandler.DrawnTexture(TextureValue.SpawnPoint);
-                spawnMarkerBuilding = (Building)world.GetTile(position);
+
+                ModifiableTile tile = world.GetTile(position);
+                if (tile is ReferenceTile)
+                {
+                    tile = ((ReferenceTile)tile).tile;
+                }
+                spawnMarkerBuilding = (Building)tile;
             }
         }
         /// <summary>
@@ -113,15 +120,22 @@ namespace _0x46696E616C.CommandPattern
         {
             foreach (IUnit unit in SelectedUnits)
             {
-                if (unit is Civilian)
+                if (unit is BasicUnit && ((BasicUnit)unit).TeamAssociation == this.Team)
                 {
-                    if (target is IHarvestable)
+                    if (unit is Civilian && target is IHarvestable)
                     {
                         ((Civilian)unit).Harvest(target);
                     }
                     else
                     {
-                        ((Civilian)unit).Attack(target);
+                        if (unit is Civilian)
+                        {
+                            ((Civilian)unit).Attack(target);
+                        }
+                        else if (unit is OffensiveUnits)
+                        {
+                            ((OffensiveUnits)unit).Attack(target);
+                        }
                     }
 
                 }
@@ -155,9 +169,9 @@ namespace _0x46696E616C.CommandPattern
         {
             foreach (IUnit unit in SelectedUnits)
             {
-                if (unit is Civilian)
+                if (unit is BasicUnit && ((BasicUnit)unit).TeamAssociation == this.Team)
                 {
-                    ((Civilian)unit).Move(Position);
+                    ((BasicUnit)unit).Move(Position);
                 }
             }
         }
@@ -169,9 +183,16 @@ namespace _0x46696E616C.CommandPattern
         {
             foreach (IUnit unit in SelectedUnits)
             {
-                if (unit is Civilian)
+                if (unit is BasicUnit && ((BasicUnit)unit).TeamAssociation == this.Team)
                 {
-                    ((Civilian)unit).Garrison(building);
+                    if (unit is Civilian)
+                    {
+                        ((Civilian)unit).Garrison(building);
+                    }
+                    else if (unit is OffensiveUnits)
+                    {
+                        ((OffensiveUnits)unit).Garrison(building);
+                    }
                 }
             }
         }
@@ -242,9 +263,9 @@ namespace _0x46696E616C.CommandPattern
         {
             foreach (IUnit unit in world.GetUnits(Team))
             {
-                if (unit is Civilian)
+                if (unit is BasicUnit)
                 {
-                    ((Civilian)unit).Update(gameTime);
+                    ((BasicUnit)unit).Update(gameTime);
                 }
             }
             timer += gameTime.ElapsedGameTime.Milliseconds;
@@ -259,9 +280,9 @@ namespace _0x46696E616C.CommandPattern
                 timer = 0;
             }
             CleanList();
-            if (world.GetTiles(Team).Where(l =>l is Building).Count() <= 0 && world.GetUnits(Team).Count <= 0)
+            if (world.GetTiles(Team).Where(l => l is Building).Count() <= 0 && world.GetUnits(Team).Count <= 0)
             {
-                    IsGameOver = true;
+                IsGameOver = true;
             }
             base.Update(gameTime);
         }
@@ -318,10 +339,10 @@ namespace _0x46696E616C.CommandPattern
         /// <param name="unit"></param>
         public void Train(Building build, IUnit unit)
         {
-            if (unit is Civilian)
+            if (unit is BasicUnit)
             {
-                unit = ((Civilian)unit).NewInstace(0, unit.Position);
-            }
+                unit = ((BasicUnit)unit).NewInstace(0, unit.Position);
+            } 
             build.trainingQueue.Enqueue((IQueueable<TextureValue>)unit);
         }
         /// <summary>
@@ -337,11 +358,11 @@ namespace _0x46696E616C.CommandPattern
                     IQueueable<TextureValue> item = buildings[i].Train(Game.GraphicsDevice);
                     if (item != null)
                     {
-                        
-                        if (item is Civilian)
+
+                        if (item is BasicUnit)
                         {
-                            ((Civilian)item).Move(buildings[i].GetSpawn());
-                            world.AddMob((Civilian)item);
+                            ((BasicUnit)item).Move(buildings[i].GetSpawn());
+                            world.AddMob((BasicUnit)item);
                         }
                     }
                 }
@@ -413,7 +434,7 @@ namespace _0x46696E616C.CommandPattern
         {
             List<Building> buildings = world.GetTiles(Team).Where(l => l is Building).Cast<Building>().ToList();
             foreach (IUnit unit in world.GetUnits(Team))
-            {   
+            {
                 if (unit.stats[tech.technology] != null)
                 {
                     if (tech is StatTech)
@@ -421,10 +442,10 @@ namespace _0x46696E616C.CommandPattern
                         unit.stats[tech.technology] += (Stat)tech;
                     }
                 }
-            } 
+            }
             foreach (Building build in buildings)
             {
-                if(!buildings.Contains(build))
+                if (!buildings.Contains(build))
                 {
                     buildings.Add(build);
                 }

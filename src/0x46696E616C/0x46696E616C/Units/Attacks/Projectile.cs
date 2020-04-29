@@ -9,7 +9,7 @@ using WorldManager.TileHandlerLibrary;
 
 namespace _0x46696E616C.Units.Attacks
 {
-    internal class Projectile : ICollider
+    public class Projectile : ICollider
     {
         protected Vector2 direction;
         protected float speed;
@@ -38,7 +38,7 @@ namespace _0x46696E616C.Units.Attacks
             this.Shooter = shooter;
             this.Damage = damage;
             Direction = (float)Math.Asin(direction.Y / Math.Sqrt(Math.Pow(direction.X, 2) + (Math.Pow(direction.Y, 2))));//This should the the projectile direction
-            lifeTime = Vector2.Distance(OriginPosition, EndPosition)/speed;
+            lifeTime = Vector2.Distance(OriginPosition, EndPosition)/speed+0.5f;
         }
         public void Update(GameTime gameTime)
         {

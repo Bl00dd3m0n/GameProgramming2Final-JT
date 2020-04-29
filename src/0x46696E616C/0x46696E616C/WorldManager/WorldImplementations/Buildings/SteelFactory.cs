@@ -8,6 +8,8 @@ using _0x46696E616C.ConcreteImplementations.Resources;
 using _0x46696E616C.ConcreteImplementations;
 using _0x46696E616C.WorldManager.WorldImplementations.Buildings;
 using _0x46696E616C.TechManager.Stats;
+using WorldManager;
+using _0x46696E616C.Units.Attacks;
 
 namespace _0x46696E616C.Buildings
 {
@@ -23,12 +25,12 @@ namespace _0x46696E616C.Buildings
 
         public List<IResource> productionTypes { get; private set; }
 
-        public SteelFactory(TextureValue texture, Vector2 position, TextureValue icon) : base(texture, position, icon)
+        public SteelFactory(TextureValue texture, Vector2 position, TextureValue icon, WorldHandler world, ProjectileManager proj) : base(texture, position, icon, world, proj)
         {
             Cost = new Wallet();
             Cost.Deposit(new Iron(), 200);
             Cost.Deposit(new Wood(), 3000);
-            Cost.Deposit(new Money(), 100);
+            Cost.Deposit(new Money(), 0);
             productionTypes = new List<IResource>() { new Steel() };
             ProductionAMinute= new List<int>() { 60 };
             ChargeAMinute = new List<int>() { 5, 60 };
@@ -43,7 +45,7 @@ namespace _0x46696E616C.Buildings
 
         public override Building NewInstace(TextureValue tex, Vector2 position, TextureValue Icon)
         {
-            return new SteelFactory(tex, position, Icon);
+            return new SteelFactory(tex, position, Icon, world,proj);
         }
     }
 }

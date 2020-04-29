@@ -8,6 +8,8 @@ using _0x46696E616C.WorldManager.ConcreteImplementations.Resources;
 using System.Collections.Generic;
 using _0x46696E616C.WorldManager.WorldImplementations.Buildings;
 using _0x46696E616C.TechManager.Stats;
+using WorldManager;
+using _0x46696E616C.Units.Attacks;
 
 namespace _0x46696E616C.Buildings
 {
@@ -17,7 +19,7 @@ namespace _0x46696E616C.Buildings
 
         public List<IResource> ChargeTypes { get; protected set; }
 
-        public ServerFarm(TextureValue texture, Vector2 position, TextureValue icon) : base(texture, position, icon)
+        public ServerFarm(TextureValue texture, Vector2 position, TextureValue icon, WorldHandler world, ProjectileManager proj) : base(texture, position, icon, world, proj)
         {
             Cost = new Wallet();
             Cost.Deposit(new Steel(), 1000);
@@ -31,9 +33,10 @@ namespace _0x46696E616C.Buildings
             healthBar = new HealthBar(new Rectangle(new Point((int)position.X, (int)position.Y - 1), new Point((int)(Size.X * 16), (int)(Size.Y))));
             BuildingDescription = "Used if a unit cap is implemented, at the moment this is also useless.";
         }
+
         public override Building NewInstace(TextureValue tex, Vector2 position, TextureValue Icon)
         {
-            return new ServerFarm(tex, position, Icon);
+            return new ServerFarm(tex, position, Icon, world , proj);
         }
     }
 }

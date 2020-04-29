@@ -12,16 +12,20 @@ using _0x46696E616C.WorldManager.WorldImplementations.Buildings;
 using _0x46696E616C.WorldManager.ConcreteImplementations.Resources;
 using System.Collections.Generic;
 using _0x46696E616C.TechManager.Stats;
+using _0x46696E616C.CommandPattern;
+using WorldManager;
+using _0x46696E616C.Units.AllyUnit;
+using _0x46696E616C.Units.Attacks;
 
 namespace _0x46696E616C.Buildings
 {
-    public class Center : Building, ICollectionCenter<Wallet>, IResourceCharge
+    public class Center : Building, IResourceCharge
     {
         public List<int> ChargeAMinute { get; protected set; }
 
         public List<IResource> ChargeTypes { get; protected set; }
 
-        public Center(TextureValue texture, Vector2 position, TextureValue icon) : base(texture, position, icon)
+        public Center(TextureValue texture, Vector2 position, TextureValue icon, WorldHandler world, ProjectileManager proj) : base(texture, position, icon, world, proj)
         {
             Cost = new Wallet();
             Cost.Deposit(new Steel(), 1000);
@@ -29,6 +33,7 @@ namespace _0x46696E616C.Buildings
             Cost.Deposit(new Money(), 100);
             ChargeAMinute = new List<int>() { 5 };
             ChargeTypes = new List<IResource>() { new Energy() };
+           
             name = "Center";
             Position = position;
             Size = new Vector2(4, 4);
@@ -39,9 +44,16 @@ namespace _0x46696E616C.Buildings
             healthBar = new HealthBar(new Rectangle(new Point((int)position.X, (int)position.Y - 1), new Point((int)(Size.X * 16), (int)(Size.Y))));
             BuildingDescription = "The center allows the user to train Civilians";
         }
+
+        public override Building AddQueueables()
+        {
+            queueableThings.Add(new Civilian("Base unit", new Vector2(1, 1), 100, 0, GetSpawn() + new Vector2(4, 5), BaseUnitState.Idle, TextureValue.Civilian, world, TextureValue.Civilian, 1.1f, proj));
+            queueableThings.Add(new Ballista("Ballista", new Vector2(1, 1), 100, 0, GetSpawn() + new Vector2(4, 5), BaseUnitState.Idle, TextureValue.Ballista, Color.Blue,TextureValue.Ballista, world, proj, 1000));
+            return this;
+        }
         public override Building NewInstace(TextureValue tex, Vector2 position, TextureValue Icon)
         {
-            return new Center(tex, position, Icon);
+            return new Center(tex, position, Icon, world, proj).AddQueueables();
         }
 
         public override void Collect(Wallet resource)

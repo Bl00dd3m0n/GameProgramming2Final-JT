@@ -115,11 +115,11 @@ namespace _0x46696E616C
 
             cam = new Camera(Game, input, world, startPoint);
             #endregion
-
+            projectileManager = new ProjectileManager(Game, world, cam, collision);
             //Adds a unit to start
             #region startUnits
             List<IUnit> units = new List<IUnit>();
-            units.Add(new Civilian("Base unit", new Vector2(1, 1), 100, 100, startPoint + new Vector2(4, 5), BaseUnitState.Idle, TextureValue.Civilian, world, TextureValue.Civilian,1));
+            units.Add(new Civilian("Base unit", new Vector2(1, 1), 100, 100, startPoint + new Vector2(4, 5), BaseUnitState.Idle, TextureValue.Civilian, world, TextureValue.Civilian,1, projectileManager).AddQueueables());
             world.AddMob(units[0]);
             ((BasicUnit)units[0]).SetTeam(1);
             #endregion
@@ -132,17 +132,17 @@ namespace _0x46696E616C
             #region buildingPlacement
             #region Allies
             //Center
-            Center center = new Center(TextureValue.Center, startPoint, TextureValue.CenterIcon);
+            Center center = new Center(TextureValue.Center, startPoint, TextureValue.CenterIcon, world, projectileManager);
+            center.AddQueueables();
             center.SetTeam(cc.Team);
             center.SetSpawn(startPoint + center.Size + new Vector2(0, 1));
-            center.AddQueueable(((Civilian)units[units.Count - 1]).NewInstace(100, startPoint));
             center.PlacedTile();
             world.Place(center, startPoint);
             center.Subscribe((IBuildingObserver)cc);
             #endregion
             #region Enemies
             //Portal
-            Portal portal = new Portal(TextureValue.Portal, startPoint + new Vector2(0, 20), TextureValue.Portal);
+            Portal portal = new Portal(TextureValue.Portal, startPoint + new Vector2(0, 20), TextureValue.Portal, world, projectileManager);
             portal.SetTeam(cc.Team + 1);
             portal.SetSpawn(startPoint + portal.Size + new Vector2(0, 1));
             portal.PlacedTile();
@@ -150,7 +150,7 @@ namespace _0x46696E616C
             portal.Subscribe((IBuildingObserver)cc);
             #endregion
             #endregion
-            projectileManager = new ProjectileManager(Game, world, cam, collision);
+
             //Wave handler
             wave = new WaveManager(Game, world, projectileManager);
 
@@ -179,13 +179,9 @@ namespace _0x46696E616C
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         public override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.X))
+            if (Game.IsActive && InProgress)
             {
-                EndRun = true;
-            }
-            if (/*Game.IsActive &&*/ (!EndRun && !cc.IsGameOver))
-            {
-                //wave.Update(gameTime);
+                wave.Update(gameTime);
                 cam.Update(gameTime);
                 projectileManager.Update(gameTime);
                 process.Update(gameTime);
@@ -193,11 +189,16 @@ namespace _0x46696E616C
                 cc.Update(gameTime);
                 collision.Update(gameTime);
             }
-            else if (/*cc.IsGameOver || */EndRun)
+            if (InProgress && cc.IsGameOver)
             {
                 Clean();
                 InProgress = false;
             }
+            /*if(InProgress && (cc.SelectedBuild == null && cc.SelectedUnits.Count > 0) && input.CheckInput(Controls.Deselect))
+            {
+                Clean();
+                InProgress = false;
+            }*/
             // TODO: Add your update logic here
 
             base.Update(gameTime);
@@ -212,7 +213,7 @@ namespace _0x46696E616C
 
             GraphicsDevice.Clear(Color.Black);
             // TODO: Add your drawing code here
-            if (/*Game.IsActive && */InProgress && (!cc.IsGameOver || !EndRun))
+            if (Game.IsActive && InProgress && (!cc.IsGameOver || !EndRun))
             {
                 cam.Draw(gameTime);
                 projectileManager.Draw(spriteBatch);

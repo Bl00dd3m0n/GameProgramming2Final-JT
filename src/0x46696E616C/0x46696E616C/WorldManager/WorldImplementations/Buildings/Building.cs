@@ -16,6 +16,9 @@ using _0x46696E616C.ConcreteImplementations;
 using _0x46696E616C.WorldManager.ConcreteImplementations.Resources;
 using Microsoft.Xna.Framework.Graphics;
 using _0x46696E616C.TechManager.Stats;
+using WorldManager;
+using System.Linq;
+using _0x46696E616C.Units.Attacks;
 
 namespace _0x46696E616C.Buildings
 {
@@ -32,8 +35,8 @@ namespace _0x46696E616C.Buildings
 
         public Queue<IQueueable<TextureValue>> trainingQueue { get; set; }
 
-        public List<IQueueable<TextureValue>> QueueableThings { get; protected set; }
-
+        protected List<IQueueable<TextureValue>> queueableThings { get; set; }
+        public List<IQueueable<TextureValue>> QueueableThings { get { return queueableThings.ToList(); } }
         public TextureValue Icon { get; protected set; }
 
         public override Vector2 Position { get { return base.Position; } }
@@ -50,7 +53,11 @@ namespace _0x46696E616C.Buildings
 
         protected string BuildingDescription { get; set; }
 
-        public Building(TextureValue texture, Vector2 position, TextureValue Icon) : base(texture, position, Color.Blue)
+        protected WorldHandler world;
+
+        protected ProjectileManager proj;
+
+        public Building(TextureValue texture, Vector2 position, TextureValue Icon, WorldHandler world, ProjectileManager proj) : base(texture, position, Color.Blue)
         {
             Cost = new Wallet();
             name = "Building";
@@ -62,10 +69,12 @@ namespace _0x46696E616C.Buildings
             healthBar = new HealthBar(new Rectangle(this.Position.ToPoint() - new Point(0, (int)(this.Size.Y * 16 + 1)), Size.ToPoint()));
             GarrisonedUnits = new List<IUnit>();
             this.Icon = Icon;//if the texture values change this breaks it find a better way to do this
-            QueueableThings = new List<IQueueable<TextureValue>>();
+            queueableThings = new List<IQueueable<TextureValue>>();
             trainingQueue = new Queue<IQueueable<TextureValue>>();
             BuildingDescription = "";
             techObservers = new List<ITechObserver>();
+            this.world = world;
+            this.proj = proj;
         }
 
         public void Subscribe(IBuildingObserver observer)
@@ -114,9 +123,9 @@ namespace _0x46696E616C.Buildings
             }
         }
 
-        public virtual void AddQueueable(IQueueable<TextureValue> item)
+        public virtual void AddQueueable(IQueueable<TextureValue> item) // For Tech
         {
-            QueueableThings.Add(item);//workaround for not being able to have UnitComponent
+            queueableThings.Add(item);//workaround for not being able to have UnitComponent
         }
 
         public override void Damage(float amount)
@@ -151,6 +160,11 @@ namespace _0x46696E616C.Buildings
 
         }
 
+        public virtual Building AddQueueables()
+        {
+            return this;
+        }
+
         public void SetSpawn(Vector2 position)
         {
             this.spawnPoint = position;
@@ -165,7 +179,7 @@ namespace _0x46696E616C.Buildings
             string description = string.Empty;
             description += $"{name}\n";
             description += "Cost:\n";
-            foreach(string resource in Cost.ResourceString())
+            foreach (string resource in Cost.ResourceString())
             {
                 description += $"{resource}\n";
             }

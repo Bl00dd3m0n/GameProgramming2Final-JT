@@ -38,8 +38,6 @@ namespace MainMenu
         {
             graphics = null;
             spriteBatch = null;
-            MainMenuBackground = null;
-            SettingMenuBackground = null;
             Cursor = null;
             canv = null;
             mK = null;
@@ -72,24 +70,24 @@ namespace MainMenu
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            MainMenuBackground = this.Content.Load<Texture2D>("MainMenu");
-            SettingMenuBackground = this.Content.Load<Texture2D>("SettingsPage");
+            // TODO: use this.Content to load your game content here
+            if (MainMenuBackground == null && SettingMenuBackground == null)
+            {
+                MainMenuBackground = this.Content.Load<Texture2D>("MainMenu");
+                SettingMenuBackground = this.Content.Load<Texture2D>("SettingsPage");
+            }
             Cursor = this.Content.Load<Texture2D>("Cursor");
             canv = new Canvas(this);
             ss = new StyleSheet();
 
             inputDef = new InputDefinitions(this);
-            canv.LoadCanvas(ss.GetStyleSheet(GraphicsDevice, "MainMenu.ss", StyleSheet.ComponentTypes));
+            LoadCanvas("MainMenu.ss");
             CurrentPage = "Main Menu";
-            //canv.LoadCanvas(ss.GetStyleSheet(GraphicsDevice, "SettingsPage.ss", StyleSheet.ComponentTypes));
             MouseKeyboard keyboard = new MouseKeyboard(this);
             canv.Initialize();
             mK = new MouseKeyboard(this);
             this.Components.Add(mK);
 
-            //StyleSheet ss = new StyleSheet("MainMenu.ss");
-            //canv.LoadCanvas(ss.GetStyleSheet(GraphicsDevice));
-            // TODO: use this.Content to load your game content here
         }
         /// <summary>
         /// Generates a specified style sheet by call
@@ -157,8 +155,17 @@ namespace MainMenu
         {
             if (!StartGame)
             {
-                if (inputDef.CheckInput(Controls.Deselect) && CurrentPage == "MainMenu")
-                    Exit();
+                if (inputDef.CheckInput(Controls.Deselect))
+                {
+                    if (CurrentPage == "MainMenu")
+                    {
+                        Exit();
+                    }
+                    else
+                    {
+                        LoadCanvas("MainMenu.ss");
+                    }
+                }
                 canv.Update(gameTime);
                 // TODO: Add your update logic here
                 if (inputDef.CheckInput(Controls.Select))
@@ -186,7 +193,10 @@ namespace MainMenu
             }
             base.Update(gameTime);
         }
-
+        private void LoadCanvas(string Path)
+        {
+            canv.LoadCanvas(ss.GetStyleSheet(GraphicsDevice, Path, StyleSheet.ComponentTypes));
+        }
         /// <summary>
         /// This is called when the game should draw itself.
         /// </summary>
@@ -202,11 +212,11 @@ namespace MainMenu
                 {
                     if (CurrentPage == "Main Menu")
                     {
-                        canv.LoadCanvas(ss.GetStyleSheet(GraphicsDevice, "MainMenu.ss", StyleSheet.ComponentTypes));
+                        LoadCanvas("MainMenu.ss");
                     }
                     else
                     {
-                        canv.LoadCanvas(ss.GetStyleSheet(GraphicsDevice, "SettingsPage.ss", StyleSheet.ComponentTypes));
+                        LoadCanvas("SettingsPage.ss");
                     }
                 }
 
@@ -229,7 +239,7 @@ namespace MainMenu
                 this.Components.Clear();
                 ResetEverything();
             }
-            else if (PlayedGame != null) 
+            else if (PlayedGame != null)
             {
                 PlayedGame.Draw(gameTime);
             }

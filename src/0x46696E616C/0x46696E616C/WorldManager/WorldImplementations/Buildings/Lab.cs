@@ -11,6 +11,7 @@ using TechHandler;
 using WorldManager;
 using _0x46696E616C.TechManager.Stats;
 using _0x46696E616C.TechManager.Technologies;
+using _0x46696E616C.Units.Attacks;
 
 namespace _0x46696E616C.Buildings
 {
@@ -20,10 +21,10 @@ namespace _0x46696E616C.Buildings
 
         public List<IResource> ChargeTypes { get; protected set; } 
 
-        public Lab(TextureValue texture, Vector2 position, TextureValue icon) : base(texture, position, icon)
+        public Lab(TextureValue texture, Vector2 position, TextureValue icon, WorldHandler world, ProjectileManager proj) : base(texture, position, icon, world, proj)
         {
-            QueueableThings = new List<IQueueable<TextureValue>>();
-            QueueableThings.Add(new DamageUpgrade(new AttackPower("Power", 10), TextureValue.Damage, new Vector2()));
+            queueableThings = new List<IQueueable<TextureValue>>();
+            queueableThings.Add(new DamageUpgrade(new AttackPower("Power", 10), TextureValue.Damage, new Vector2()));
             Cost = new Wallet();
             Cost.Deposit(new Steel(), 1000);
             Cost.Deposit(new Wood(), 2000);
@@ -40,7 +41,7 @@ namespace _0x46696E616C.Buildings
         }
         public override Building NewInstace(TextureValue tex, Vector2 position, TextureValue Icon)
         {
-            return new Lab(tex, position, Icon);
+            return new Lab(tex, position, Icon, world, proj);
         }
 
         public void Learn(ITech tech)

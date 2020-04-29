@@ -6,6 +6,7 @@ using _0x46696E616C.ConcreteImplementations.Resources;
 using _0x46696E616C.MobHandler;
 using _0x46696E616C.MobHandler.Units;
 using _0x46696E616C.TechManager.Stats;
+using _0x46696E616C.Units.Attacks;
 using Microsoft.Xna.Framework;
 using NationBuilder.TileHandlerLibrary;
 using System;
@@ -24,25 +25,14 @@ namespace _0x46696E616C.CommandPattern
 {
     internal class Civilian : BasicUnit, ICommandComponent
     {
-        IEntity Target;
-        WorldHandler world;
         Wallet unitWallet;
         bool arrived;
         IEntity returnTarget;
         float timer = 0;
-        public Civilian(string name, Vector2 size, float totalHealth, float currentHealth, Vector2 position, BaseUnitState state, TextureValue texture, WorldHandler world, TextureValue Icon, float range) : base(name, size, totalHealth, currentHealth, position, state, texture, Color.Blue, Icon, world, range)
+        ProjectileManager proj;
+        public Civilian(string name, Vector2 size, float totalHealth, float currentHealth, Vector2 position, BaseUnitState state, TextureValue texture, WorldHandler world, TextureValue Icon, float range, ProjectileManager proj) : base(name, size, totalHealth, currentHealth, position, state, texture, Color.Blue, Icon, world, range)
         {
-            QueueableThings = new List<IQueueable<TextureValue>>();
-            QueueableThings.Add(new Center(TextureValue.Center, Vector2.Zero, TextureValue.CenterIcon));
-            QueueableThings.Add(new FireWall(TextureValue.FireWall, Vector2.Zero, TextureValue.FireWallIcon));
-            QueueableThings.Add(new InternetCafe(TextureValue.InternetCafe, Vector2.Zero, TextureValue.InternetCafeIcon));
-            QueueableThings.Add(new Lab(TextureValue.Lab, Vector2.Zero, TextureValue.LabIcon));
-            QueueableThings.Add(new MediaCenter(TextureValue.MediaCenter, Vector2.Zero, TextureValue.MediaCenterIcon));
-            QueueableThings.Add(new Mines(TextureValue.Mines, Vector2.Zero, TextureValue.MinesIcon));
-            QueueableThings.Add(new PowerSupply(TextureValue.PowerSupply, Vector2.Zero, TextureValue.PowerSupplyIcon));
-            QueueableThings.Add(new ServerFarm(TextureValue.ServerFarm, Vector2.Zero, TextureValue.ServerFarmIcon));
-            QueueableThings.Add(new SolarPanel(TextureValue.SolarPanel, Vector2.Zero, TextureValue.SolarPanelIcon));
-            QueueableThings.Add(new SteelFactory(TextureValue.SteelFactory, Vector2.Zero, TextureValue.SteelFactoryIcon));
+            this.proj = proj;
             stats.Add(new BuildPower("Build Power", 10));
             stats.Add(new AttackPower("Attack Power", 10));
             stats.Add(new HarvestPower("Harvest Power", 2));
@@ -51,15 +41,30 @@ namespace _0x46696E616C.CommandPattern
             zero = Vector2.Zero;
             xOne = new Vector2(1, 0);
             yOne = new Vector2(0, 1);
-            
+            toBuild = new Stack<Building>();
             speed = 50;
-            this.world = world;
             unitWallet = new UnitWallet(this);
             tags.Add("HasInventoryCap");
             tags.Add("CanAttack");
             tags.Add("HasHealth");
             nextPoint = TargetPosition = Position;
             Description = "A basic unit able to Harvest resources, and build things\nMinimal Damage";
+        }
+
+        public override BasicUnit AddQueueables()
+        {
+            QueueableThings = new List<IQueueable<TextureValue>>();
+            QueueableThings.Add(new Center(TextureValue.Center, Vector2.Zero, TextureValue.CenterIcon, world, proj));
+            QueueableThings.Add(new FireWall(TextureValue.FireWall, Vector2.Zero, TextureValue.FireWallIcon, world, proj));
+            QueueableThings.Add(new InternetCafe(TextureValue.InternetCafe, Vector2.Zero, TextureValue.InternetCafeIcon, world, proj));
+            QueueableThings.Add(new Lab(TextureValue.Lab, Vector2.Zero, TextureValue.LabIcon, world, proj));
+            QueueableThings.Add(new MediaCenter(TextureValue.MediaCenter, Vector2.Zero, TextureValue.MediaCenterIcon, world, proj));
+            QueueableThings.Add(new Mines(TextureValue.Mines, Vector2.Zero, TextureValue.MinesIcon, world, proj));
+            QueueableThings.Add(new PowerSupply(TextureValue.PowerSupply, Vector2.Zero, TextureValue.PowerSupplyIcon, world, proj));
+            QueueableThings.Add(new ServerFarm(TextureValue.ServerFarm, Vector2.Zero, TextureValue.ServerFarmIcon, world, proj));
+            QueueableThings.Add(new SolarPanel(TextureValue.SolarPanel, Vector2.Zero, TextureValue.SolarPanelIcon, world, proj));
+            QueueableThings.Add(new SteelFactory(TextureValue.SteelFactory, Vector2.Zero, TextureValue.SteelFactoryIcon, world, proj));
+            return this;
         }
 
         public override void Update(GameTime gameTime)
@@ -70,13 +75,25 @@ namespace _0x46696E616C.CommandPattern
             {
                 UnitInteraction();
             }
+            if (waypoints.Count() > 0 && Vector2.Distance(Position, TargetPosition + DistanceFromPosition) < stats[typeof(Range)].Value)
+            {
+                waypoints.Clear();
+            }
+            if (timer / 1000 >= 1)
+            {
+                if (Target != null && Target.Position.ToPoint() != TargetPosition.ToPoint()) // Keeps tracking the units
+                {
+                    Move(Target.Position);
+                }
+                timer = 0;
+            }
         }
         /// <summary>
-        /// Interact with each tile based on what type of tile it is if the unit is within 1 tile of their target.
+        /// Interact with each tile based on what type of tile it is if the unit is within range of their target.
         /// </summary>
         private void UnitInteraction()
         {
-            float dist = Vector2.Distance(TargetPosition, nextPoint);
+            float dist = Vector2.Distance(TargetPosition + DistanceFromPosition, nextPoint);
             if (Direction == zero && Target != null && !arrived && dist <= stats[typeof(Range)].Value)
             {
                 if (Target is Building && ((ModifiableTile)Target).TeamAssociation == this.TeamAssociation)
@@ -151,6 +168,7 @@ namespace _0x46696E616C.CommandPattern
         /// <param name="Position"></param>
         public override void Move(Vector2 Position)
         {
+            if (world.GetUnit(Position) == null && world.GetTile(Position) == null) Target = null;  
             base.Move(Position);
         }
         /// <summary>
@@ -236,7 +254,7 @@ namespace _0x46696E616C.CommandPattern
         /// <returns></returns>
         public override BasicUnit NewInstace(float currentHealth, Vector2 position)
         {
-            return new Civilian(this.name, this.Size, this.TotalHealth, currentHealth, position, BaseUnitState.Idle, this.block.texture, this.world, this.Icon, this.range);
+            return new Civilian(this.name, this.Size, this.TotalHealth, currentHealth, position, BaseUnitState.Idle, this.block.texture, this.world, this.Icon, this.stats[typeof(Range)].Value, proj).AddQueueables();
         }
     }
 }

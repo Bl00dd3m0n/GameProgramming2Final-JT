@@ -32,6 +32,7 @@ namespace NationBuilder.DataHandlerLibrary
                 textures.Add(TextureValue.Water, SetTexture(TextureValue.Water, game));
                 textures.Add(TextureValue.Stone, SetTexture(TextureValue.Stone, game));
                 //Building Textures
+                //Allies
                 textures.Add(TextureValue.Center, SetTexture(TextureValue.Center, game));
                 textures.Add(TextureValue.FireWall, SetTexture(TextureValue.FireWall, game));
                 textures.Add(TextureValue.InternetCafe, SetTexture(TextureValue.InternetCafe, game));
@@ -42,9 +43,14 @@ namespace NationBuilder.DataHandlerLibrary
                 textures.Add(TextureValue.ServerFarm, SetTexture(TextureValue.ServerFarm, game));
                 textures.Add(TextureValue.SolarPanel, SetTexture(TextureValue.SolarPanel, game));
                 textures.Add(TextureValue.SteelFactory, SetTexture(TextureValue.SteelFactory, game));
+                //Enemies
                 textures.Add(TextureValue.Portal, SetTexture(TextureValue.Portal, game));
                 //Unit Textures
+                //Allies
                 textures.Add(TextureValue.Civilian, SetTexture(TextureValue.Civilian, game));
+                textures.Add(TextureValue.Ballista, SetTexture(TextureValue.Ballista, game));
+                textures.Add(TextureValue.Priest, SetTexture(TextureValue.Priest, game));
+                //Hostiles
                 textures.Add(TextureValue.HeadlessHorseman, SetTexture(TextureValue.HeadlessHorseman, game));
                 textures.Add(TextureValue.Mage, SetTexture(TextureValue.Mage, game));
                 //Projectiles
@@ -61,7 +67,11 @@ namespace NationBuilder.DataHandlerLibrary
                 textures.Add(TextureValue.SolarPanelIcon, SetTexture(TextureValue.SolarPanelIcon, game));
                 textures.Add(TextureValue.SteelFactoryIcon, SetTexture(TextureValue.SteelFactoryIcon, game));
                 //Stats UI 
-
+                textures.Add(TextureValue.Damage, SetTexture(TextureValue.Damage, game));
+                textures.Add(TextureValue.Chest, SetTexture(TextureValue.Chest, game));
+                textures.Add(TextureValue.Range, SetTexture(TextureValue.Range, game));
+                textures.Add(TextureValue.BuildPower, SetTexture(TextureValue.BuildPower, game));
+                textures.Add(TextureValue.HarvestPower, SetTexture(TextureValue.HarvestPower, game));
                 //Util Content
                 textures.Add(TextureValue.Cursor, SetTexture(TextureValue.Cursor, game));
                 textures.Add(TextureValue.SpawnPoint, SetTexture(TextureValue.SpawnPoint, game));

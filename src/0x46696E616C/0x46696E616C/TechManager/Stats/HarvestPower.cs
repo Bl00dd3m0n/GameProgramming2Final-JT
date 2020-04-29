@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NationBuilder.TileHandlerLibrary;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +11,7 @@ namespace _0x46696E616C.TechManager.Stats
     {
         public HarvestPower(string name, float value) : base(name, value)
         {
+            Texture = TextureValue.HarvestPower;
         }
     }
 }

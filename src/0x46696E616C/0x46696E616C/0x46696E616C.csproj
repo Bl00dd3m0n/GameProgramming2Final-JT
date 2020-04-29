@@ -42,6 +42,9 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Units\AllyUnit\Ballista.cs" />
+    <Compile Include="Units\AllyUnit\OffensiveUnits.cs" />
+    <Compile Include="Units\AllyUnit\Priest.cs" />
     <Compile Include="Util\Collision\CollisionHandler.cs" />
     <Compile Include="CommandPattern\Command.cs" />
     <Compile Include="CommandPattern\GameCommands\BuildSelectCommand.cs" />
