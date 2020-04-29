@@ -25,24 +25,37 @@ namespace MobHandler.HostileMobManager
         private float waveSpawnTime;
         public float TimeTillSpawn { get { return waveSpawnTime - (waveSpawnTimer / 1000); } }
         public bool StartSpawn;
+        public bool Won { get; private set; }
         public WaveManager(Game game, WorldHandler world, ProjectileManager projectileManager) : base(game)
         {
             this.world = world;
             Wave = 0;
             this.projectileManager = projectileManager;
             units = new List<IUnit>();
-            waveSpawnTime = 10f;
+            waveSpawnTime = 20f;
+        }
+
+        private void CheckGameOver()
+        {
+            if (world.GetUnits(2).Where(l => l is HostileMob).Count() <= 0)
+            {
+                if (world.GetTiles("Portal").Count() <= 0)
+                {
+                    Won = true;
+                }
+            }
         }
 
         public override void Update(GameTime gameTime)
         {
             waveSpawnTimer += gameTime.ElapsedGameTime.Milliseconds;
-            if(waveSpawnTimer/1000 >= 100)
+            if (waveSpawnTimer / 1000 >= 100)
             {
+                CheckGameOver();
                 StartSpawn = true;
                 waveSpawnTimer = 0;
             }
-            if (StartSpawn)
+            if (StartSpawn && !Won)
             {
                 foreach (IUnit unit in units)
                 {
@@ -50,6 +63,7 @@ namespace MobHandler.HostileMobManager
                 }
                 if (waveSpawnTimer / 1000 >= waveSpawnTime /*&& units.Count < 5*/)//TODO the game seems to freeze when you get more than 5 units...need to implement a better move system but I'm too tired at the moment to fix it.
                 {
+                    CheckGameOver();
                     waveSpawnTimer = 0;
                     BasicWaveStart();
                 }
@@ -59,8 +73,8 @@ namespace MobHandler.HostileMobManager
         public void BasicWaveStart()
         {
             List<IUnit> tempUnits = new List<IUnit>();
-            tempUnits.Add(new HeadlessHorseman("Headless Horseman", new Vector2(1), (Wave * 100) + 1000, 1000, new Vector2(318, 120), BaseUnitState.Idle, TextureValue.HeadlessHorseman, Color.Red, TextureValue.HeadlessHorseman, world, 1));
-            tempUnits.Add(new Mage("Mage", new Vector2(1), (Wave * 50)+1000, 1000, new Vector2(318, 113), BaseUnitState.Idle, TextureValue.Mage, Color.Red, TextureValue.Mage, world, projectileManager, 10));
+            tempUnits.Add(new HeadlessHorseman("Headless Horseman", new Vector2(1), (Wave * 100) + 100, (Wave * 100) + 100, new Vector2(318, 120), BaseUnitState.Idle, TextureValue.HeadlessHorseman, Color.Red, TextureValue.HeadlessHorseman, world, 1));
+            tempUnits.Add(new Mage("Mage", new Vector2(1), (Wave * 50) + 100, (Wave * 100) + 100, new Vector2(318, 113), BaseUnitState.Idle, TextureValue.Mage, Color.Red, TextureValue.Mage, world, projectileManager, 10));
 
             foreach (IUnit unit in tempUnits)
             {

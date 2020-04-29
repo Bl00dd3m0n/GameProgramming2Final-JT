@@ -179,7 +179,7 @@ namespace _0x46696E616C
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         public override void Update(GameTime gameTime)
         {
-            if (Game.IsActive && InProgress)
+            if (InProgress)
             {
                 wave.Update(gameTime);
                 cam.Update(gameTime);
@@ -189,7 +189,7 @@ namespace _0x46696E616C
                 cc.Update(gameTime);
                 collision.Update(gameTime);
             }
-            if (InProgress && cc.IsGameOver)
+            if (InProgress && (cc.IsGameOver || wave.Won))
             {
                 Clean();
                 InProgress = false;
@@ -213,7 +213,7 @@ namespace _0x46696E616C
 
             GraphicsDevice.Clear(Color.Black);
             // TODO: Add your drawing code here
-            if (Game.IsActive && InProgress && (!cc.IsGameOver || !EndRun))
+            if (InProgress && (!cc.IsGameOver || !EndRun))
             {
                 cam.Draw(gameTime);
                 projectileManager.Draw(spriteBatch);

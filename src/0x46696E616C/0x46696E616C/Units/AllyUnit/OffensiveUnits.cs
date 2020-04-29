@@ -50,18 +50,21 @@ namespace _0x46696E616C.Units.AllyUnit
         /// </summary>
         private void UnitInteraction()
         {
-            IEntity entity = world.GetUnits(TeamAssociation + 1).Find(l => Vector2.Distance(l.Position, Position) < stats[typeof(Range)].Value * 2 && l is ModifiableTile && ((ModifiableTile)l).TeamAssociation != this.TeamAssociation);
-            if (entity == null)//Targets units first
+            if (Vector2.Distance(TargetPosition, Position) < 0.5f)
             {
-                IEntity[] entities = world.GetTiles(TeamAssociation + 1);
-                if (entities != null)
+                IEntity entity = world.GetUnits(TeamAssociation + 1).Find(l => Vector2.Distance(l.Position, Position) < stats[typeof(Range)].Value * 2 && l is ModifiableTile && ((ModifiableTile)l).TeamAssociation != this.TeamAssociation);
+                if (entity == null)//Targets units first
                 {
-                    entity = entities.FirstOrDefault(l => Vector2.Distance(l.Position, Position) < stats[typeof(Range)].Value * 2 && l is ModifiableTile && ((ModifiableTile)l).TeamAssociation != this.TeamAssociation);
+                    IEntity[] entities = world.GetTiles(TeamAssociation + 1);
+                    if (entities != null)
+                    {
+                        //entity = entities.FirstOrDefault(l => Vector2.Distance(l.Position, Position) < stats[typeof(Range)].Value * 2 && l is ModifiableTile && ((ModifiableTile)l).TeamAssociation != this.TeamAssociation);
+                    }
                 }
-            }
-            if (entity != null)//HACK this won't always work
-            {
-                Attack(entity);
+                if (entity != null)//HACK this won't always work
+                {
+                    Attack(entity);
+                }
             }
             float dist = Vector2.Distance(TargetPosition + DistanceFromPosition, nextPoint);
             if (Direction == zero && Target != null && dist <= stats[typeof(Range)].Value)

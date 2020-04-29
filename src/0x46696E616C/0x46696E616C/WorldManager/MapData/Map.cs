@@ -87,7 +87,7 @@ namespace WorldManager.MapData
                         {
                             building.Subscribe(this);
                             tiles[(int)position.X + x, (int)position.Y + y, 1] = building;
-                            
+
                         }
                         else
                         {
@@ -146,7 +146,7 @@ namespace WorldManager.MapData
 
         internal List<IUnit> GetUnits(int v)
         {
-            return mobs.Where(l=>((BasicUnit)l).TeamAssociation == v).Cast<IUnit>().ToList();
+            return mobs.Where(l => ((BasicUnit)l).TeamAssociation == v).Cast<IUnit>().ToList();
         }
 
         internal IEntity[] GetTile(int team)
@@ -270,18 +270,21 @@ namespace WorldManager.MapData
         /// <param name="observer"></param>
         public void Update(ModifiableTile observer)
         {
-            if (observer.State == tileState.dead)
+            if (observer.Position.X >= 0 && observer.Position.X < mapSize.X && observer.Position.Y >= 0 && observer.Position.Y < mapSize.Y)
             {
-
-                if (observer is IUnit)
+                if (observer.State == tileState.dead)
                 {
-                    int index = mobs.FindIndex(l => l.Position.ToPoint() == observer.Position.ToPoint());
-                    if (index >= 0)
+
+                    if (observer is IUnit)
                     {
-                        mobs.RemoveAt(index);
+                        int index = mobs.FindIndex(l => l.Position.ToPoint() == observer.Position.ToPoint());
+                        if (index >= 0)
+                        {
+                            mobs.RemoveAt(index);
+                        }
                     }
+                    else tiles[(int)observer.Position.X, (int)observer.Position.Y, 1] = null;
                 }
-                else tiles[(int)observer.Position.X, (int)observer.Position.Y, 1] = null;
             }
         }
         /// <summary>

@@ -57,8 +57,6 @@ namespace _0x46696E616C.CommandPattern.Commands
             stats.Add(new Health("Health", totalHealth));
             stats.Add(new Range("Range", range));
             this.CurrentHealth = currentHealth;
-            int x = 0;
-            int y = 0;
             this.UnitState = state;
             Direction = new Vector2(0, 0);
             speed = 0;
@@ -70,6 +68,7 @@ namespace _0x46696E616C.CommandPattern.Commands
             xOne = new Vector2(1, 0);
             yOne = new Vector2(0, 1);
             speed = 50;
+            nextPoint = Position;
             UnitState = BaseUnitState.Idle;
             attack = new Melee(stats[typeof(Range)].Value);
         }
@@ -186,6 +185,9 @@ namespace _0x46696E616C.CommandPattern.Commands
             if (waypoints.Count > 0)
             {
                 nextPoint = waypoints[0];
+            } else
+            {
+                nextPoint = Position;
             }
             TargetPosition = Position;
         }

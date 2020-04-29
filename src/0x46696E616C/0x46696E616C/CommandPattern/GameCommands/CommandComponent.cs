@@ -247,12 +247,12 @@ namespace _0x46696E616C.CommandPattern
             int minutes = 0;
             int seconds = (int)(clock / 1000);
 
-            seconds %= 60;
             minutes = seconds / 60;
+            seconds %= 60;
             if (minutes > 60)
             {
+                hours = minutes/60;
                 minutes %= 60;
-                hours /= 60;
             }
             if (hours > 0)
                 return $"{hours}:{minutes}:{seconds}";
