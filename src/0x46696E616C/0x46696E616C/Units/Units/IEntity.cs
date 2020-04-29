@@ -1,4 +1,5 @@
-﻿using _0x46696E616C.Units;
+﻿using _0x46696E616C.TechManager.Stats;
+using _0x46696E616C.Units;
 using Microsoft.Xna.Framework;
 using MobHandler;
 using System;
@@ -15,5 +16,6 @@ namespace _0x46696E616C.MobHandler.Units
         Vector2 Position { get; }
         Vector2 Size { get; }
         HealthBar healthBar { get; }
+        Stats stats { get; }
     }
 }

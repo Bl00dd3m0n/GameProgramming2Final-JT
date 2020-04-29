@@ -8,6 +8,9 @@ namespace _0x46696E616C.CommandPattern
 {
     class CommandWithUndo : Command, ICommandWithUndo
     {
-
+        public override string Description()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

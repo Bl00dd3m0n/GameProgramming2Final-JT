@@ -15,8 +15,9 @@ namespace _0x46696E616C.ConcreteImplementations
         private List<IResource> resources;
         internal List<IResource> Resources { get { return resources.ToList(); } }
 
-        public Wallet() : this(new List<IResource>())
+        public Wallet()
         {
+            resources = new List<IResource>();
             resources.Add(new Wood());
             resources.Add(new Steel());
             resources.Add(new Money());
@@ -24,11 +25,6 @@ namespace _0x46696E616C.ConcreteImplementations
             resources.Add(new Iron());
             resources.Add(new Energy());
 
-        }
-
-        public Wallet(List<IResource> wallet)
-        {
-            this.resources = wallet;
         }
 
         public Wallet(Wallet wallet)
@@ -165,6 +161,20 @@ namespace _0x46696E616C.ConcreteImplementations
         public static implicit operator Wallet(List<IResource> v)
         {
             return new Wallet(v);
+        }
+
+        //Returns the teams resources
+        internal List<string> ResourceString()
+        {
+            List<string> resourceStringList = new List<string>();
+            resourceStringList.Clear();
+            resourceStringList.Add($"Wood:{Count(new Wood())}");
+            resourceStringList.Add($"Energy:{Count(new Energy())}");
+            resourceStringList.Add($"Iron:{Count(new Iron())}");
+            resourceStringList.Add($"Likes:{Count(new Likes())}");
+            resourceStringList.Add($"Money:{Count(new Money())}");
+            resourceStringList.Add($"Steel:{Count(new Steel())}");
+            return resourceStringList;
         }
     }
 }

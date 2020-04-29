@@ -1,6 +1,9 @@
-﻿using Microsoft.Xna.Framework;
+﻿using _0x46696E616C.Util.Input;
+using MainMenu.Component;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using NationBuilder.DataHandlerLibrary;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,38 +30,68 @@ namespace UIProject
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            font = Game.Content.Load<SpriteFont>("Ariel");
+            if (ContentHandler.Font == null)
+            {
+                font = Game.Content.Load<SpriteFont>("Ariel");
+            } else
+            {
+                font = ContentHandler.Font;
+            }
             base.LoadContent();
         }
 
         public override void Update(GameTime gameTime)
         {
-
             base.Update(gameTime);
         }
 
-        public override void Draw(GameTime gameTime)
+        public virtual Button CheckClick(Point point, InputDefinitions input)
         {
-            spriteBatch.Begin();
-
-            for (int i = 0; i < components.Count; i++)
+            foreach (IComponent component in components)
             {
-                if (((Button)components[i]).Clicked)
+                if (component.bounds.Contains(point))
                 {
-                    spriteBatch.Draw(components[i].picture, components[i].Position, Color.LightGray);
-                }
-                else
-                {
-                    spriteBatch.Draw(components[i].picture, components[i].Position, null, components[i].color, 0, new Vector2(0), components[i].Scale, SpriteEffects.None, 0);
-                }
-                if (components[i].Text != null && components[i].Text != string.Empty)
-                {
-                    Vector2 position = components[i].Position + (components[i].Size.ToVector2() / 2) - (font.MeasureString(components[i].Text) / 2);
-                    spriteBatch.DrawString(font, components[i].Text, position, Color.Black);
+                    if (component is PageButton)
+                    {
+                        ((PageButton)component).Click(Game, this);
+                        return (Button)component;
+                    }
+                    else if (component is InputButton)
+                    {
+                        ((InputButton)component).Click(input, Game);
+                        return (Button)component;
+                    }
+                    else if (component is Button)
+                    {
+                        ((Button)component).Click(Game);
+                        return (Button)component;
+                    }
                 }
             }
-            spriteBatch.End();
-            base.Draw(gameTime);
+            return null;
+        }
+
+        public void Draw(SpriteBatch spriteBatch)
+        {
+            for (int i = 0; i < components.Count; i++)
+            {
+                if (((Component)components[i]).drawComponent)
+                {
+                    if (components[i] is Button && ((Button)components[i]).Clicked)
+                    {
+                        spriteBatch.Draw(components[i].picture, components[i].Position, Color.LightGray);
+                    }
+                    else if (components[i].picture != null)
+                    {
+                        spriteBatch.Draw(components[i].picture, components[i].Position, null, components[i].Color, 0, new Vector2(0), components[i].Scale, SpriteEffects.None, 0);
+                    }
+                    if (components[i].Text != null && components[i].Text != string.Empty)
+                    {
+                        Vector2 position = components[i].Position + (components[i].Size.ToVector2() / 2) - (font.MeasureString(components[i].Text) / 2);
+                        spriteBatch.DrawString(font, components[i].Text, position, Color.Black);
+                    }
+                }
+            }
         }
         public virtual void AddComponent(IComponent component)
         {

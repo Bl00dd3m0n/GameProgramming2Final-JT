@@ -14,16 +14,27 @@ namespace UIProject
     {
         public Vector2 Position { get; set; }
         public Point Size { get; set; }
-        public Color color { get; set; }
+        public SaveManager.MyColor color { get; set; }
+        [XmlIgnore]
+        public Color Color
+        {
+            get { return color; }
+            set
+            {
+                color = value;
+                //if (graphics != null) { }
+                    //Draw(graphics);I don't think this will be needed to added again but for updating color this will be needed I think
+            }
+        }
+        public Color TextColor { get; set; }
         public string Text { get; set; }
-        public Rectangle bounds { get; set; }
         public Vector2 Textposition;
-
+        public bool drawComponent { get; set; }
         [XmlIgnore]
         public Texture2D picture { get; protected set; }
         [XmlIgnore]
         public GraphicsDevice graphics { get; set; }
-
+        public Rectangle bounds { get; set; }
         public float Scale { get; set; }
 
         #region Constructors
@@ -40,6 +51,8 @@ namespace UIProject
             this.color = color;
             this.Position = position;
             this.bounds = new Rectangle(position.ToPoint(), size);
+            drawComponent = true;
+            TextColor = Color.Black;
         }
 
         protected Component(Vector2 position, Point size, Color color, string Text) : this(position, size, color)
@@ -48,27 +61,35 @@ namespace UIProject
         }
         #endregion
         /// <summary>
-        /// 
+        /// Draws the component
         /// </summary>
         public virtual void Draw(GraphicsDevice gd)
         {
-            if (graphics == null) graphics = gd;
-            Color[] background = new Color[Size.X * Size.Y];
-            for (int y = 0; y < Size.Y; y++)
+            if (Size.X > 0 && Size.Y > 0)
             {
-                for (int x = 0; x < Size.X; x++)
+                if (graphics == null) graphics = gd;
+                Color[] background = new Color[Size.X * Size.Y];
+                for (int y = 0; y < Size.Y; y++)
                 {
-                    background[x + (y * Size.X)] = color;
+                    for (int x = 0; x < Size.X; x++)
+                    {
+                        background[x + (y * Size.X)] = color;
+                    }
                 }
-            }
-            picture = new Texture2D(this.graphics, Size.X,Size.Y);
+                picture = new Texture2D(this.graphics, Size.X, Size.Y);
 
-            picture.SetData(background,0,Size.X * Size.Y);
+                picture.SetData(background, 0, Size.X * Size.Y);
+            }
         }
 
         public virtual void Resize(Point size)
         {
             this.Size = size;
+        }
+
+        public virtual string Description()
+        {
+            return "";
         }
     }
 }

@@ -14,7 +14,7 @@ namespace _0x46696E616C
         [STAThread]
         static void Main()
         {
-            using (var game = new Game1())
+            using (var game = new 0x46696E616CGame())
                 game.Run();
         }
     }

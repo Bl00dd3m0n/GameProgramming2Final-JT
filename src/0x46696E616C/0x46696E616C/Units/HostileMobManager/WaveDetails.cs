@@ -6,9 +6,15 @@ namespace MobHandler.HostileMobManager
 {
     public class WaveDetails
     {
+        List<IUnit> WaveUnits;
+        public WaveDetails(List<IUnit> units)
+        {
+            WaveUnits = new List<IUnit>();
+            WaveUnits.AddRange(units);
+        }
         internal List<IUnit> GetUnits()
         {
-            throw new NotImplementedException();
+            return WaveUnits;
         }
     }
 }

@@ -13,6 +13,12 @@ using WorldManager.MapData;
 using WorldManager.Buildings;
 using System.Collections;
 using _0x46696E616C.ConcreteImplementations;
+using _0x46696E616C.WorldManager.ConcreteImplementations.Resources;
+using Microsoft.Xna.Framework.Graphics;
+using _0x46696E616C.TechManager.Stats;
+using WorldManager;
+using System.Linq;
+using _0x46696E616C.Units.Attacks;
 
 namespace _0x46696E616C.Buildings
 {
@@ -26,30 +32,49 @@ namespace _0x46696E616C.Buildings
         public int energyCost { get; protected set; }
 
         public List<IUnit> GarrisonedUnits { get; set; }
+
         public Queue<IQueueable<TextureValue>> trainingQueue { get; set; }
-        public List<IQueueable<TextureValue>> QueueableThings { get; protected set; }
+
+        protected List<IQueueable<TextureValue>> queueableThings { get; set; }
+        public List<IQueueable<TextureValue>> QueueableThings { get { return queueableThings.ToList(); } }
         public TextureValue Icon { get; protected set; }
+
         public override Vector2 Position { get { return base.Position; } }
-        Color teamColor; //Maybe implement this
+
+        Color teamColor; //TODO Maybe implement this
+
         IQueueable<TextureValue> trainingObject;
+
         public IBuildingObserver worldComponent { get; protected set; }
+
+        public List<ITechObserver> techObservers;
 
         Vector2 spawnPoint { get; set; }
 
-        public Building(Game game, TextureValue texture, Vector2 position, TextureValue Icon) : base(game, texture, position, Color.Blue)
+        protected string BuildingDescription { get; set; }
+
+        protected WorldHandler world;
+
+        protected ProjectileManager proj;
+
+        public Building(TextureValue texture, Vector2 position, TextureValue Icon, WorldHandler world, ProjectileManager proj) : base(texture, position, Color.Blue)
         {
             Cost = new Wallet();
             name = "Building";
             Position = new Vector2(0, 0);
             Size = new Vector2(0, 0);
-            TotalHealth = 0;
+            stats.Add(new Health("Health", 0));
             CurrentHealth = 0;
             energyCost = 0;
             healthBar = new HealthBar(new Rectangle(this.Position.ToPoint() - new Point(0, (int)(this.Size.Y * 16 + 1)), Size.ToPoint()));
             GarrisonedUnits = new List<IUnit>();
             this.Icon = Icon;//if the texture values change this breaks it find a better way to do this
-            QueueableThings = new List<IQueueable<TextureValue>>();
+            queueableThings = new List<IQueueable<TextureValue>>();
             trainingQueue = new Queue<IQueueable<TextureValue>>();
+            BuildingDescription = "";
+            techObservers = new List<ITechObserver>();
+            this.world = world;
+            this.proj = proj;
         }
 
         public void Subscribe(IBuildingObserver observer)
@@ -57,7 +82,12 @@ namespace _0x46696E616C.Buildings
             worldComponent = observer;
         }
 
-        public IQueueable<TextureValue> Train()
+        public void Subscribe(ITechObserver observer)
+        {
+            techObservers.Add(observer);
+        }
+
+        public IQueueable<TextureValue> Train(GraphicsDevice gd)
         {
             if (trainingQueue.Count > 0)
             {
@@ -66,7 +96,7 @@ namespace _0x46696E616C.Buildings
                 {
                     if (trainingObject is BasicUnit)
                     {
-                        ((BasicUnit)trainingObject).UpdatePosition(spawnPoint);
+                        ((BasicUnit)trainingObject).UpdatePosition(gd, spawnPoint);
                         ((BasicUnit)trainingObject).PlacedTile();
                         ((BasicUnit)trainingObject).SetTeam(this.TeamAssociation);
                     }
@@ -81,11 +111,11 @@ namespace _0x46696E616C.Buildings
         {
             foreach (IUnit unit in GarrisonedUnits)
             {
-                if (unit.State == BaseUnitState.build)
+                if (unit.UnitState == BaseUnitState.build)
                 {
                     if (unit is BasicUnit)
                     {
-                        CurrentHealth += ((BasicUnit)unit).BuildPower;
+                        CurrentHealth += ((BasicUnit)unit).stats[typeof(BuildPower)].Value;
                     }
                     if (CurrentHealth > TotalHealth)
                         CurrentHealth = TotalHealth;
@@ -93,9 +123,9 @@ namespace _0x46696E616C.Buildings
             }
         }
 
-        public virtual void AddQueueable(IQueueable<TextureValue> item)
+        public virtual void AddQueueable(IQueueable<TextureValue> item) // For Tech
         {
-            QueueableThings.Add(item);//workaround for not being able to have UnitComponent
+            queueableThings.Add(item);//workaround for not being able to have UnitComponent
         }
 
         public override void Damage(float amount)
@@ -103,26 +133,23 @@ namespace _0x46696E616C.Buildings
             base.Damage(amount);
         }
 
-        public void Destroy()
-        {
-
-        }
-        public override void UpdatePosition(Vector2 position)
+        public override void UpdatePosition(GraphicsDevice gd, Vector2 position)
         {
             if (!placed)
             {
                 spawnPoint = position - (new Vector2(0, -1) * this.Size);
             }
-            base.UpdatePosition(position);
+            base.UpdatePosition(gd, position);
         }
         public override void Die()
         {
             base.Die();
         }
-        public virtual Building NewInstace(Game game, TextureValue tex, Vector2 position, TextureValue Icon)
+        public virtual Building NewInstace(TextureValue tex, Vector2 position, TextureValue Icon)
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException();//This never should be hit
         }
+
         public virtual void Deposit(Wallet wallet)
         {
 
@@ -133,6 +160,11 @@ namespace _0x46696E616C.Buildings
 
         }
 
+        public virtual Building AddQueueables()
+        {
+            return this;
+        }
+
         public void SetSpawn(Vector2 position)
         {
             this.spawnPoint = position;
@@ -140,6 +172,19 @@ namespace _0x46696E616C.Buildings
         public Vector2 GetSpawn()
         {
             return this.spawnPoint;
+        }
+
+        internal object Description()
+        {
+            string description = string.Empty;
+            description += $"{name}\n";
+            description += "Cost:\n";
+            foreach (string resource in Cost.ResourceString())
+            {
+                description += $"{resource}\n";
+            }
+            description += this.BuildingDescription;
+            return description;
         }
     }
 }

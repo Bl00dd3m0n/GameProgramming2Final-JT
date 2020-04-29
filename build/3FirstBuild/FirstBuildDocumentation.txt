@@ -1,0 +1,35 @@
+Minimal Viable Product Notes:
+
+Added Functionalities:
+- Added a collider system...not sure I did it properly - added observers to the collision handler and if something collides it lets the collider know
+
+Changes:
+- Collapsed everything into one file because I poorly set up my projects also it cut my project size by nearly half.
+- Moved all unit stats to a stats system allowing for customizable units so I can upgrade stats
+- Removed unit checks from my A* algorithm - caused some issues - however it caused a lot less issues to go this route than the lag I was hitting because of it.
+- Offensive ally units added for combat
+- Implemented Settings and added the possibility for multiple control types - still tied to mouse and keyboard for now.
+
+Bugs:
+- Since A* doesn't find a way around units they often just catch on each other
+- Balistas don't cost anything
+- For some reason attack commands...when I get some more time I need to look into this
+- Memory stacking issue - not entirely sure where from I think that serializers are holding onto memory from what I can see....there are probably other issues though that I need to find(Would recomend for now restarting the project and starting over instead of clicking play) - not overly bad as long as you don't spam but just a heads up.
+
+Features to add:
+- Add a tutorial scene to introduce the player to the game
+- Abstract stuff back - probably won't get to this
+- Clean up some code
+- Maybe redo some of my systems
+- Add more units
+- Balance changes to make the game more reasonable
+- UI updates to make things look more understandable - like queued things being visable and possibly more details on units
+
+Controls:
+Command(Default) - example 
+Select(left click) - to Select units or Building Clicking and dragging your mouse then releasing selects multiple units - Also used for placing things
+Interact(right click) - Selected units are sent to interact where you click - this includes moving
+Zoom in(Scroll Up) - Scrolls into the screen
+Zoom out(Scroll Down) - Scrolls out
+Deselect(Escape) - Deselects the selected building
+Up/Down/Left/Right(W/S/A/D)- Move the camera 

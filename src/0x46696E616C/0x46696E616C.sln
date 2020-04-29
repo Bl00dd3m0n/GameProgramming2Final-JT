@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "0x46696E616C", "0x46696E616
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SaveManager", "SaveManager\SaveManager.csproj", "{CF14C12F-0548-453B-A169-D53E87AAE273}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MainMenu", "MainMenu\MainMenu.csproj", "{FE5DD1B6-CBAD-4E44-BD0A-023A719B3CA9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -21,6 +23,10 @@ Global
 		{CF14C12F-0548-453B-A169-D53E87AAE273}.Debug|x86.Build.0 = Debug|x86
 		{CF14C12F-0548-453B-A169-D53E87AAE273}.Release|x86.ActiveCfg = Release|x86
 		{CF14C12F-0548-453B-A169-D53E87AAE273}.Release|x86.Build.0 = Release|x86
+		{FE5DD1B6-CBAD-4E44-BD0A-023A719B3CA9}.Debug|x86.ActiveCfg = Debug|x86
+		{FE5DD1B6-CBAD-4E44-BD0A-023A719B3CA9}.Debug|x86.Build.0 = Debug|x86
+		{FE5DD1B6-CBAD-4E44-BD0A-023A719B3CA9}.Release|x86.ActiveCfg = Release|x86
+		{FE5DD1B6-CBAD-4E44-BD0A-023A719B3CA9}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,6 +1,7 @@
 ﻿using _0x46696E616C.MobHandler.Units;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,11 +10,14 @@ using System.Threading.Tasks;
 
 namespace _0x46696E616C.MobHandler
 {
+    
     public class HealthBar
     {
+        [JsonIgnore]
         public Texture2D Health { get; private set; }
         public Rectangle Bounds { get; protected set; }
         private Vector2 position;
+        Color[] healthBar;
         public Vector2 Position
         {
             get { return position; }
@@ -38,7 +42,10 @@ namespace _0x46696E616C.MobHandler
         {
             if (entity.healthBar.Bounds.Width > 0 && entity.healthBar.Bounds.Height > 0)
             {
-                Color[] healthBar = new Color[Bounds.Width * Bounds.Height];
+                if (healthBar == null || healthBar.Length != Bounds.Width * Bounds.Height)
+                {
+                    healthBar = new Color[Bounds.Width * Bounds.Height];
+                }
                 float percentHealth = entity.CurrentHealth / entity.TotalHealth;
                 for (int y = 0; y < Bounds.Height; y++)
                 {

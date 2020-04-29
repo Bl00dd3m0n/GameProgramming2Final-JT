@@ -10,7 +10,7 @@ namespace WorldManager.TileHandlerLibrary
 {
     public class BackGroundTile : Tile
     {
-        public BackGroundTile(Game game, TextureValue texture, Vector2 position, Color color) : base(game, texture, position, color)
+        public BackGroundTile(TextureValue texture, Vector2 position, Color color) : base(texture, position, color)
         {
 
         }

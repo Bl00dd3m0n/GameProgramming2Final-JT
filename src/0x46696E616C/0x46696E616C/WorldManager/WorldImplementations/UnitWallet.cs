@@ -1,4 +1,6 @@
 ﻿using _0x46696E616C.ConcreteImplementations;
+using _0x46696E616C.MobHandler.Units;
+using _0x46696E616C.TechManager.Stats;
 using _0x46696E616C.WorldManager.ConcreteImplementations.Resources;
 using System;
 using System.Collections.Generic;
@@ -9,35 +11,30 @@ using TechHandler;
 
 namespace _0x46696E616C
 {
-    public class UnitWallet : Wallet, ITechObserver
+    public class UnitWallet : Wallet
     {
         int ResourceCap
         {
             get;
             set;
         }
-        public UnitWallet(int ResourceCap) : base()
+        IUnit unit;
+        public UnitWallet(IUnit unit) : base()
         {
-            if (ResourceCap > 0)
-            {
-                this.ResourceCap = ResourceCap;
-            } else
-            {
-                this.ResourceCap = 10;
-            }
-        }
-        public void Update(ITech tech)
-        {
-
+            if (unit.stats[typeof(InventorySpace)]!= null) this.ResourceCap = (int)unit.stats[typeof(InventorySpace)].Value;
+            else this.ResourceCap = 10;
+            this.unit = unit;
         }
 
         public override bool Deposit(IResource resource, float amount)
         {
-            if (amount + Count(resource) <= ResourceCap)
+            if (unit.stats[typeof(InventorySpace)] != null) this.ResourceCap = (int)unit.stats[typeof(InventorySpace)].Value;//Dynamic wallet sizing with tech upgrades
+            if (amount + Count(resource) <= this.ResourceCap)
             {
                 base.Deposit(resource, amount);
                 return false;
-            } else
+            }
+            else
             {
                 return true;
             }
@@ -45,7 +42,7 @@ namespace _0x46696E616C
 
         public override bool Deposit(Wallet wallet)
         {
-            if(CheckWalletSize(wallet))
+            if (CheckWalletSize(wallet))
             {
                 base.Deposit(wallet);
                 return false;
@@ -65,9 +62,9 @@ namespace _0x46696E616C
         /// </returns>
         private bool CheckWalletSize(Wallet wallet)
         {
-            foreach(IResource resource in wallet.Resources)
+            foreach (IResource resource in wallet.Resources)
             {
-                if(wallet.Count(resource)+Count(resource) > ResourceCap)
+                if (wallet.Count(resource) + Count(resource) > ResourceCap)
                 {
                     return false;
                 }

@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using _0x46696E616C.ConcreteImplementations;
+using _0x46696E616C.TechManager.Stats;
+using Microsoft.Xna.Framework.Graphics;
 using MobHandler;
 using System;
 using System.Collections.Generic;
@@ -15,6 +17,8 @@ namespace _0x46696E616C.MobHandler.Units
     }
     public interface IUnit : IEntity
     {
-        BaseUnitState State { get; }
+        BaseUnitState UnitState { get; }
+        Wallet Cost { get; }
+        string Description { get; }
     }
 }

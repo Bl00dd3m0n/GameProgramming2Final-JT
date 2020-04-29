@@ -2,7 +2,7 @@
 
 namespace _0x46696E616C.CommandPattern
 {
-    internal interface I
+    internal interface IObserver
     {
         void Update(IUnit units);
     }

@@ -11,23 +11,19 @@ using System.Threading.Tasks;
 using WorldManager;
 using WorldManager.Mobs.HarvestableUnits;
 using WorldManager.TileHandlerLibrary;
-//using MyVector2 = NationBuilder.TileHandlerLibrary.Vector2;
 
 namespace NationBuilder.WorldHandlerLibrary
 {
     public class WorldGeneration
     {
-        Random ran;
-        string worldName;
         Game game;
         OpenSimplexNoise ElevationNoise;
         OpenSimplexNoise MoistureNoise;
         Vector2 MapSize;
-        
+
         public WorldGeneration(Game game, string WorldName, long Seed, Vector2 MapSize)
         {
             this.game = game;
-            this.worldName = WorldName;
             ElevationNoise = new OpenSimplexNoise(Seed);
             MoistureNoise = new OpenSimplexNoise(Seed - 10);
             this.MapSize = MapSize;
@@ -49,15 +45,15 @@ namespace NationBuilder.WorldHandlerLibrary
         {
             float nx = position.X / MapSize.X;
             float ny = position.Y / MapSize.Y;
-            double elevation = Math.Pow(Math.Sin(noise(nx,ny,ElevationNoise)),3) + Math.Pow(Math.Sin(noise(nx, ny, ElevationNoise)), 2)+Math.Pow(nx,2);
+            double elevation = Math.Pow(Math.Sin(noise(nx, ny, ElevationNoise)), 3) + Math.Pow(Math.Sin(noise(nx, ny, ElevationNoise)), 2) + Math.Pow(nx, 2);
             double moisture = (6 * Math.Pow(noise(nx, ny, ElevationNoise), 5) - 15 * Math.Pow(noise(nx, ny, ElevationNoise), 4) + 10 * Math.Pow(noise(nx, ny, ElevationNoise), 3));
             if (elevation < 0.6)
             {
-                return new BackGroundTile(game, TextureValue.Grass, position, Color.LimeGreen);
+                return new BackGroundTile(TextureValue.Grass, position, Color.LimeGreen);
             }
             else if (elevation < 0.7)
             {
-                return new BackGroundTile(game, TextureValue.Sand, position, Color.Yellow);
+                return new BackGroundTile(TextureValue.Sand, position, Color.Yellow);
             }
             /*lse if (elevation < 0.9)
             {
@@ -65,8 +61,8 @@ namespace NationBuilder.WorldHandlerLibrary
             }*/
             else
             {
-                if (moisture < 0.6) return new BackGroundTile(game, TextureValue.Stone, position, Color.Gray);//Add Snow later
-                else return new BackGroundTile(game, TextureValue.Stone, position, Color.Gray);
+                if (moisture < 0.6) return new BackGroundTile(TextureValue.Stone, position, Color.Gray);//Add Snow later
+                else return new BackGroundTile(TextureValue.Stone, position, Color.Gray);
             }
         }
         /// <summary>
@@ -92,10 +88,11 @@ namespace NationBuilder.WorldHandlerLibrary
             bool placeIron = (ironFrequency * noise(x, y, ElevationNoise)) > 0.75;
             if (placetree)
             {
-                return new Tree(game, TextureValue.Tree, new Wood(), this.GetType().Name, new Vector2(1), 100,100, new Vector2(x,y), Color.DarkGreen);
-            } if(placeIron)
+                return new Tree(TextureValue.Tree, new Wood(), this.GetType().Name, new Vector2(1), 100, 100, new Vector2(x, y), Color.DarkGreen);
+            }
+            if (placeIron)
             {
-                return new IronVein(game, TextureValue.IronVein, new Iron(), this.GetType().Name, new Vector2(1), 100, 100, new Vector2(x, y), Color.OrangeRed);
+                return new IronVein(TextureValue.IronVein, new Iron(), this.GetType().Name, new Vector2(1), 100, 100, new Vector2(x, y), Color.OrangeRed);
             }
             return null;
         }

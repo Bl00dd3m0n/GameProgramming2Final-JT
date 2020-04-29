@@ -12,4 +12,5 @@ namespace _0x46696E616C.Buildings
         List<int> ProductionAMinute { get; }
         List<IResource> productionTypes { get; }
     }
+
 }

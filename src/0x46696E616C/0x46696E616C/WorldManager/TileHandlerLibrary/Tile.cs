@@ -4,17 +4,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace NationBuilder.TileHandlerLibrary
 {
-    [Serializable]
-    public class Tile : GameComponent
+    public class Tile
     {
         public static float Zoom;
         public BlockData block;
         private Vector2 position;
         protected bool placed;
         public Color tileColor { get; protected set; }
+        internal float fCost;
+        
+        internal void SetCost(float fCost)
+        {
+            this.fCost = fCost; 
+        }
+
         public virtual Vector2 Position
         {
             get { return position; }
@@ -23,7 +31,7 @@ namespace NationBuilder.TileHandlerLibrary
                 position = value;
             }
         }
-        public Tile(Game game, TextureValue texture, Vector2 position, Color color) : base(game)
+        public Tile(TextureValue texture, Vector2 position, Color color)
         {
             block.texture = texture;
             this.Position = position;
@@ -34,7 +42,7 @@ namespace NationBuilder.TileHandlerLibrary
             placed = true;
             return this;
         }
-        public virtual void UpdatePosition(Vector2 position)
+        public virtual void UpdatePosition(GraphicsDevice gd, Vector2 position)
         {
             if (!placed)
             {

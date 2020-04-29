@@ -13,7 +13,7 @@
 
 #---------------------------------- Content ---------------------------------#
 
-#begin ../../../../assets/Center.png
+#begin ../../../../assets/Ballista.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -23,7 +23,19 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../../../assets/Center.png;Center.png
+/build:../../../../assets/Ballista.png;Ballista.png
+
+#begin ../../../../assets/Build power.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:../../../../assets/Build power.png;BuildPower.png
 
 #begin ../../../../assets/Center.png
 /importer:TextureImporter
@@ -49,7 +61,7 @@
 /processorParam:TextureFormat=Color
 /build:../../../../assets/CenterIcon.png;CenterIcon.png
 
-#begin ../../../../assets/CenterIcon.png
+#begin ../../../../assets/Chest.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -59,7 +71,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../../../assets/CenterIcon.png;CenterIcon.png
+/build:../../../../assets/Chest.png;Chest.png
 
 #begin ../../../../assets/Cursor.png
 /importer:TextureImporter
@@ -73,7 +85,7 @@
 /processorParam:TextureFormat=Color
 /build:../../../../assets/Cursor.png;Cursor.png
 
-#begin ../../../../assets/Cursor.png
+#begin ../../../../assets/Damage.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -83,7 +95,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../../../assets/Cursor.png;Cursor.png
+/build:../../../../assets/Damage.png;Damage.png
 
 #begin ../../../../assets/Eye.png
 /importer:TextureImporter
@@ -109,30 +121,6 @@
 /processorParam:TextureFormat=Color
 /build:../../../../assets/FireWall.png;FireWall.png
 
-#begin ../../../../assets/FireWall.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:../../../../assets/FireWall.png;FireWall.png
-
-#begin ../../../../assets/FireWallIcon.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:../../../../assets/FireWallIcon.png;FireWallIcon.png
-
 #begin ../../../../assets/FireWallIcon.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -157,7 +145,7 @@
 /processorParam:TextureFormat=Color
 /build:../../../../assets/Grass.png;Grass.png
 
-#begin ../../../../assets/Grass.png
+#begin ../../../../assets/HarvestPower.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -167,7 +155,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../../../assets/Grass.png;Grass.png
+/build:../../../../assets/HarvestPower.png;HarvestPower.png
 
 #begin ../../../../assets/Hdd.png
 /importer:TextureImporter
@@ -205,30 +193,6 @@
 /processorParam:TextureFormat=Color
 /build:../../../../assets/InternetCafe.png;InternetCafe.png
 
-#begin ../../../../assets/InternetCafe.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:../../../../assets/InternetCafe.png;InternetCafe.png
-
-#begin ../../../../assets/InternetCafeIcon.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:../../../../assets/InternetCafeIcon.png;InternetCafeIcon.png
-
 #begin ../../../../assets/InternetCafeIcon.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -253,18 +217,6 @@
 /processorParam:TextureFormat=Color
 /build:../../../../assets/IronOre.png;IronOre.png
 
-#begin ../../../../assets/IronOre.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:../../../../assets/IronOre.png;IronOre.png
-
 #begin ../../../../assets/Lab.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -276,30 +228,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:../../../../assets/Lab.png;Lab.png
-
-#begin ../../../../assets/Lab.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:../../../../assets/Lab.png;Lab.png
-
-#begin ../../../../assets/LabIcon.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:../../../../assets/LabIcon.png;LabIcon.png
 
 #begin ../../../../assets/LabIcon.png
 /importer:TextureImporter
@@ -325,7 +253,7 @@
 /processorParam:TextureFormat=Color
 /build:../../../../assets/Mage.png;Mage.png
 
-#begin ../../../../assets/MediaCenter.png
+#begin ../../../../assets/MainMenu.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -335,7 +263,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../../../assets/MediaCenter.png;MediaCenter.png
+/build:../../../../assets/MainMenu.png;MainMenu.png
 
 #begin ../../../../assets/MediaCenter.png
 /importer:TextureImporter
@@ -361,30 +289,6 @@
 /processorParam:TextureFormat=Color
 /build:../../../../assets/MediaCenterIcon.png;MediaCenterIcon.png
 
-#begin ../../../../assets/MediaCenterIcon.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:../../../../assets/MediaCenterIcon.png;MediaCenterIcon.png
-
-#begin ../../../../assets/Mines.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:../../../../assets/Mines.png;Mines.png
-
 #begin ../../../../assets/Mines.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -408,30 +312,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:../../../../assets/MinesIcon.png;MinesIcon.png
-
-#begin ../../../../assets/MinesIcon.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:../../../../assets/MinesIcon.png;MinesIcon.png
-
-#begin ../../../../assets/Overlay.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:../../../../assets/Overlay.png;Overlay.png
 
 #begin ../../../../assets/Overlay.png
 /importer:TextureImporter
@@ -456,18 +336,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:../../../../assets/OverlayExample.png;OverlayExample.png
-
-#begin ../../../../assets/PlayerTest.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:../../../../assets/PlayerTest.png;PlayerTest.png
 
 #begin ../../../../assets/PlayerTest.png
 /importer:TextureImporter
@@ -517,18 +385,6 @@
 /processorParam:TextureFormat=Color
 /build:../../../../assets/PowerSupply.png;PowerSupply.png
 
-#begin ../../../../assets/PowerSupply.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:../../../../assets/PowerSupply.png;PowerSupply.png
-
 #begin ../../../../assets/PowerSupplyIcon.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -541,7 +397,7 @@
 /processorParam:TextureFormat=Color
 /build:../../../../assets/PowerSupplyIcon.png;PowerSupplyIcon.png
 
-#begin ../../../../assets/PowerSupplyIcon.png
+#begin ../../../../assets/Priest.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -551,9 +407,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../../../assets/PowerSupplyIcon.png;PowerSupplyIcon.png
+/build:../../../../assets/Priest.png;Priest.png
 
-#begin ../../../../assets/Sand.png
+#begin ../../../../assets/Range.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -563,7 +419,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../../../assets/Sand.png;Sand.png
+/build:../../../../assets/Range.png;Range.png
 
 #begin ../../../../assets/Sand.png
 /importer:TextureImporter
@@ -601,7 +457,7 @@
 /processorParam:TextureFormat=Color
 /build:../../../../assets/ServerFarmIcon.png;ServerFarmIcon.png
 
-#begin ../../../../assets/SolarPanel.png
+#begin ../../../../assets/SettingsPage.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -611,7 +467,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:../../../../assets/SolarPanel.png;SolarPanel.png
+/build:../../../../assets/SettingsPage.png;SettingsPage.png
 
 #begin ../../../../assets/SolarPanel.png
 /importer:TextureImporter
@@ -637,18 +493,6 @@
 /processorParam:TextureFormat=Color
 /build:../../../../assets/SolarPanelIcon.png;SolarPanelIcon.png
 
-#begin ../../../../assets/SolarPanelIcon.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:../../../../assets/SolarPanelIcon.png;SolarPanelIcon.png
-
 #begin ../../../../assets/SpawnPoint.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -660,30 +504,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:../../../../assets/SpawnPoint.png;SpawnPoint.png
-
-#begin ../../../../assets/SpawnPoint.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:../../../../assets/SpawnPoint.png;SpawnPoint.png
-
-#begin ../../../../assets/SteelFactory.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:../../../../assets/SteelFactory.png;SteelFactory.png
 
 #begin ../../../../assets/SteelFactory.png
 /importer:TextureImporter
@@ -709,18 +529,6 @@
 /processorParam:TextureFormat=Color
 /build:../../../../assets/SteelFactoryIcon.png;SteelFactoryIcon.png
 
-#begin ../../../../assets/SteelFactoryIcon.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:../../../../assets/SteelFactoryIcon.png;SteelFactoryIcon.png
-
 #begin ../../../../assets/Stone.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -732,30 +540,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:../../../../assets/Stone.png;Stone.png
-
-#begin ../../../../assets/Stone.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:../../../../assets/Stone.png;Stone.png
-
-#begin ../../../../assets/Tree.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:../../../../assets/Tree.png;Tree.png
 
 #begin ../../../../assets/Tree.png
 /importer:TextureImporter

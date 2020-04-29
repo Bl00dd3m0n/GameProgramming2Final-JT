@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using _0x46696E616C.UIComponents;
+using MainMenu.Component;
+using Microsoft.Xna.Framework.Graphics;
 using SaveManager;
 using System;
 using System.Collections.Generic;
@@ -16,33 +18,39 @@ namespace UIProject
         private string FilePath;
         Type[] componentTypes;
         SaveXml<List<Component>> save;
-        public StyleSheet(string FilePath)
+        public static Type[] ComponentTypes = new Type[] { typeof(Button), typeof(StartButton), typeof(ExitButton), typeof(Label), typeof(PageButton), typeof(InputButton) };
+        public StyleSheet()
         {
             save = new SaveXml<List<Component>>();
-            this.FilePath = FilePath;
         }
 
-        public List<IComponent> GetStyleSheet(GraphicsDevice gd)
+        public List<IComponent> GetStyleSheet(GraphicsDevice gd, string path, Type[] types)
         {
-            Type[] types = new Type[] { typeof(Button) };
-            List<Component> components = save.LoadFromXml(FilePath, types);
-            foreach(Component component in components)
+            this.FilePath = path;
+            List<Component> components = new List<Component>();
+            if (File.Exists(path))
             {
-                component.Draw(gd);
-                component.Scale = 1;
+                components = save.LoadFromXml(FilePath, types);
+                foreach (Component component in components)
+                {
+                    component.Draw(gd);
+                    component.Scale = 1;
+                }
             }
             return components.Cast<IComponent>().ToList();
         }
 
-        public void SaveStyleSheet(List<IComponent> list)
+        public void SaveStyleSheet(List<IComponent> list, string Path)
         {
+            this.FilePath = Path;
             List<Component> page = list.Cast<Component>().ToList();
-            componentTypes = new Type[] { typeof(Button) };
-            XmlSerializer xml = new XmlSerializer(page.GetType(), componentTypes);
-            using (StreamWriter wr = new StreamWriter(File.Create(FilePath)))
+            List<Type> types = new List<Type>();
+            foreach (IComponent component in list)
             {
-                xml.Serialize(wr, page);
+                types.Add(component.GetType());
             }
+            componentTypes = types.Distinct().ToArray();
+            save.SaveToXml(page, Path, componentTypes);
         }
     }
 }

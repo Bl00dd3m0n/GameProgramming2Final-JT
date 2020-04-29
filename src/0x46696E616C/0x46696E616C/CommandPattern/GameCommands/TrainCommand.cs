@@ -24,5 +24,17 @@ namespace _0x46696E616C.CommandPattern.GameCommands
             uc.Train(building, unit);
             this.Log(uc);
         }
+        public override string Description()
+        {
+            string description = string.Empty;
+            description += $"{unit.name}\n";
+            description += "Cost:\n";
+            foreach (string resource in unit.Cost.ResourceString())
+            {
+                description += $"{resource}\n";
+            }
+            description += unit.Description;
+            return description;
+        }
     }
 }

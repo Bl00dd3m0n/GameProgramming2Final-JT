@@ -10,7 +10,7 @@ namespace PathFinding
 {
     class Formation
     {
-        List<IUnit> units;
+        //List<IUnit> units; TODO implement
 
         public Formation()
         {

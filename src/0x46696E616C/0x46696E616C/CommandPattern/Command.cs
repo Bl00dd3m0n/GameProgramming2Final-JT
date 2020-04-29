@@ -19,5 +19,9 @@ namespace _0x46696E616C.CommandPattern
             string LogString = string.Format($"{CommandName} executed.");
             return LogString;
         }
+        public virtual string Description()
+        {
+            return "";
+        }
     }
 }

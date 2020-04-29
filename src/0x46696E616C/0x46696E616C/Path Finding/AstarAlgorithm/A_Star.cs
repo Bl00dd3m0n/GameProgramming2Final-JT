@@ -14,6 +14,17 @@ namespace _0x46696E616C.AstarAlgorithm
     public class A_Star
     {
 
+        public List<Vector2> FindPath(Vector2 StartPosition, Vector2 EndPosition, WorldHandler world, List<Vector2> waypoints)
+        {
+            if(waypoints.Count > 0  && waypoints[waypoints.Count-1] == EndPosition)
+            {
+                return waypoints;
+            } else
+            {
+                return FindPath(StartPosition, EndPosition, world);
+            }
+        }
+
         /// <summary>
         /// A* Algorithm implementation
         /// </summary>
@@ -62,7 +73,7 @@ namespace _0x46696E616C.AstarAlgorithm
                     for (int x = -1; x <= 1; x++)
                     {
                         Vector2 CurrentPos = CurrentNode.Position + new Vector2(x, y);
-                        if ((world.CheckPlacement(CurrentPos, new Vector2(1)) || CurrentNode.Position != StartPosition) && world.GetUnit(CurrentPos) == null && CurrentPos != CurrentNode.Position)//To avoid the entire game breaking if you spawn something on a block CurrentPos != StartPosition needs to be implemented
+                        if ((world.CheckPlacement(CurrentPos, new Vector2(1)) || CurrentNode.Position != StartPosition) && CurrentPos != CurrentNode.Position)//To avoid the entire game breaking if you spawn something on a block CurrentPos != StartPosition needs to be implemented
                         {
                             Node tempNode = new Node(CurrentPos, FCost(GCost(StartPosition, CurrentPos), HCost(EndPosition, CurrentPos)));
                             tempNode.Parent = CurrentNode;

@@ -12,17 +12,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WorldManager.TileHandlerLibrary;
+using Newtonsoft.Json;
+using _0x46696E616C.CommandPattern.Commands;
 
 namespace WorldManager.MapData
 {
     public class Map : IMapObserver
     {
         public Vector2 mapSize { get; private set; }
-        Tile[,,] tiles;
+        [JsonIgnore]
+        public Tile[,,] tiles;
+        [JsonIgnore]
         public Texture2D mapTexture { get; private set; }
-        long Seed;
-        WorldGeneration wg;
-        List<IEntity> mobs;
+        long Seed { get; set; }
+        WorldGeneration wg { get; set; }
+        public List<IEntity> mobs { get; private set; }
 
         public Map(Game game, Vector2 mapSize, long Seed)
         {
@@ -65,6 +69,7 @@ namespace WorldManager.MapData
             mapTexture.SetData(colors, 0, (int)((mapSize.X * mapSize.Y)));
 
         }
+
         /// <summary>
         /// places a building at a certain point
         /// </summary>
@@ -72,9 +77,9 @@ namespace WorldManager.MapData
         /// <param name="position"></param>
         internal void PlaceBlock(ModifiableTile building, Vector2 position)
         {
-            for (int y = 0; y <= building.Size.Y; y++)
+            for (int y = 0; y < building.Size.Y; y++)
             {
-                for (int x = 0; x <= building.Size.X; x++)
+                for (int x = 0; x < building.Size.X; x++)
                 {
                     try
                     {
@@ -82,12 +87,13 @@ namespace WorldManager.MapData
                         {
                             building.Subscribe(this);
                             tiles[(int)position.X + x, (int)position.Y + y, 1] = building;
-                            
+
                         }
                         else
                         {
                             tiles[(int)position.X + x, (int)position.Y + y, 1] = new ReferenceTile((ModifiableTile)tiles[(int)position.X, (int)position.Y, 1]);
                             ((ModifiableTile)tiles[(int)position.X + x, (int)position.Y + y, 1]).Subscribe(this);
+                            ((ModifiableTile)tiles[(int)position.X, (int)position.Y, 1]).Subscribe((ReferenceTile)tiles[(int)position.X + x, (int)position.Y + y, 1]);
                         }
                     }
                     catch (IndexOutOfRangeException ex)
@@ -130,6 +136,77 @@ namespace WorldManager.MapData
                             {
                                 tile = (IEntity)tiles[x, y, 1];
                                 distance = Vector2.Distance(tiles[x, y, 1].Position, Position);
+                            }
+                        }
+                    }
+                }
+            }
+            return tile;
+        }
+
+        internal List<IUnit> GetUnits(int v)
+        {
+            return mobs.Where(l => ((BasicUnit)l).TeamAssociation == v).Cast<IUnit>().ToList();
+        }
+
+        internal IEntity[] GetTile(int team)
+        {
+            List<IEntity> taggedTiles = new List<IEntity>();
+            for (int y = 0; y < mapSize.Y; y++)
+            {
+                for (int x = 0; x < mapSize.X; x++)
+                {
+                    if (tiles[x, y, 1] != null)
+                    {
+                        if (((ModifiableTile)tiles[x, y, 1]).TeamAssociation.Equals(team))
+                        {
+                            taggedTiles.Add((IEntity)tiles[x, y, 1]);
+                        }
+                    }
+                }
+            }
+            return taggedTiles.ToArray();
+        }
+
+        internal IEntity[] GetTile(string v)
+        {
+            List<IEntity> taggedTiles = new List<IEntity>();
+            for (int y = 0; y < mapSize.Y; y++)
+            {
+                for (int x = 0; x < mapSize.X; x++)
+                {
+                    if (tiles[x, y, 1] != null)
+                    {
+                        if (((ModifiableTile)tiles[x, y, 1]).HasTag(v))
+                        {
+                            taggedTiles.Add((IEntity)tiles[x, y, 1]);
+                        }
+                    }
+                }
+            }
+            return taggedTiles.ToArray();
+        }
+
+        internal IEntity GetTile(int v, Vector2 Position)
+        {
+            IEntity tile = null;
+            float distance = 0;
+            for (int y = 0; y < mapSize.Y; y++)
+            {
+                for (int x = 0; x < mapSize.X; x++)
+                {
+                    ModifiableTile modTile = null;
+                    if (tiles[x, y, 1] != null) modTile = (ModifiableTile)tiles[x, y, 1];
+                    else if (GetUnits(new Vector2(x, y)) != null)
+                        modTile = (ModifiableTile)GetUnits(new Vector2(x, y));
+                    if (modTile != null)
+                    {
+                        if (modTile.TeamAssociation.Equals(v))
+                        {
+                            if (Vector2.Distance(modTile.Position, Position) < distance || distance == 0)
+                            {
+                                tile = modTile;
+                                distance = Vector2.Distance(modTile.Position, Position);
                             }
                         }
                     }
@@ -193,18 +270,21 @@ namespace WorldManager.MapData
         /// <param name="observer"></param>
         public void Update(ModifiableTile observer)
         {
-            if (observer.State == tileState.dead)
+            if (observer.Position.X >= 0 && observer.Position.X < mapSize.X && observer.Position.Y >= 0 && observer.Position.Y < mapSize.Y)
             {
-
-                if (observer is IUnit)
+                if (observer.State == tileState.dead)
                 {
-                    int index = mobs.FindIndex(l => l.Position.ToPoint() == observer.Position.ToPoint());
-                    if (index >= 0)
+
+                    if (observer is IUnit)
                     {
-                        mobs.RemoveAt(index);
+                        int index = mobs.FindIndex(l => l.Position.ToPoint() == observer.Position.ToPoint());
+                        if (index >= 0)
+                        {
+                            mobs.RemoveAt(index);
+                        }
                     }
+                    else tiles[(int)observer.Position.X, (int)observer.Position.Y, 1] = null;
                 }
-                else tiles[(int)observer.Position.X, (int)observer.Position.Y, 1] = null;
             }
         }
         /// <summary>
