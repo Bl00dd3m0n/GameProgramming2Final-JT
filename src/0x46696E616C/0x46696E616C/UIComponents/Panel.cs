@@ -12,9 +12,7 @@ namespace _0x46696E616C.UIComponents
 {
     class Panel : Canvas, IComponent
     {
-        public Panel(Game game) : base(game)
-        {
-        }
+
 
         public Vector2 Position { get; set; }
 
@@ -29,6 +27,11 @@ namespace _0x46696E616C.UIComponents
         public Texture2D picture => throw new NotSupportedException();
 
         public float Scale => throw new NotSupportedException();
+
+        public Panel(Game game, Rectangle bounds) : base(game)
+        {
+            this.bounds = bounds;
+        }
 
         public override void AddComponent(IComponent component)
         {

@@ -95,6 +95,10 @@ namespace _0x46696E616C.UIComponents
         internal Command ClickCheck()
         {
             IComponent component = components.Find(x => x.bounds.Contains(input.InputPos));
+            if(component is Panel)
+            {
+                component = ((Panel)component).Components.Find(x => x.bounds.Contains(input.InputPos));
+            }
             if (component != null)
             {
                 if (component.Description() != null)
