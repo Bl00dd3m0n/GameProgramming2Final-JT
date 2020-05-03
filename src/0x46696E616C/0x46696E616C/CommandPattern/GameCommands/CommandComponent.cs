@@ -251,7 +251,7 @@ namespace _0x46696E616C.CommandPattern
             seconds %= 60;
             if (minutes > 60)
             {
-                hours = minutes/60;
+                hours = minutes / 60;
                 minutes %= 60;
             }
             if (hours > 0)
@@ -388,7 +388,7 @@ namespace _0x46696E616C.CommandPattern
             Building[] buildings = world.GetTiles(Team).Where(l => l is Building).Cast<Building>().ToArray();
             foreach (Building building in buildings)
             {
-                if (building is IResourceCharge)
+                if (building is IResourceCharge && building.built)
                 {
                     for (int i = 0; i < ((IResourceCharge)building).ChargeTypes.Count; i++)
                     {
@@ -406,7 +406,7 @@ namespace _0x46696E616C.CommandPattern
             Building[] buildings = world.GetTiles(Team).Where(l => l is Building).Cast<Building>().ToArray();
             foreach (Building building in buildings)
             {
-                if (building is IProductionCenter)
+                if (building is IProductionCenter && building.built)
                 {
                     for (int i = 0; i < ((IProductionCenter)building).productionTypes.Count; i++)
                     {
@@ -450,19 +450,23 @@ namespace _0x46696E616C.CommandPattern
             List<Building> buildings = world.GetTiles(Team).Where(l => l is Building).Cast<Building>().ToList();
             foreach (IUnit unit in world.GetUnits(Team))
             {
-                if (unit.stats[tech.technology] != null)
+                if (tech is StatTech)
                 {
-                    if (tech is StatTech)
+                    if (unit.stats[((StatTech)tech).Upgrade.GetType()] != null)
                     {
-                        unit.stats[tech.technology] += (Stat)tech;
+
+                        unit.stats[((StatTech)tech).Upgrade.GetType()] += ((StatTech)tech).Upgrade;
                     }
                 }
             }
             foreach (Building build in buildings)
             {
-                if (!buildings.Contains(build))
+                if (tech is StatTech)
                 {
-                    buildings.Add(build);
+                    if (build.stats[((StatTech)tech).Upgrade.GetType()] != null)
+                    {
+                        build.stats[((StatTech)tech).Upgrade.GetType()] += ((StatTech)tech).Upgrade;
+                    }
                 }
             }
         }

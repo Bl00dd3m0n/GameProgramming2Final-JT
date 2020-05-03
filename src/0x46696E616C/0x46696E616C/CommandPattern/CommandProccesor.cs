@@ -39,7 +39,8 @@ namespace _0x46696E616C.CommandPattern
         List<CommandButton> buttons;
         public Vector2 CurrentPos { get; private set; }
         public Overlay overlay { get; set; }
-
+        public Panel EntityDetails;
+        public Panel EntityActions;
         public CommandProccesor(Game game, List<IUnit> startingUnits, WorldHandler wh, InputDefinitions input, CommandComponent command, Camera camera) : base(game)
         {
             this.cc = command;
@@ -235,9 +236,13 @@ namespace _0x46696E616C.CommandPattern
 
         private void SelectedUnitDisplay(ModifiableTile tile)
         {
+            if (EntityDetails != null)
+                overlay.RemoveComponent(EntityDetails);
+            EntityDetails = new Panel(Game);
+            EntityDetails.Initialize();
             Component com = new ImageBox(tile.block.texture, new Vector2(227, 359), (tile.Size * 16).ToPoint(), Color.White);
             com.Scale = 2 / (tile.Size.X);
-            overlay.AddComponent(com);
+            EntityDetails.AddComponent(com);
             float y = 380;
             for (int i = 0; i < tile.stats.Count; i++)
             {
@@ -245,25 +250,30 @@ namespace _0x46696E616C.CommandPattern
                 {
                     com = new ImageBox(tile.healthBar.Health, new Vector2(227, 359 + 32), new Point((int)com.Scale, 1), Color.White);
                     com.Scale = 2;
-                    overlay.AddComponent(com);
+                    EntityDetails.AddComponent(com);
                     com = com = new Label(new Vector2(217 + 32, 359 + 64), $"{tile.CurrentHealth}/{tile.TotalHealth}", Color.White);
                 }
                 else
                 {
                     com = new ImageBox(tile.stats[i].Texture, new Vector2(300, y - 8), new Point(1, 1), Color.White);
                     com.Scale = 0.25f;
-                    overlay.AddComponent(com);
+                    EntityDetails.AddComponent(com);
                     com = new Label(new Vector2(330, y), tile.stats[i].Value.ToString(), Color.White);
                     com.Scale = 1;
                 }
                 com.drawComponent = true;
-                overlay.AddComponent(com);
+                EntityDetails.AddComponent(com);
                 y += 12 + 5;
             }
+            overlay.AddComponent(EntityDetails);
         }
 
         private void AddQueueables(Tile tile)
         {
+            if (EntityDetails != null)
+                overlay.RemoveComponent(EntityActions);
+            EntityActions = new Panel(Game);
+            EntityActions.Initialize();
             //BuildQueue size
             //Pos: (591,391) Size: (200,120)
             float x = 591;//MaxX = 791
@@ -280,7 +290,7 @@ namespace _0x46696E616C.CommandPattern
                         float width = ((Building)queueable).Size.X;
                         float height = ((Building)queueable).Size.Y;
                         com.Scale = 0.25f;
-                        overlay.AddComponent(com);
+                        EntityActions.AddComponent(com);
                         x += 128 * scale;
                         if (x + 128 * scale > 791)
                         {
@@ -301,7 +311,7 @@ namespace _0x46696E616C.CommandPattern
                         float width = ((BasicUnit)queueable).Size.X;
                         float height = ((BasicUnit)queueable).Size.Y;
                         com.Scale = 2;
-                        overlay.AddComponent(com);
+                        EntityActions.AddComponent(com);
                         x += 128 * scale;
                         if (x + 128 * scale > 791)
                         {
@@ -316,7 +326,7 @@ namespace _0x46696E616C.CommandPattern
                         float width = ContentHandler.DrawnTexture(((Technology)queueable).Icon).Bounds.Size.X;
                         float height = ContentHandler.DrawnTexture(((Technology)queueable).Icon).Bounds.Size.Y;
                         com.Scale = 0.5f;
-                        overlay.AddComponent(com);
+                        EntityActions.AddComponent(com);
                         x += 128 * scale;
                         if (x + 128 * scale > 791)
                         {
@@ -326,6 +336,7 @@ namespace _0x46696E616C.CommandPattern
                     }
                 }
             }
+            overlay.AddComponent(EntityActions);
         }
     }
 }

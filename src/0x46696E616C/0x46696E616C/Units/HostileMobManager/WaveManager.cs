@@ -49,7 +49,7 @@ namespace MobHandler.HostileMobManager
         public override void Update(GameTime gameTime)
         {
             waveSpawnTimer += gameTime.ElapsedGameTime.Milliseconds;
-            if (waveSpawnTimer / 1000 >= 100)
+            if (waveSpawnTimer / 1000 >= 300)//5 Minute spawn time
             {
                 CheckGameOver();
                 StartSpawn = true;
@@ -61,7 +61,7 @@ namespace MobHandler.HostileMobManager
                 {
                     ((BasicUnit)unit).Update(gameTime);
                 }
-                if (waveSpawnTimer / 1000 >= waveSpawnTime /*&& units.Count < 5*/)//TODO the game seems to freeze when you get more than 5 units...need to implement a better move system but I'm too tired at the moment to fix it.
+                if (waveSpawnTimer / 1000 >= waveSpawnTime)
                 {
                     CheckGameOver();
                     waveSpawnTimer = 0;

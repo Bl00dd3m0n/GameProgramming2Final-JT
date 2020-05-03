@@ -1,4 +1,5 @@
-﻿using _0x46696E616C.Util.Input;
+﻿using _0x46696E616C.UIComponents;
+using _0x46696E616C.Util.Input;
 using MainMenu.Component;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -75,21 +76,28 @@ namespace UIProject
         {
             for (int i = 0; i < components.Count; i++)
             {
-                if (((Component)components[i]).drawComponent)
+                if (components[i] is Component)
                 {
-                    if (components[i] is Button && ((Button)components[i]).Clicked)
+                    if (((Component)components[i]).drawComponent)
                     {
-                        spriteBatch.Draw(components[i].picture, components[i].Position, Color.LightGray);
+                        if (components[i] is Button && ((Button)components[i]).Clicked)
+                        {
+                            spriteBatch.Draw(components[i].picture, components[i].Position, Color.LightGray);
+                        }
+                        else if (components[i].picture != null)
+                        {
+                            spriteBatch.Draw(components[i].picture, components[i].Position, null, components[i].Color, 0, new Vector2(0), components[i].Scale, SpriteEffects.None, 0);
+                        }
+                        if (components[i].Text != null && components[i].Text != string.Empty)
+                        {
+                            Vector2 position = components[i].Position + (components[i].Size.ToVector2() / 2) - (font.MeasureString(components[i].Text) / 2);
+                            spriteBatch.DrawString(font, components[i].Text, position, Color.Black);
+                        }
                     }
-                    else if (components[i].picture != null)
-                    {
-                        spriteBatch.Draw(components[i].picture, components[i].Position, null, components[i].Color, 0, new Vector2(0), components[i].Scale, SpriteEffects.None, 0);
-                    }
-                    if (components[i].Text != null && components[i].Text != string.Empty)
-                    {
-                        Vector2 position = components[i].Position + (components[i].Size.ToVector2() / 2) - (font.MeasureString(components[i].Text) / 2);
-                        spriteBatch.DrawString(font, components[i].Text, position, Color.Black);
-                    }
+                }
+                else if(components[i] is Panel) 
+                {
+                    ((Panel)components[i]).Draw(spriteBatch);
                 }
             }
         }
@@ -97,9 +105,15 @@ namespace UIProject
         {
             components.Add(component);
         }
+
         public virtual void RemoveComponent(int value)
         {
             components.RemoveAt(value);
+        }
+
+        public virtual void RemoveComponent(IComponent component)
+        {
+            components.Remove(component);
         }
 
         public void RemoveAllComponents()
