@@ -43,13 +43,5 @@ namespace _0x46696E616C.Buildings
         {
             return new Lab(tex, position, Icon, world, proj);
         }
-
-        public void Learn(ITech tech)
-        {
-            foreach(ITechObserver observer in techObservers)
-            {
-                observer.Update(tech);
-            }
-        }
     }
 }

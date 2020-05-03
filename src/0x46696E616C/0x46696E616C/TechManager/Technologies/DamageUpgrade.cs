@@ -18,9 +18,10 @@ namespace _0x46696E616C.TechManager.Technologies
 
         public DamageUpgrade(Stat upgrade, TextureValue icon, Vector2 position) : base(upgrade, icon, position)
         {
-            cost = new Wallet();
-            cost.Deposit(new Likes(), 25);
-            cost.Deposit(new Money(), 50);
+            Cost = new Wallet();
+            Cost.Deposit(new Likes(), 2.5f);
+            Cost.Deposit(new Money(), 5.0f);
+            LearnTime = 10;
         }
 
     }

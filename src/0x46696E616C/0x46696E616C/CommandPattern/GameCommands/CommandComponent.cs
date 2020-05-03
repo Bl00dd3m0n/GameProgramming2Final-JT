@@ -337,20 +337,32 @@ namespace _0x46696E616C.CommandPattern
         /// </summary>
         /// <param name="build"></param>
         /// <param name="unit"></param>
-        public void Train(Building build, IUnit unit)
+        public void Train(Building building, IUnit unit)
         {
-            if (unit is BasicUnit)
+            Wallet wallet = resources.Withdraw(unit.Cost);
+            if (wallet != null)
             {
-                unit = ((BasicUnit)unit).NewInstace(0, unit.Position);
-            } 
-            build.trainingQueue.Enqueue((IQueueable<TextureValue>)unit);
+                if (unit is BasicUnit)
+                {
+                    unit = ((BasicUnit)unit).NewInstace(0, unit.Position);
+                }
+                building.trainingQueue.Enqueue((IQueueable<TextureValue>)unit);
+            }
+        }
+        public void Learn(Building building, ITech tech)
+        {
+            Wallet wallet = resources.Withdraw(((Technology)tech).Cost);
+            if (wallet != null)
+            {
+                building.trainingQueue.Enqueue((IQueueable<TextureValue>)tech);
+            }
         }
         /// <summary>
         /// Actual training update loop - returns the units that are at full health(AKA fully trained)
         /// </summary>
         private void Train()
         {
-            if (resources.Count(new Energy()) > 0)//Shut off energy if out of power
+            if (resources.Count(new Energy()) > 0)//Shut off training if out of power
             {
                 Building[] buildings = world.GetTiles(Team).Where(l => l is Building).Cast<Building>().ToArray();
                 for (int i = 0; i < buildings.Length; i++)
@@ -420,7 +432,10 @@ namespace _0x46696E616C.CommandPattern
         /// <param name="building"></param>
         internal void Repair(Building building)
         {
-            toBuild.Add(building);
+            if (!toBuild.Contains(building))
+            {
+                toBuild.Add(building);
+            }
             foreach (IUnit unit in SelectedUnits)
             {
                 if (unit is Civilian)

@@ -22,9 +22,9 @@ namespace _0x46696E616C.Units.AllyUnit
         public Ballista(string name, Vector2 size, float totalHealth, float currentHealth, Vector2 position, BaseUnitState state, TextureValue texture, Color color, TextureValue icon, WorldHandler world, ProjectileManager projectile, float range) : base(name, size, totalHealth, currentHealth, position, state, texture, color, icon, world, range)
         {
             Cost = new Wallet();
-            Cost.Deposit(new Steel(), 10);
-            Cost.Deposit(new Wood(), 50);
-            Cost.Deposit(new Money(), 200);
+            Cost.Deposit(new Steel(), 1);
+            Cost.Deposit(new Wood(), 5);
+            Cost.Deposit(new Money(), 20);
             attack = new Ranged(projectile, stats[typeof(Range)].Value);
             stats.Add(new AttackPower("Attack", 50));
             stats.Add(new Health("Health", 10));

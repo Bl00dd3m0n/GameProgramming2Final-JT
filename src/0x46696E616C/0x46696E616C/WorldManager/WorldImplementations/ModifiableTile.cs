@@ -37,14 +37,15 @@ namespace WorldManager.TileHandlerLibrary
             }
             set
             {
-                if (CurrentHealth <= TotalHealth || CurrentHealth - value < CurrentHealth)//Doesn't let you build past full health
+                if (CurrentHealth < TotalHealth || CurrentHealth - value < CurrentHealth)//Doesn't let you build past full health
                 {
                     currentHealth = value;
+                    if (currentHealth >= TotalHealth && !built)
+                    {
+                        built = true;
+                    }
                 }
-                else if (currentHealth >= TotalHealth && !built)
-                {
-                    built = true;
-                }
+
             }
         }
 

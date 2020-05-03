@@ -19,6 +19,7 @@ using _0x46696E616C.TechManager.Stats;
 using WorldManager;
 using System.Linq;
 using _0x46696E616C.Units.Attacks;
+using _0x46696E616C.TechManager.Technologies;
 
 namespace _0x46696E616C.Buildings
 {
@@ -57,6 +58,8 @@ namespace _0x46696E616C.Buildings
 
         protected ProjectileManager proj;
 
+        protected float trainTimer;
+
         public Building(TextureValue texture, Vector2 position, TextureValue Icon, WorldHandler world, ProjectileManager proj) : base(texture, position, Color.Blue)
         {
             Cost = new Wallet();
@@ -86,23 +89,37 @@ namespace _0x46696E616C.Buildings
         {
             techObservers.Add(observer);
         }
-
+        //this method is called every second
         public IQueueable<TextureValue> Train(GraphicsDevice gd)
         {
             if (trainingQueue.Count > 0)
             {
                 trainingObject = trainingQueue.Peek();
-                if (((IEntity)trainingObject).CurrentHealth >= ((IEntity)trainingObject).TotalHealth)
+                if (trainingObject is IEntity)
                 {
-                    if (trainingObject is BasicUnit)
+                    if (((IEntity)trainingObject).CurrentHealth >= ((IEntity)trainingObject).TotalHealth)
                     {
-                        ((BasicUnit)trainingObject).UpdatePosition(gd, spawnPoint);
-                        ((BasicUnit)trainingObject).PlacedTile();
-                        ((BasicUnit)trainingObject).SetTeam(this.TeamAssociation);
+                        if (trainingObject is BasicUnit)
+                        {
+                            ((BasicUnit)trainingObject).UpdatePosition(gd, spawnPoint);
+                            ((BasicUnit)trainingObject).PlacedTile();
+                            ((BasicUnit)trainingObject).SetTeam(this.TeamAssociation);
+                        }
+                        return trainingQueue.Dequeue();
                     }
-                    return trainingQueue.Dequeue();
+                    ((BasicUnit)trainingObject).CurrentHealth += 10f;//this probably should be updated too
                 }
-                ((BasicUnit)trainingObject).CurrentHealth += 10f;//this probably should be updated too
+                else if (trainingObject is ITech)
+                {
+                    if (trainTimer >= ((Technology)trainingObject).LearnTime)
+                    {
+                        trainTimer = 0;
+                        Learn((ITech)trainingObject);
+                        return null;
+                    }
+                    trainTimer++;//Since it's supposed to be called every one second it's fair to add 1 every time
+                }
+
             }
             return null;
         }
@@ -126,6 +143,15 @@ namespace _0x46696E616C.Buildings
         public virtual void AddQueueable(IQueueable<TextureValue> item) // For Tech
         {
             queueableThings.Add(item);//workaround for not being able to have UnitComponent
+        }
+
+
+        public void Learn(ITech tech)
+        {
+            foreach (ITechObserver observer in techObservers)
+            {
+                observer.Update(tech);
+            }
         }
 
         public override void Damage(float amount)

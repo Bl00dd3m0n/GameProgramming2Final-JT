@@ -5,6 +5,7 @@ using _0x46696E616C.Input;
 using _0x46696E616C.MobHandler;
 using _0x46696E616C.MobHandler.Units;
 using _0x46696E616C.TechManager.Stats;
+using _0x46696E616C.TechManager.Technologies;
 using _0x46696E616C.UIComponents;
 using _0x46696E616C.Units;
 using _0x46696E616C.Units.HostileMobManager;
@@ -289,7 +290,7 @@ namespace _0x46696E616C.CommandPattern
                     }
                 }
             }
-            else if (tile is Building)
+            else if (tile is Building && ((ModifiableTile)tile).built)
             {
                 foreach (IQueueable<TextureValue> queueable in ((Building)tile).QueueableThings)
                 {
@@ -300,6 +301,21 @@ namespace _0x46696E616C.CommandPattern
                         float width = ((BasicUnit)queueable).Size.X;
                         float height = ((BasicUnit)queueable).Size.Y;
                         com.Scale = 2;
+                        overlay.AddComponent(com);
+                        x += 128 * scale;
+                        if (x + 128 * scale > 791)
+                        {
+                            x = 591;
+                            y += 128 * scale;
+                        }
+                    }
+                    if (queueable is ITech)
+                    {
+                        ((Technology)queueable).Position = new Vector2(x, y);
+                        Component com = new CommandButton(Game.GraphicsDevice, new LearnCommand((ITech)queueable, (Building)tile), queueable, new Point(32));
+                        float width = ContentHandler.DrawnTexture(((Technology)queueable).Icon).Bounds.Size.X;
+                        float height = ContentHandler.DrawnTexture(((Technology)queueable).Icon).Bounds.Size.Y;
+                        com.Scale = 0.5f;
                         overlay.AddComponent(com);
                         x += 128 * scale;
                         if (x + 128 * scale > 791)
