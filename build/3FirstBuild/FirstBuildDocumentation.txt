@@ -33,3 +33,9 @@ Zoom in(Scroll Up) - Scrolls into the screen
 Zoom out(Scroll Down) - Scrolls out
 Deselect(Escape) - Deselects the selected building
 Up/Down/Left/Right(W/S/A/D)- Move the camera 
+
+
+
+Use Final Build Hash:
+8b612adc8b387fe0bf0e0b1364c394b2b1a21a59
+Found a save error that was causing crashes for the main menu
