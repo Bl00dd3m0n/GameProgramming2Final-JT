@@ -26,9 +26,9 @@ namespace _0x46696E616C.Buildings
             queueableThings = new List<IQueueable<TextureValue>>();
             queueableThings.Add(new DamageUpgrade(new AttackPower("Power", 10), TextureValue.Damage, new Vector2()));
             Cost = new Wallet();
-            Cost.Deposit(new Steel(), 1000);
-            Cost.Deposit(new Wood(), 2000);
-            Cost.Deposit(new Money(), 1000);
+            Cost.Deposit(new Steel(), 100);
+            Cost.Deposit(new Wood(), 200);
+            Cost.Deposit(new Money(), 100);
             ChargeAMinute = new List<int>() { 100 };
             ChargeTypes = new List<IResource>() { new Energy() };
             name = "Lab";

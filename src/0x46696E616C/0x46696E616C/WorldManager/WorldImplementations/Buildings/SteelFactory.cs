@@ -29,7 +29,7 @@ namespace _0x46696E616C.Buildings
         {
             Cost = new Wallet();
             Cost.Deposit(new Iron(), 200);
-            Cost.Deposit(new Wood(), 3000);
+            Cost.Deposit(new Wood(), 300);
             Cost.Deposit(new Money(), 0);
             productionTypes = new List<IResource>() { new Steel() };
             ProductionAMinute= new List<int>() { 60 };

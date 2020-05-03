@@ -22,7 +22,7 @@ namespace _0x46696E616C.Buildings
         public ServerFarm(TextureValue texture, Vector2 position, TextureValue icon, WorldHandler world, ProjectileManager proj) : base(texture, position, icon, world, proj)
         {
             Cost = new Wallet();
-            Cost.Deposit(new Steel(), 1000);
+            Cost.Deposit(new Steel(), 100);
             Cost.Deposit(new Wood(), 200);
             Cost.Deposit(new Money(), 100);
             energyCost = 5;

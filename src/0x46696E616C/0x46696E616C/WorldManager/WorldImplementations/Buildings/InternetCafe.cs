@@ -28,8 +28,8 @@ namespace _0x46696E616C.Buildings
             ProductionAMinute = new List<int>() { 5, 1 };
             productionTypes = new List<IResource>() { new Money(), new Likes() };
             Cost = new Wallet();
-            Cost.Deposit(new Steel(), 2000);
-            Cost.Deposit(new Wood(), 1000);
+            Cost.Deposit(new Steel(), 200);
+            Cost.Deposit(new Wood(), 100);
             Cost.Deposit(new Iron(), 100);
             ChargeAMinute = new List<int>() { 25 };
             ChargeTypes = new List<IResource>() { new Energy() };
