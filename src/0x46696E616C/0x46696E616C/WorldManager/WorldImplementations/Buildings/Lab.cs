@@ -21,10 +21,10 @@ namespace _0x46696E616C.Buildings
 
         public List<IResource> ChargeTypes { get; protected set; } 
 
-        public Lab(TextureValue texture, Vector2 position, TextureValue icon, WorldHandler world, ProjectileManager proj) : base(texture, position, icon, world, proj)
+        public Lab(TextureValue texture, Vector2 position, TextureValue icon, WorldHandler world, ProjectileManager proj, Stats teamStats) : base(texture, position, icon, world, proj, teamStats)
         {
             queueableThings = new List<IQueueable<TextureValue>>();
-            queueableThings.Add(new DamageUpgrade(new AttackPower("Power", 10), TextureValue.Damage, new Vector2()));
+            queueableThings.Add(new DamageUpgrade(new MeleeDamage("Power", 10), TextureValue.Damage, new Vector2()));
             Cost = new Wallet();
             Cost.Deposit(new Steel(), 100);
             Cost.Deposit(new Wood(), 200);
@@ -35,13 +35,13 @@ namespace _0x46696E616C.Buildings
             Position = position;
             Size = new Vector2(2, 2);
             stats.Add(new Health("Health", 1000));
-            CurrentHealth = 0;
+            currentHealth = 0;
             healthBar = new HealthBar(new Rectangle(new Point((int)position.X, (int)position.Y - 1), new Point((int)(Size.X * 16), (int)(Size.Y))));
             BuildingDescription = "Used to learn technology to improve production.";
         }
         public override Building NewInstace(TextureValue tex, Vector2 position, TextureValue Icon)
         {
-            return new Lab(tex, position, Icon, world, proj);
+            return new Lab(tex, position, Icon, world, proj, teamStats);
         }
     }
 }

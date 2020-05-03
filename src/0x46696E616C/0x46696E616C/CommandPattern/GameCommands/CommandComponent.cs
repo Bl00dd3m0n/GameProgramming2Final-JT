@@ -44,7 +44,7 @@ namespace _0x46696E616C.CommandPattern
         public Texture2D SpawnMarker;
         private Building spawnMarkerBuilding;
         public bool IsGameOver { get; private set; }
-
+        internal Stats TeamStats { get; private set; }
         public CommandComponent(Game game, Wallet startingResources) : base(game)
         {
             toBuild = new List<Building>();
@@ -52,22 +52,23 @@ namespace _0x46696E616C.CommandPattern
             ID++;
             this.Team = ID;
             spawnMarkerBuilding = null;
+            TeamStats = new Stats();
         }
         /// <summary>
         /// Test Constructor to easily get units
         /// </summary>
         /// <param name="game"></param>
         /// <param name="startingResources"></param>
-        public CommandComponent(Game game, Wallet startingResources, List<IUnit> units, WorldHandler world) : base(game)
+        public CommandComponent(Game game, Wallet startingResources, WorldHandler world) : base(game)
         {
             toBuild = new List<Building>();
             resources = startingResources;
-            this.SelectedUnits = units.ToList();
             resourceStringList = new List<string>();
             ID++;
             this.Team = ID;
             this.world = world;
             IsGameOver = false;
+            SelectedUnits = new List<IUnit>();
         }
         /// <summary>
         /// set a spawn point if the spawnmarker isn't null otherwise set the spawn marker

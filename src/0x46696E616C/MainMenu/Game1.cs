@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
+using System.IO;
 using UIProject;
 
 namespace MainMenu
@@ -79,15 +80,22 @@ namespace MainMenu
             Cursor = this.Content.Load<Texture2D>("Cursor");
             canv = new Canvas(this);
             ss = new StyleSheet();
-
             inputDef = new InputDefinitions(this);
-            LoadCanvas("MainMenu.ss");
-            CurrentPage = "Main Menu";
+
             MouseKeyboard keyboard = new MouseKeyboard(this);
             canv.Initialize();
             mK = new MouseKeyboard(this);
             this.Components.Add(mK);
-
+            if (!File.Exists("MainMenu.ss"))
+            {
+                GenerateStyleSheet("MainMenu");
+            }
+            if (!File.Exists("SettingsPage.ss"))
+            {
+                GenerateStyleSheet("SettingsPage");
+            }
+            LoadCanvas("MainMenu.ss");
+            CurrentPage = "Main Menu";
         }
         /// <summary>
         /// Generates a specified style sheet by call

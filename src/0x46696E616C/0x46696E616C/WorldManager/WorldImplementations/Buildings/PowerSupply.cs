@@ -19,7 +19,7 @@ namespace _0x46696E616C.Buildings
 
         public List<IResource> ChargeTypes { get; protected set; }
 
-        public PowerSupply(TextureValue texture, Vector2 position, TextureValue icon, WorldHandler world, ProjectileManager proj) : base(texture, position, icon, world, proj)
+        public PowerSupply(TextureValue texture, Vector2 position, TextureValue icon, WorldHandler world, ProjectileManager proj, Stats teamStats) : base(texture, position, icon, world, proj, teamStats)
         {
             Cost = new Wallet();
             Cost.Deposit(new Steel(), 100);
@@ -36,7 +36,7 @@ namespace _0x46696E616C.Buildings
         }
         public override Building NewInstace(TextureValue tex, Vector2 position, TextureValue Icon)
         {
-            return new PowerSupply(tex, position, Icon, world, proj);
+            return new PowerSupply(tex, position, Icon, world, proj, teamStats);
         }
     }
 }

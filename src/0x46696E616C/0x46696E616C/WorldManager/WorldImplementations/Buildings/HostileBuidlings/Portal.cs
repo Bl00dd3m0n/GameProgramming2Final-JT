@@ -19,22 +19,22 @@ namespace _0x46696E616C.WorldManager.WorldImplementations.Buildings.HostileBuidl
 {
     class Portal : Building
     {
-        public Portal(TextureValue texture, Vector2 position, TextureValue icon, WorldHandler world, ProjectileManager proj) : base(texture, position, icon, world, proj)
+        public Portal(TextureValue texture, Vector2 position, TextureValue icon, WorldHandler world, ProjectileManager proj, Stats stats) : base(texture, position, icon, world, proj, stats)
         {
             energyCost = 0;
             name = "Portal";
             Position = position;
             Size = new Vector2(4, 4);
             stats.Add(new Health("Health", 5000));
-            CurrentHealth = 5000;
+            currentHealth = 5000;
             tags.Add("Portal");
             healthBar = new HealthBar(new Rectangle(new Point((int)position.X, (int)position.Y - 1), new Point((int)(Size.X * 16), (int)(Size.Y))));
             BuildingDescription = "The Portal summons waves";
         }
 
-        public override Building NewInstace( TextureValue tex, Vector2 position, TextureValue Icon)
+        public override Building NewInstace(TextureValue tex, Vector2 position, TextureValue Icon)
         {
-            return new Portal(tex, position, Icon, world,proj);
+            return new Portal(tex, position, Icon, world,proj,stats);
         }
 
         public override void AddQueueable(IQueueable<TextureValue> item)

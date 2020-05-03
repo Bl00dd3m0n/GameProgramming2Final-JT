@@ -41,7 +41,7 @@ namespace _0x46696E616C
         ProjectileManager projectileManager;
         CollisionHandler collision;
         public bool InProgress { get; private set; }
-        public ActualGame(Game game) : base(game)
+        public ActualGame(Game game, string World) : base(game)
         {
             InProgress = true;
         }
@@ -116,43 +116,61 @@ namespace _0x46696E616C
             cam = new Camera(Game, input, world, startPoint);
             #endregion
             projectileManager = new ProjectileManager(Game, world, cam, collision);
-            //Adds a unit to start
-            #region startUnits
-            List<IUnit> units = new List<IUnit>();
-            units.Add(new Civilian("Base unit", new Vector2(1, 1), 100, 100, startPoint + new Vector2(4, 5), BaseUnitState.Idle, TextureValue.Civilian, world, TextureValue.Civilian,1, projectileManager).AddQueueables());
-            world.AddMob(units[0]);
-            ((BasicUnit)units[0]).SetTeam(1);
-            #endregion
             #region componenets
             //Game components
-            cc = new CommandComponent(Game, startingResources, units, world);
+            cc = new CommandComponent(Game, startingResources, world);
             process = new CommandProccesor(Game, new List<IUnit>(), world, input, cc, cam);
             overlay = new Overlay(Game, input, world, process);
             #endregion
+            //Wave handler
+            wave = new WaveManager(Game, world, projectileManager);
+            //Adds a unit to start
+            #region startUnits
+            List<IUnit> units = new List<IUnit>();
+            units.Add(new Civilian("Base unit", new Vector2(1, 1), 100, 100, startPoint + new Vector2(4, 5), BaseUnitState.Idle, TextureValue.Civilian, world, TextureValue.Civilian,1, projectileManager, cc.TeamStats).AddQueueables());
+            world.AddMob(units[0]);
+            ((BasicUnit)units[0]).SetTeam(1);
+            #endregion
+
             #region buildingPlacement
             #region Allies
             //Center
-            Center center = new Center(TextureValue.Center, startPoint, TextureValue.CenterIcon, world, projectileManager);
+            Center center = new Center(TextureValue.Center, startPoint, TextureValue.CenterIcon, world, projectileManager, cc.TeamStats);
             center.AddQueueables();
             center.SetTeam(cc.Team);
             center.SetSpawn(startPoint + center.Size + new Vector2(0, 1));
             center.PlacedTile();
             world.Place(center, startPoint);
             center.Subscribe((IBuildingObserver)cc);
+            center.Damage(-5000);
             #endregion
             #region Enemies
             //Portal
-            Portal portal = new Portal(TextureValue.Portal, startPoint + new Vector2(0, 20), TextureValue.Portal, world, projectileManager);
+            startPoint = new Vector2(82, 190);
+            Portal portal = new Portal(TextureValue.Portal, startPoint, TextureValue.Portal, world, projectileManager, wave.TeamStats);
             portal.SetTeam(cc.Team + 1);
             portal.SetSpawn(startPoint + portal.Size + new Vector2(0, 1));
             portal.PlacedTile();
-            world.Place(portal, startPoint + new Vector2(0, 20));
+            world.Place(portal, startPoint);
+
+            startPoint = new Vector2(90, 190);
+            portal = new Portal(TextureValue.Portal, startPoint, TextureValue.Portal, world, projectileManager, wave.TeamStats);
+            portal.SetTeam(cc.Team + 1);
+            portal.SetSpawn(startPoint + portal.Size + new Vector2(0, 1));
+            portal.PlacedTile();
+            world.Place(portal, startPoint);
             portal.Subscribe((IBuildingObserver)cc);
+
+            startPoint = new Vector2(98, 190);
+            portal = new Portal(TextureValue.Portal, startPoint, TextureValue.Portal, world, projectileManager, wave.TeamStats);
+            portal.SetTeam(cc.Team + 1);
+            portal.SetSpawn(startPoint + portal.Size + new Vector2(0, 1));
+            portal.PlacedTile();
+            world.Place(portal, startPoint);
             #endregion
             #endregion
 
-            //Wave handler
-            wave = new WaveManager(Game, world, projectileManager);
+
 
             //Initializer
             wave.Initialize();
@@ -171,7 +189,6 @@ namespace _0x46696E616C
         {
             // TODO: Unload any non ContentManager content here
         }
-        bool EndRun;
         /// <summary>
         /// Allows the game to run logic such as updating the world,
         /// checking for collisions, gathering input, and playing audio.
@@ -181,11 +198,11 @@ namespace _0x46696E616C
         {
             if (InProgress)
             {
-                wave.Update(gameTime);
                 cam.Update(gameTime);
+                input.Update(gameTime);
+                wave.Update(gameTime);
                 projectileManager.Update(gameTime);
                 process.Update(gameTime);
-                input.Update(gameTime);
                 cc.Update(gameTime);
                 collision.Update(gameTime);
             }
@@ -203,7 +220,7 @@ namespace _0x46696E616C
 
             base.Update(gameTime);
         }
-        bool debug = false;
+        bool debug = true;
         /// <summary>
         /// This is called when the game should draw itself.
         /// </summary>
@@ -213,7 +230,7 @@ namespace _0x46696E616C
 
             GraphicsDevice.Clear(Color.Black);
             // TODO: Add your drawing code here
-            if (InProgress && (!cc.IsGameOver || !EndRun))
+            if (InProgress && !cc.IsGameOver)
             {
                 cam.Draw(gameTime);
                 projectileManager.Draw(spriteBatch);

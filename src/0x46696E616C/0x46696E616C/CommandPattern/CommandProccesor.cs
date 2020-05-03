@@ -242,6 +242,11 @@ namespace _0x46696E616C.CommandPattern
             EntityDetails.Initialize();
             Component com = new ImageBox(tile.block.texture, new Vector2(227, 359), (tile.Size * 16).ToPoint(), Color.White);
             com.Scale = 2 / (tile.Size.X);
+            if (tile is Building)
+            {
+                com = new ImageBox(((Building)tile).Icon, new Vector2(227, 359), (tile.Size * 16).ToPoint(), Color.White);
+                com.Scale = 0.25f;
+            }
             EntityDetails.AddComponent(com);
             float y = 380;
             for (int i = 0; i < tile.stats.Count; i++)
@@ -251,7 +256,7 @@ namespace _0x46696E616C.CommandPattern
                     com = new ImageBox(tile.healthBar.Health, new Vector2(227, 359 + 32), new Point((int)com.Scale, 1), Color.White);
                     com.Scale = 2;
                     EntityDetails.AddComponent(com);
-                    com = com = new Label(new Vector2(217 + 32, 359 + 64), $"{tile.CurrentHealth}/{tile.TotalHealth}", Color.White);
+                    com = com = new Label(new Vector2(224, 359 + 46), $"{tile.CurrentHealth}/{tile.TotalHealth}", Color.White);
                 }
                 else
                 {

@@ -19,13 +19,16 @@ namespace _0x46696E616C.Units.HostileMobManager
     {
         float checkPosTimer;
         float InteractTimer;
-        public HostileMob(string name, Vector2 size, float totalHealth, float currentHealth, Vector2 position, BaseUnitState state, TextureValue texture, Color color, TextureValue icon, WorldHandler world, float range) : base(name, size, totalHealth, currentHealth, position, state, texture, color, icon, world, range)
+        private Color color;
+
+        public HostileMob(string name, Vector2 size, float totalHealth, float currentHealth, Vector2 position, BaseUnitState state, TextureValue texture, Color color, TextureValue icon, WorldHandler world, float range, Stats teamStats) : base(name, size, totalHealth, currentHealth, position, state, texture, color, icon, world, range, teamStats)
         {
             waypoints = new List<Vector2>();
             speed = 50;
-            stats.Add(new AttackPower("Attack", 3));
+            stats.Add(new MeleeDamage("Attack", 3));
             tags.Add("CanAttack");
         }
+
         public override void Update(GameTime gameTime)
         {
             UpdateMove(gameTime);
@@ -43,7 +46,7 @@ namespace _0x46696E616C.Units.HostileMobManager
             {
                 if (Vector2.Distance(Position, Target.Position + DistanceFromPosition) < stats[typeof(Range)].Value && UnitState == BaseUnitState.attack)
                 {
-                    attack.Attack(Target, this, stats[typeof(AttackPower)].Value);
+                    attack.Attack(Target, this, stats[typeof(MeleeDamage)].Value);
                     if (((ModifiableTile)Target).State == tileState.dead)
                     {
                         Target = null;

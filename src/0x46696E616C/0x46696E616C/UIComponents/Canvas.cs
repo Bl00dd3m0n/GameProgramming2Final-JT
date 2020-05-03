@@ -90,7 +90,11 @@ namespace UIProject
                         }
                         if (components[i].Text != null && components[i].Text != string.Empty)
                         {
-                            Vector2 position = components[i].Position + (components[i].Size.ToVector2() / 2) - (font.MeasureString(components[i].Text) / 2);
+                            Vector2 position = components[i].Position;
+                            if (!(components[i] is Label))
+                            {
+                                position = components[i].Position + (components[i].Size.ToVector2() / 2) - (font.MeasureString(components[i].Text) / 2);
+                            }
                             spriteBatch.DrawString(font, components[i].Text, position, Color.Black);
                         }
                     }

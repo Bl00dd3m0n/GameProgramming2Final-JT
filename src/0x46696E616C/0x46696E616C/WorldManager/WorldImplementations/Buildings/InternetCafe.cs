@@ -23,7 +23,7 @@ namespace _0x46696E616C.Buildings
 
         public List<IResource> ChargeTypes { get; protected set; }
 
-        public InternetCafe(TextureValue texture, Vector2 position, TextureValue icon, WorldHandler world, ProjectileManager proj) : base(texture, position, icon, world, proj)
+        public InternetCafe(TextureValue texture, Vector2 position, TextureValue icon, WorldHandler world, ProjectileManager proj, Stats teamStats) : base(texture, position, icon, world, proj, teamStats)
         {
             ProductionAMinute = new List<int>() { 5, 1 };
             productionTypes = new List<IResource>() { new Money(), new Likes() };
@@ -37,13 +37,13 @@ namespace _0x46696E616C.Buildings
             Position = position;
             Size = new Vector2(2, 2);
             stats.Add(new Health("Health", 500));
-            CurrentHealth = 0;
+            currentHealth = 0;
             healthBar = new HealthBar(new Rectangle(new Point((int)position.X, (int)position.Y - 1), new Point((int)(Size.X * 16), (int)(Size.Y))));
             BuildingDescription = "Internet Cafe used for units to generate money and likes in.";
         }
         public override Building NewInstace(TextureValue tex, Vector2 position, TextureValue Icon)
         {
-            return new InternetCafe(tex, position, Icon, world, proj);
+            return new InternetCafe(tex, position, Icon, world, proj, teamStats);
         }
     }
 }

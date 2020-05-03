@@ -48,8 +48,9 @@ namespace _0x46696E616C.CommandPattern.Commands
         A_Star aStar;
         protected WorldHandler world { get; set; }
         protected float range;
+        protected Stats teamStats { get; set; }
         //TODO List of commands needed to be implemented for the units
-        public BasicUnit(string name, Vector2 size, float totalHealth, float currentHealth, Vector2 position, BaseUnitState state, TextureValue texture, Color color, TextureValue icon, WorldHandler world, float range) : base(texture, position, color)
+        public BasicUnit(string name, Vector2 size, float totalHealth, float currentHealth, Vector2 position, BaseUnitState state, TextureValue texture, Color color, TextureValue icon, WorldHandler world, float range, Stats teamStats) : base(texture, position, color)
         {
             Cost = new Wallet();// TODO charge for units
             this.name = name;
@@ -71,6 +72,7 @@ namespace _0x46696E616C.CommandPattern.Commands
             nextPoint = Position;
             UnitState = BaseUnitState.Idle;
             attack = new Melee(stats[typeof(Range)].Value);
+            this.teamStats = teamStats;
         }
 
         public virtual BasicUnit AddQueueables()
@@ -86,7 +88,7 @@ namespace _0x46696E616C.CommandPattern.Commands
 
         public virtual BasicUnit NewInstace(float currentHealth, Vector2 position)
         {
-            return new BasicUnit(this.name, this.Size, this.TotalHealth, currentHealth, position, BaseUnitState.Idle, this.block.texture, this.tileColor, this.Icon, world, this.stats[typeof(Range)].Value).AddQueueables();
+            return new BasicUnit(this.name, this.Size, this.TotalHealth, currentHealth, position, BaseUnitState.Idle, this.block.texture, this.tileColor, this.Icon, world, this.stats[typeof(Range)].Value, teamStats).AddQueueables();
         }
 
 
@@ -132,7 +134,10 @@ namespace _0x46696E616C.CommandPattern.Commands
 
             if (world.GetUnit(TempPosition) != null && world.GetUnit(TempPosition) != this)
             {
-                //Move(TargetPosition);
+                if (Direction.X < 0) { nextPoint = TempPosition + new Vector2(0, 1); }
+                else if (Direction.X > 0) { nextPoint = TempPosition - new Vector2(0, 1); }
+                if (Direction.Y < 0) { nextPoint = TempPosition + new Vector2(1, 0); }
+                else if (Direction.X > 0) { nextPoint = TempPosition - new Vector2(1, 0); }
             }
             else if (Direction != zero)
             {
@@ -162,9 +167,9 @@ namespace _0x46696E616C.CommandPattern.Commands
             float closestDistance = 0;
             if (Target != null && Target is IEntity)
             {
-                for (int y = -1; y < Target.Size.Y; y++)
+                for (int y = -1; y <= Target.Size.Y; y++)
                 {
-                    for (int x = -1; x < Target.Size.X; x++)
+                    for (int x = -1; x <= Target.Size.X; x++)
                     {
                         if (x == -1 || y == -1 || x == Target.Size.X || y == Target.Size.Y)
                         {
@@ -185,7 +190,8 @@ namespace _0x46696E616C.CommandPattern.Commands
             if (waypoints.Count > 0)
             {
                 nextPoint = waypoints[0];
-            } else
+            }
+            else
             {
                 nextPoint = Position;
             }

@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace _0x46696E616C.TechManager.Stats
 {
-    public class AttackPower : Stat
+    public class MeleeDamage : Stat
     {
-        public AttackPower(string name, float value) : base(name, value)
+        public MeleeDamage(string name, float value) : base(name, value)
         {
             Texture = TextureValue.Damage;
         }

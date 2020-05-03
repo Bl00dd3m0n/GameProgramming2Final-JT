@@ -19,13 +19,14 @@ namespace _0x46696E616C.Buildings
 
         public List<IResource> ChargeTypes { get; protected set; }
 
-        public ServerFarm(TextureValue texture, Vector2 position, TextureValue icon, WorldHandler world, ProjectileManager proj) : base(texture, position, icon, world, proj)
+        public ServerFarm(TextureValue texture, Vector2 position, TextureValue icon, WorldHandler world, ProjectileManager proj, Stats teamStats) : base(texture, position, icon, world, proj, teamStats)
         {
             Cost = new Wallet();
             Cost.Deposit(new Steel(), 100);
             Cost.Deposit(new Wood(), 200);
             Cost.Deposit(new Money(), 100);
-            energyCost = 5;
+            ChargeAMinute = new List<int>(5);
+            ChargeTypes = new List<IResource>() { new Energy() };
             name = "Server Farm";
             Position = position;
             Size = new Vector2(3, 3);
@@ -36,7 +37,7 @@ namespace _0x46696E616C.Buildings
 
         public override Building NewInstace(TextureValue tex, Vector2 position, TextureValue Icon)
         {
-            return new ServerFarm(tex, position, Icon, world , proj);
+            return new ServerFarm(tex, position, Icon, world , proj, teamStats);
         }
     }
 }

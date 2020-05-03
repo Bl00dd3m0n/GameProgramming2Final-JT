@@ -31,7 +31,7 @@ namespace MainMenu.Component
         #endregion
         public override void Click(Game thisGame)
         {
-            game = new ActualGame(thisGame);
+            game = new ActualGame(thisGame, "World");
             base.Click(thisGame);
         }
         public ActualGame LoadedGame()

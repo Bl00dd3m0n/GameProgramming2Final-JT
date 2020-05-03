@@ -18,9 +18,9 @@ namespace _0x46696E616C.Units.AllyUnit
     {
         float timer;
 
-        public OffensiveUnits(string name, Vector2 size, float totalHealth, float currentHealth, Vector2 position, BaseUnitState state, TextureValue texture, Color color, TextureValue icon, WorldHandler world, float range) : base(name, size, totalHealth, currentHealth, position, state, texture, color, icon, world, range)
+        public OffensiveUnits(string name, Vector2 size, float totalHealth, float currentHealth, Vector2 position, BaseUnitState state, TextureValue texture, Color color, TextureValue icon, WorldHandler world, float range, Stats teamstats) : base(name, size, totalHealth, currentHealth, position, state, texture, color, icon, world, range, teamstats)
         {
-            stats.Add(new AttackPower("Attack Power", 10));
+            stats.Add(new MeleeDamage("Attack Power", 10));
         }
 
         public override void Update(GameTime gameTime)
@@ -71,7 +71,7 @@ namespace _0x46696E616C.Units.AllyUnit
             {
                 if (((ModifiableTile)Target).TeamAssociation != this.TeamAssociation)
                 {
-                    attack.Attack(Target, this, this.stats[typeof(AttackPower)].Value);
+                    attack.Attack(Target, this, this.stats[typeof(MeleeDamage)].Value);
                     if (((ModifiableTile)Target).State == tileState.dead) Target = null;
                 }
             }

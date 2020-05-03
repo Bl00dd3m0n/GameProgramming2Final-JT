@@ -60,15 +60,16 @@ namespace _0x46696E616C.Buildings
 
         protected float trainTimer;
 
-        public Building(TextureValue texture, Vector2 position, TextureValue Icon, WorldHandler world, ProjectileManager proj) : base(texture, position, Color.Blue)
+        protected Stats teamStats;
+
+        public Building(TextureValue texture, Vector2 position, TextureValue Icon, WorldHandler world, ProjectileManager proj, Stats teamStats) : base(texture, position, Color.Blue)
         {
             Cost = new Wallet();
             name = "Building";
             Position = new Vector2(0, 0);
             Size = new Vector2(0, 0);
-            stats.Add(new Health("Health", 0));
-            CurrentHealth = 0;
-            energyCost = 0;
+            stats.Add(new Health("Health", 100000));
+            currentHealth = 0;
             healthBar = new HealthBar(new Rectangle(this.Position.ToPoint() - new Point(0, (int)(this.Size.Y * 16 + 1)), Size.ToPoint()));
             GarrisonedUnits = new List<IUnit>();
             this.Icon = Icon;//if the texture values change this breaks it find a better way to do this

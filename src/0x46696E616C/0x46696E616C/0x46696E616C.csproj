@@ -43,6 +43,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="CommandPattern\GameCommands\LearnCommand.cs" />
+    <Compile Include="TechManager\Stats\RangedDamage.cs" />
     <Compile Include="UIComponents\Panel.cs" />
     <Compile Include="Units\AllyUnit\Ballista.cs" />
     <Compile Include="Units\AllyUnit\OffensiveUnits.cs" />
@@ -71,7 +72,7 @@
     <Compile Include="TechManager\IQueueable.cs" />
     <Compile Include="TechManager\ITech.cs" />
     <Compile Include="TechManager\ITechObserver.cs" />
-    <Compile Include="TechManager\Stats\AttackPower.cs" />
+    <Compile Include="TechManager\Stats\MeleeDamage.cs" />
     <Compile Include="TechManager\Stats\BuildPower.cs" />
     <Compile Include="TechManager\Stats\HarvestPower.cs" />
     <Compile Include="TechManager\Stats\Health.cs" />

@@ -1,6 +1,8 @@
-﻿using _0x46696E616C.CommandPattern;
+﻿using _0x46696E616C.Buildings;
+using _0x46696E616C.CommandPattern;
 using _0x46696E616C.CommandPattern.Commands;
 using _0x46696E616C.MobHandler.Units;
+using _0x46696E616C.TechManager.Stats;
 using _0x46696E616C.Units.Attacks;
 using _0x46696E616C.Units.HostileMobManager;
 using Microsoft.Xna.Framework;
@@ -26,13 +28,15 @@ namespace MobHandler.HostileMobManager
         public float TimeTillSpawn { get { return waveSpawnTime - (waveSpawnTimer / 1000); } }
         public bool StartSpawn;
         public bool Won { get; private set; }
+        internal Stats TeamStats { get; private set; }
         public WaveManager(Game game, WorldHandler world, ProjectileManager projectileManager) : base(game)
         {
             this.world = world;
             Wave = 0;
             this.projectileManager = projectileManager;
             units = new List<IUnit>();
-            waveSpawnTime = 20f;
+            waveSpawnTime = 30f;
+            TeamStats = new Stats();
         }
 
         private void CheckGameOver()
@@ -49,7 +53,7 @@ namespace MobHandler.HostileMobManager
         public override void Update(GameTime gameTime)
         {
             waveSpawnTimer += gameTime.ElapsedGameTime.Milliseconds;
-            if (waveSpawnTimer / 1000 >= 300)//5 Minute spawn time
+            if (waveSpawnTimer / 1000 >= 300 && !StartSpawn)//5 Minute spawn time
             {
                 CheckGameOver();
                 StartSpawn = true;
@@ -59,7 +63,7 @@ namespace MobHandler.HostileMobManager
             {
                 foreach (IUnit unit in units)
                 {
-                    ((BasicUnit)unit).Update(gameTime);
+                    ((HostileMob)unit).Update(gameTime);
                 }
                 if (waveSpawnTimer / 1000 >= waveSpawnTime)
                 {
@@ -73,8 +77,8 @@ namespace MobHandler.HostileMobManager
         public void BasicWaveStart()
         {
             List<IUnit> tempUnits = new List<IUnit>();
-            tempUnits.Add(new HeadlessHorseman("Headless Horseman", new Vector2(1), (Wave * 100) + 100, (Wave * 100) + 100, new Vector2(318, 120), BaseUnitState.Idle, TextureValue.HeadlessHorseman, Color.Red, TextureValue.HeadlessHorseman, world, 1));
-            tempUnits.Add(new Mage("Mage", new Vector2(1), (Wave * 50) + 100, (Wave * 100) + 100, new Vector2(318, 113), BaseUnitState.Idle, TextureValue.Mage, Color.Red, TextureValue.Mage, world, projectileManager, 10));
+            tempUnits.Add(new HeadlessHorseman("Headless Horseman", new Vector2(1), (Wave * 100) + 100, (Wave * 100) + 100, new Vector2(318, 120), BaseUnitState.Idle, TextureValue.HeadlessHorseman, Color.Red, TextureValue.HeadlessHorseman, world, 1, TeamStats));
+            tempUnits.Add(new Mage("Mage", new Vector2(1), (Wave * 50) + 100, (Wave * 100) + 100, new Vector2(318, 113), BaseUnitState.Idle, TextureValue.Mage, Color.Red, TextureValue.Mage, world, projectileManager, 10, TeamStats));
 
             foreach (IUnit unit in tempUnits)
             {
@@ -88,13 +92,13 @@ namespace MobHandler.HostileMobManager
             Wave++;
             foreach (Tile tile in world.GetTiles("Portal"))
             {
-                SummonWave(wave);
+                SummonWave(wave, (Building)tile);
             }
         }
 
-        private void SummonWave(WaveDetails wave)
+        private void SummonWave(WaveDetails wave, Building building)
         {
-            units.AddRange(wave.GetUnits());
+            units.AddRange(wave.GetUnits(building));
             world.AddMobs(units);
         }
     }

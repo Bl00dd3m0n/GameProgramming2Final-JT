@@ -19,7 +19,7 @@ namespace _0x46696E616C.Buildings
 
         public List<IResource> ChargeTypes { get; protected set; } 
 
-        public MediaCenter(TextureValue texture, Vector2 position, TextureValue icon, WorldHandler world, ProjectileManager proj) : base(texture, position, icon, world, proj)
+        public MediaCenter(TextureValue texture, Vector2 position, TextureValue icon, WorldHandler world, ProjectileManager proj, Stats teamStats) : base(texture, position, icon, world, proj, teamStats)
         {
             Cost = new Wallet();
             Cost.Deposit(new Steel(), 100);
@@ -31,13 +31,13 @@ namespace _0x46696E616C.Buildings
             Position = position;
             Size = new Vector2(4, 4);
             stats.Add(new Health("Health", 2000));
-            CurrentHealth = 0;
+            currentHealth = 0;
             healthBar = new HealthBar(new Rectangle(new Point((int)position.X, (int)position.Y - 1), new Point((int)(Size.X * 16), (int)(Size.Y))));
             BuildingDescription = "In theory suppose to generate content, kinda pointless at this moment";
         }
         public override Building NewInstace(TextureValue tex, Vector2 position, TextureValue Icon)
         {
-            return new MediaCenter(tex, position, Icon, world ,proj);
+            return new MediaCenter(tex, position, Icon, world ,proj, teamStats);
         }
     }
 }

@@ -30,11 +30,11 @@ namespace _0x46696E616C.CommandPattern
         IEntity returnTarget;
         float timer = 0;
         ProjectileManager proj;
-        public Civilian(string name, Vector2 size, float totalHealth, float currentHealth, Vector2 position, BaseUnitState state, TextureValue texture, WorldHandler world, TextureValue Icon, float range, ProjectileManager proj) : base(name, size, totalHealth, currentHealth, position, state, texture, Color.Blue, Icon, world, range)
+        public Civilian(string name, Vector2 size, float totalHealth, float currentHealth, Vector2 position, BaseUnitState state, TextureValue texture, WorldHandler world, TextureValue Icon, float range, ProjectileManager proj, Stats teamStats) : base(name, size, totalHealth, currentHealth, position, state, texture, Color.Blue, Icon, world, range, teamStats)
         {
             this.proj = proj;
             stats.Add(new BuildPower("Build Power", 10));
-            stats.Add(new AttackPower("Attack Power", 10));
+            stats.Add(new MeleeDamage("Attack Power", 10));
             stats.Add(new HarvestPower("Harvest Power", 2));
             stats.Add(new InventorySpace("Inventory Space", 10));
             waypoints = new List<Vector2>();
@@ -54,16 +54,16 @@ namespace _0x46696E616C.CommandPattern
         public override BasicUnit AddQueueables()
         {
             QueueableThings = new List<IQueueable<TextureValue>>();
-            QueueableThings.Add(new Center(TextureValue.Center, Vector2.Zero, TextureValue.CenterIcon, world, proj));
-            QueueableThings.Add(new FireWall(TextureValue.FireWall, Vector2.Zero, TextureValue.FireWallIcon, world, proj));
-            QueueableThings.Add(new InternetCafe(TextureValue.InternetCafe, Vector2.Zero, TextureValue.InternetCafeIcon, world, proj));
-            QueueableThings.Add(new Lab(TextureValue.Lab, Vector2.Zero, TextureValue.LabIcon, world, proj));
-            QueueableThings.Add(new MediaCenter(TextureValue.MediaCenter, Vector2.Zero, TextureValue.MediaCenterIcon, world, proj));
-            QueueableThings.Add(new Mines(TextureValue.Mines, Vector2.Zero, TextureValue.MinesIcon, world, proj));
-            QueueableThings.Add(new PowerSupply(TextureValue.PowerSupply, Vector2.Zero, TextureValue.PowerSupplyIcon, world, proj));
-            QueueableThings.Add(new ServerFarm(TextureValue.ServerFarm, Vector2.Zero, TextureValue.ServerFarmIcon, world, proj));
-            QueueableThings.Add(new SolarPanel(TextureValue.SolarPanel, Vector2.Zero, TextureValue.SolarPanelIcon, world, proj));
-            QueueableThings.Add(new SteelFactory(TextureValue.SteelFactory, Vector2.Zero, TextureValue.SteelFactoryIcon, world, proj));
+            QueueableThings.Add(new Center(TextureValue.Center, Vector2.Zero, TextureValue.CenterIcon, world, proj, teamStats));
+            QueueableThings.Add(new FireWall(TextureValue.FireWall, Vector2.Zero, TextureValue.FireWallIcon, world, proj, teamStats));
+            QueueableThings.Add(new InternetCafe(TextureValue.InternetCafe, Vector2.Zero, TextureValue.InternetCafeIcon, world, proj, teamStats));
+            QueueableThings.Add(new Lab(TextureValue.Lab, Vector2.Zero, TextureValue.LabIcon, world, proj, teamStats));
+            QueueableThings.Add(new MediaCenter(TextureValue.MediaCenter, Vector2.Zero, TextureValue.MediaCenterIcon, world, proj, teamStats));
+            QueueableThings.Add(new Mines(TextureValue.Mines, Vector2.Zero, TextureValue.MinesIcon, world, proj, teamStats));
+            QueueableThings.Add(new PowerSupply(TextureValue.PowerSupply, Vector2.Zero, TextureValue.PowerSupplyIcon, world, proj, teamStats));
+            QueueableThings.Add(new ServerFarm(TextureValue.ServerFarm, Vector2.Zero, TextureValue.ServerFarmIcon, world, proj, teamStats));
+            QueueableThings.Add(new SolarPanel(TextureValue.SolarPanel, Vector2.Zero, TextureValue.SolarPanelIcon, world, proj, teamStats));
+            QueueableThings.Add(new SteelFactory(TextureValue.SteelFactory, Vector2.Zero, TextureValue.SteelFactoryIcon, world, proj, teamStats));
             return this;
         }
 
@@ -140,7 +140,7 @@ namespace _0x46696E616C.CommandPattern
                 //Attack the unit if it isn't part of their team
                 else if(((ModifiableTile)Target).TeamAssociation != this.TeamAssociation)
                 {
-                    Target.Damage(this.stats[typeof(AttackPower)].Value);
+                    Target.Damage(this.stats[typeof(MeleeDamage)].Value);
                     if (((ModifiableTile)Target).State == tileState.dead) Target = null;
                 }
                 timer = 0;// Only reset the timer if the unit does something that way the player instantly acts when they get to the position
@@ -254,7 +254,7 @@ namespace _0x46696E616C.CommandPattern
         /// <returns></returns>
         public override BasicUnit NewInstace(float currentHealth, Vector2 position)
         {
-            return new Civilian(this.name, this.Size, this.TotalHealth, currentHealth, position, BaseUnitState.Idle, this.block.texture, this.world, this.Icon, this.stats[typeof(Range)].Value, proj).AddQueueables();
+            return new Civilian(this.name, this.Size, this.TotalHealth, currentHealth, position, BaseUnitState.Idle, this.block.texture, this.world, this.Icon, this.stats[typeof(Range)].Value, proj, teamStats).AddQueueables();
         }
     }
 }

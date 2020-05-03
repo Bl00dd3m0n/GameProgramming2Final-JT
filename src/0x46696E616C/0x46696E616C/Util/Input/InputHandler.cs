@@ -31,7 +31,6 @@ namespace _0x46696E616C.Input
     }
     public class MouseKeyboard : InputHandler
     {
-        bool Pressed;
         KeyboardState keyBoard;
         KeyboardState prevKeyState;
         MouseState mouse;
@@ -65,7 +64,6 @@ namespace _0x46696E616C.Input
                 UpdateMouseState();
                 UpdateCursorPosition(mouse.Position.ToVector2());
             }
-            Pressed = false;
             base.Update(gameTime);
             Subscribed = false;
         }
@@ -163,7 +161,6 @@ namespace _0x46696E616C.Input
             {
                 prevKeyState = keyBoard;
                 Updated = true;
-                Pressed = true;
             }
         }
         /// <summary>

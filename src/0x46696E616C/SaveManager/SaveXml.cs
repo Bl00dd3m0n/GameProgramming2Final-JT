@@ -42,8 +42,9 @@ namespace SaveManager
         {
             XmlSerializer ser = new XmlSerializer(typeof(T), types);
             string deserialize = Save.save.LoadFromFile(path);
-            using (MemoryStream ms = new MemoryStream(Encoding.UTF8.GetBytes(deserialize)))
+            using (MemoryStream ms = new MemoryStream(Encoding.UTF8.GetString(deserialize)))
             {
+                string xml = Encoding.UTF8.GetString(ms.ToArray());
                 T test = (T)ser.Deserialize(ms);
                 return test;
             }
