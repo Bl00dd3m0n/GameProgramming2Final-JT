@@ -22,6 +22,7 @@ namespace MobHandler.HostileMobManager
         public int Wave { get; private set; }
         WorldHandler world;
         private List<IUnit> units;
+        private List<IUnit> clearUnits;
         ProjectileManager projectileManager;
         private float waveSpawnTimer;
         private float waveSpawnTime;
@@ -35,6 +36,7 @@ namespace MobHandler.HostileMobManager
             Wave = 0;
             this.projectileManager = projectileManager;
             units = new List<IUnit>();
+            clearUnits = new List<IUnit>();
             waveSpawnTime = 30f;
             TeamStats = new Stats();
         }
@@ -53,9 +55,10 @@ namespace MobHandler.HostileMobManager
         public override void Update(GameTime gameTime)
         {
             waveSpawnTimer += gameTime.ElapsedGameTime.Milliseconds;
+            CheckGameOver();
             if (waveSpawnTimer / 1000 >= 300 && !StartSpawn)//5 Minute spawn time
             {
-                CheckGameOver();
+
                 StartSpawn = true;
                 waveSpawnTimer = 0;
             }
@@ -64,10 +67,15 @@ namespace MobHandler.HostileMobManager
                 foreach (IUnit unit in units)
                 {
                     ((HostileMob)unit).Update(gameTime);
+                    if (((HostileMob)unit).State == WorldManager.TileHandlerLibrary.tileState.dead) clearUnits.Add(unit);
                 }
+                foreach(IUnit unit in clearUnits)
+                {
+                    units.Remove(unit);
+                }
+                clearUnits.Clear();
                 if (waveSpawnTimer / 1000 >= waveSpawnTime)
                 {
-                    CheckGameOver();
                     waveSpawnTimer = 0;
                     BasicWaveStart();
                 }

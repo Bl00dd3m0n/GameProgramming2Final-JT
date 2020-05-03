@@ -147,14 +147,14 @@ namespace _0x46696E616C
             #region Enemies
             //Portal
             startPoint = new Vector2(82, 190);
-            Portal portal = new Portal(TextureValue.Portal, startPoint, TextureValue.Portal, world, projectileManager, wave.TeamStats);
+            Portal portal = new Portal(TextureValue.Portal, startPoint, TextureValue.Portal, world, projectileManager, wave.TeamStats, wave);
             portal.SetTeam(cc.Team + 1);
             portal.SetSpawn(startPoint + portal.Size + new Vector2(0, 1));
             portal.PlacedTile();
             world.Place(portal, startPoint);
 
             startPoint = new Vector2(90, 190);
-            portal = new Portal(TextureValue.Portal, startPoint, TextureValue.Portal, world, projectileManager, wave.TeamStats);
+            portal = new Portal(TextureValue.Portal, startPoint, TextureValue.Portal, world, projectileManager, wave.TeamStats, wave);
             portal.SetTeam(cc.Team + 1);
             portal.SetSpawn(startPoint + portal.Size + new Vector2(0, 1));
             portal.PlacedTile();
@@ -162,7 +162,7 @@ namespace _0x46696E616C
             portal.Subscribe((IBuildingObserver)cc);
 
             startPoint = new Vector2(98, 190);
-            portal = new Portal(TextureValue.Portal, startPoint, TextureValue.Portal, world, projectileManager, wave.TeamStats);
+            portal = new Portal(TextureValue.Portal, startPoint, TextureValue.Portal, world, projectileManager, wave.TeamStats, wave);
             portal.SetTeam(cc.Team + 1);
             portal.SetSpawn(startPoint + portal.Size + new Vector2(0, 1));
             portal.PlacedTile();

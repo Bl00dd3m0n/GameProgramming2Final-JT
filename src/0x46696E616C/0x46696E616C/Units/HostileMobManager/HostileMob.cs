@@ -33,7 +33,7 @@ namespace _0x46696E616C.Units.HostileMobManager
         {
             UpdateMove(gameTime);
             InteractTimer += gameTime.ElapsedGameTime.Milliseconds;
-            if (InteractTimer/1000 >= 1)
+            if (InteractTimer / 1000 >= 1)
             {
                 Interact();
                 InteractTimer = 0;
@@ -67,19 +67,13 @@ namespace _0x46696E616C.Units.HostileMobManager
         {
             base.UpdateMove(gameTime);
             checkPosTimer += gameTime.ElapsedGameTime.Milliseconds;
-            if(waypoints.Count() > 0 && Vector2.Distance(Position, TargetPosition + DistanceFromPosition) < stats[typeof(Range)].Value && UnitState == BaseUnitState.attack)
+            if (waypoints.Count() > 0 && Vector2.Distance(Position, TargetPosition + DistanceFromPosition) < stats[typeof(Range)].Value && UnitState == BaseUnitState.attack)
             {
                 waypoints.Clear();
             }
-            if(checkPosTimer/1000 >= 1)
+            if (checkPosTimer / 1000 >= 1.5f)
             {
-                if(Target != null && Target.Position.ToPoint() != TargetPosition.ToPoint()) // Keeps tracking the units
-                {
-                    Move(Target.Position);
-                } else if(Target == null)
-                {
-                    FindTarget();
-                }
+                FindTarget();
                 checkPosTimer = 0;
             }
         }

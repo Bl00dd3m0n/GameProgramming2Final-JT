@@ -147,13 +147,18 @@ namespace _0x46696E616C.CommandPattern
                 }
                 else if (tile is Building)
                 {
-                    if (((Building)tile).CurrentHealth >= ((Building)tile).TotalHealth)
+                    if (((ModifiableTile)tile).TeamAssociation == cc.Team) {
+                        if (((Building)tile).CurrentHealth >= ((Building)tile).TotalHealth)
+                        {
+                            return new GarrisonCommand((Building)tile);
+                        }
+                        else
+                        {
+                            return new RepairCommand((Building)tile); //Should be a repair command Garrison at the moment will cause the buildings to be repaired....needs to be updated later
+                        }
+                    } else
                     {
-                        return new GarrisonCommand((Building)tile);
-                    }
-                    else
-                    {
-                        return new RepairCommand((Building)tile); //Should be a repair command Garrison at the moment will cause the buildings to be repaired....needs to be updated later
+                        return new AttackCommand((IEntity)tile);
                     }
                 }
                 else

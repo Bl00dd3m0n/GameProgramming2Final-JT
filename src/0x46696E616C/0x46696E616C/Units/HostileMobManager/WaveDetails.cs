@@ -23,7 +23,9 @@ namespace MobHandler.HostileMobManager
             {
                 if (WaveUnits[i] is BasicUnit)
                 {
-                    WaveUnits[i] = ((BasicUnit)WaveUnits[i]).NewInstace(WaveUnits[i].CurrentHealth, building.GetSpawn() + new Vector2(lSide, 0));
+                    BasicUnit unit = ((BasicUnit)WaveUnits[i]).NewInstace(WaveUnits[i].CurrentHealth, building.GetSpawn() + new Vector2(lSide, 0));
+                    unit.SetTeam(((BasicUnit)WaveUnits[i]).TeamAssociation);
+                    WaveUnits[i] = unit;
                     lSide++;
                 }
             }
