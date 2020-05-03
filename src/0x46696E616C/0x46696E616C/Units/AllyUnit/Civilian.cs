@@ -75,7 +75,7 @@ namespace _0x46696E616C.CommandPattern
             {
                 UnitInteraction();
             }
-            if (waypoints.Count() > 0 && Vector2.Distance(Position, TargetPosition + DistanceFromPosition) < stats[typeof(Range)].Value)
+            if (waypoints.Count() > 0 && Vector2.Distance(Position, TargetPosition + DistanceFromPosition) < stats[typeof(Range)].Value + teamStats[typeof(Range)].Value)
             {
                 waypoints.Clear();
             }
@@ -94,7 +94,7 @@ namespace _0x46696E616C.CommandPattern
         private void UnitInteraction()
         {
             float dist = Vector2.Distance(TargetPosition + DistanceFromPosition, nextPoint);
-            if (Direction == zero && Target != null && !arrived && dist <= stats[typeof(Range)].Value)
+            if (Direction == zero && Target != null && !arrived && dist <= stats[typeof(Range)].Value + teamStats[typeof(Range)].Value)
             {
                 if (Target is Building && ((ModifiableTile)Target).TeamAssociation == this.TeamAssociation)
                 {
@@ -120,7 +120,7 @@ namespace _0x46696E616C.CommandPattern
                 else if (Target is IHarvestable)
                 {
                     Type type = ((HarvestableUnit)Target).type.GetType();
-                    Wallet wal = ((HarvestableUnit)Target).Harvest(stats[typeof(HarvestPower)].Value);
+                    Wallet wal = ((HarvestableUnit)Target).Harvest(stats[typeof(HarvestPower)].Value + teamStats[typeof(HarvestPower)].Value);
                     if (((HarvestableUnit)Target).State == tileState.dead) //When the source dies find a new thing to harvest
                     {
                         Harvest(world.FindNearest(((HarvestableUnit)Target).type.GetType().Name.ToString(), this.Position));
@@ -140,7 +140,7 @@ namespace _0x46696E616C.CommandPattern
                 //Attack the unit if it isn't part of their team
                 else if(((ModifiableTile)Target).TeamAssociation != this.TeamAssociation)
                 {
-                    Target.Damage(this.stats[typeof(MeleeDamage)].Value);
+                    Target.Damage(stats[typeof(MeleeDamage)].Value + teamStats[typeof(MeleeDamage)].Value);
                     if (((ModifiableTile)Target).State == tileState.dead) Target = null;
                 }
                 timer = 0;// Only reset the timer if the unit does something that way the player instantly acts when they get to the position

@@ -79,6 +79,7 @@ namespace _0x46696E616C.Buildings
             techObservers = new List<ITechObserver>();
             this.world = world;
             this.proj = proj;
+            this.teamStats = teamStats;
         }
 
         public void Subscribe(IBuildingObserver observer)
@@ -116,6 +117,7 @@ namespace _0x46696E616C.Buildings
                     {
                         trainTimer = 0;
                         Learn((ITech)trainingObject);
+                        trainingQueue.Dequeue();
                         return null;
                     }
                     trainTimer++;//Since it's supposed to be called every one second it's fair to add 1 every time
@@ -133,7 +135,7 @@ namespace _0x46696E616C.Buildings
                 {
                     if (unit is BasicUnit)
                     {
-                        CurrentHealth += ((BasicUnit)unit).stats[typeof(BuildPower)].Value;
+                        CurrentHealth += ((BasicUnit)unit).stats[typeof(BuildPower)].Value + ((BasicUnit)unit).teamStats[typeof(BuildPower)].Value;
                     }
                     if (CurrentHealth > TotalHealth)
                         CurrentHealth = TotalHealth;

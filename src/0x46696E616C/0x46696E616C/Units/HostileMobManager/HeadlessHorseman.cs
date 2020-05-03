@@ -20,7 +20,7 @@ namespace _0x46696E616C.Units.HostileMobManager
         }
         public override BasicUnit NewInstace(float currentHealth, Vector2 position)
         {
-            return new HeadlessHorseman(this.name, this.Size, this.TotalHealth, currentHealth, position, BaseUnitState.Idle, TextureValue.HeadlessHorseman, Color.Red, TextureValue.HeadlessHorseman, world, this.range, this.teamStats);
+            return new HeadlessHorseman(this.name, this.Size, this.TotalHealth, currentHealth, position, BaseUnitState.Idle, TextureValue.HeadlessHorseman, Color.Red, TextureValue.HeadlessHorseman, world, this.stats[typeof(Range)].Value, this.teamStats);
         }
     }
 }

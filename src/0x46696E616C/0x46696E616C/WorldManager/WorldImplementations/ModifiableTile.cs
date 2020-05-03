@@ -37,9 +37,9 @@ namespace WorldManager.TileHandlerLibrary
             }
             set
             {
-                if (CurrentHealth < TotalHealth || CurrentHealth + value < CurrentHealth)//Doesn't let you build past full health
+                if (CurrentHealth < TotalHealth || value < CurrentHealth)//Doesn't let you build past full health
                 {
-                    currentHealth += value;
+                    currentHealth = value;
                     if (currentHealth >= TotalHealth && !built)
                     {
                         built = true;
@@ -96,7 +96,7 @@ namespace WorldManager.TileHandlerLibrary
             }
             else
             {
-                CurrentHealth = -value;
+                CurrentHealth -= value;
                 if (CurrentHealth <= 0)
                 {
                     Die();

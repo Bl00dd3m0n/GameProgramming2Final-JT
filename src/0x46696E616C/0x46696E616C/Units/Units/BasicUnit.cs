@@ -48,7 +48,7 @@ namespace _0x46696E616C.CommandPattern.Commands
         A_Star aStar;
         protected WorldHandler world { get; set; }
         protected float range;
-        protected Stats teamStats { get; set; }
+        public Stats teamStats { get; protected set; }
         //TODO List of commands needed to be implemented for the units
         public BasicUnit(string name, Vector2 size, float totalHealth, float currentHealth, Vector2 position, BaseUnitState state, TextureValue texture, Color color, TextureValue icon, WorldHandler world, float range, Stats teamStats) : base(texture, position, color)
         {
@@ -71,7 +71,13 @@ namespace _0x46696E616C.CommandPattern.Commands
             speed = 50;
             nextPoint = Position;
             UnitState = BaseUnitState.Idle;
-            attack = new Melee(stats[typeof(Range)].Value);
+            if (teamStats != null)
+            {
+                attack = new Melee(stats[typeof(Range)].Value + teamStats[typeof(Range)].Value);
+            } else
+            {
+                attack = new Melee(stats[typeof(Range)].Value);
+            }
             this.teamStats = teamStats;
         }
 

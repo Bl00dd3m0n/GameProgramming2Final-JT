@@ -44,9 +44,9 @@ namespace _0x46696E616C.Units.HostileMobManager
         {
             if (Target != null)
             {
-                if (Vector2.Distance(Position, Target.Position + DistanceFromPosition) < stats[typeof(Range)].Value && UnitState == BaseUnitState.attack)
+                if (Vector2.Distance(Position, Target.Position + DistanceFromPosition) < stats[typeof(Range)].Value+ teamStats[typeof(Range)].Value && UnitState == BaseUnitState.attack)
                 {
-                    attack.Attack(Target, this, stats[typeof(MeleeDamage)].Value);
+                    attack.Attack(Target, this, stats[typeof(MeleeDamage)].Value+teamStats[typeof(MeleeDamage)].Value);
                     if (((ModifiableTile)Target).State == tileState.dead)
                     {
                         Target = null;
@@ -67,13 +67,16 @@ namespace _0x46696E616C.Units.HostileMobManager
         {
             base.UpdateMove(gameTime);
             checkPosTimer += gameTime.ElapsedGameTime.Milliseconds;
-            if (waypoints.Count() > 0 && Vector2.Distance(Position, TargetPosition + DistanceFromPosition) < stats[typeof(Range)].Value && UnitState == BaseUnitState.attack)
+            if (waypoints.Count() > 0 && Vector2.Distance(Position, TargetPosition + DistanceFromPosition) < stats[typeof(Range)].Value + teamStats[typeof(Range)].Value && UnitState == BaseUnitState.attack)
             {
                 waypoints.Clear();
             }
-            if (checkPosTimer / 1000 >= 1.5f)
+            if (checkPosTimer / 1000 >= 1f)
             {
-                FindTarget();
+                if (Target == null || (Target!= null && TargetPosition != Target.Position))
+                {
+                    FindTarget();
+                }
                 checkPosTimer = 0;
             }
         }

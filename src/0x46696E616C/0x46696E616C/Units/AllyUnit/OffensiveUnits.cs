@@ -50,28 +50,18 @@ namespace _0x46696E616C.Units.AllyUnit
         /// </summary>
         private void UnitInteraction()
         {
-            if (Vector2.Distance(TargetPosition, Position) < 0.5f)
+            
+            IEntity entity = Vector2.Distance(world.FindNearest(TeamAssociation + 1, Position).Position, Position) < stats[typeof(Range)].Value * 2 + teamStats[typeof(Range)].Value * 2 ? world.FindNearest(TeamAssociation + 1, Position) : null;
+            if (entity != null)//HACK this won't always work
             {
-                IEntity entity = world.GetUnits(TeamAssociation + 1).Find(l => Vector2.Distance(l.Position, Position) < stats[typeof(Range)].Value * 2 && l is ModifiableTile && ((ModifiableTile)l).TeamAssociation != this.TeamAssociation);
-                if (entity == null)//Targets units first
-                {
-                    IEntity[] entities = world.GetTiles(TeamAssociation + 1);
-                    if (entities != null)
-                    {
-                        //entity = entities.FirstOrDefault(l => Vector2.Distance(l.Position, Position) < stats[typeof(Range)].Value * 2 && l is ModifiableTile && ((ModifiableTile)l).TeamAssociation != this.TeamAssociation);
-                    }
-                }
-                if (entity != null)//HACK this won't always work
-                {
-                    Attack(entity);
-                }
+                Attack(entity);
             }
             float dist = Vector2.Distance(TargetPosition + DistanceFromPosition, nextPoint);
             if (Direction == zero && Target != null && dist <= stats[typeof(Range)].Value)
             {
                 if (((ModifiableTile)Target).TeamAssociation != this.TeamAssociation)
                 {
-                    attack.Attack(Target, this, this.stats[typeof(MeleeDamage)].Value);
+                    attack.Attack(Target, this, stats[typeof(MeleeDamage)].Value + teamStats[typeof(MeleeDamage)].Value);
                     if (((ModifiableTile)Target).State == tileState.dead) Target = null;
                 }
             }

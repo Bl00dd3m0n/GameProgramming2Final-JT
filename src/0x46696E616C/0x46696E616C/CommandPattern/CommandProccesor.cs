@@ -126,9 +126,6 @@ namespace _0x46696E616C.CommandPattern
                         else if (tile is Building)
                         {
                             AddQueueables(tile);
-                            Component com = new CommandButton(Game.GraphicsDevice, new SetSpawnPointCommand(currentPos, (Building)tile), new Vector2(757, 447), TextureValue.SpawnPoint, new Point(32));
-                            com.Scale = 2;
-                            overlay.AddComponent(com);
                         }
                         SelectedUnitDisplay(tile);
                     }
@@ -147,7 +144,8 @@ namespace _0x46696E616C.CommandPattern
                 }
                 else if (tile is Building)
                 {
-                    if (((ModifiableTile)tile).TeamAssociation == cc.Team) {
+                    if (((ModifiableTile)tile).TeamAssociation == cc.Team)
+                    {
                         if (((Building)tile).CurrentHealth >= ((Building)tile).TotalHealth)
                         {
                             return new GarrisonCommand((Building)tile);
@@ -156,7 +154,8 @@ namespace _0x46696E616C.CommandPattern
                         {
                             return new RepairCommand((Building)tile); //Should be a repair command Garrison at the moment will cause the buildings to be repaired....needs to be updated later
                         }
-                    } else
+                    }
+                    else
                     {
                         return new AttackCommand((IEntity)tile);
                     }
@@ -243,7 +242,7 @@ namespace _0x46696E616C.CommandPattern
         {
             if (EntityDetails != null)
                 overlay.RemoveComponent(EntityDetails);
-            EntityDetails = new Panel(Game, new Rectangle(new Point(217,359), new Point(336,121)));//TODO this will need to be more automatic if I add different resolutions/screen sizes
+            EntityDetails = new Panel(Game, new Rectangle(new Point(217, 359), new Point(336, 121)));//TODO this will need to be more automatic if I add different resolutions/screen sizes
             EntityDetails.Initialize();
             Component com = new ImageBox(tile.block.texture, new Vector2(227, 359), (tile.Size * 16).ToPoint(), Color.White);
             com.Scale = 2 / (tile.Size.X);
@@ -253,7 +252,7 @@ namespace _0x46696E616C.CommandPattern
                 com.Scale = 0.25f;
             }
             EntityDetails.AddComponent(com);
-            float y = 380;
+            float y = 359;
             for (int i = 0; i < tile.stats.Count; i++)
             {
                 if (tile.stats[i] is Health)
@@ -265,10 +264,23 @@ namespace _0x46696E616C.CommandPattern
                 }
                 else
                 {
-                    com = new ImageBox(tile.stats[i].Texture, new Vector2(300, y - 8), new Point(1, 1), Color.White);
+                    com = new ImageBox(tile.stats[i].Texture, new Vector2(300, y-8), new Point(1, 1), Color.White);
                     com.Scale = 0.25f;
                     EntityDetails.AddComponent(com);
-                    com = new Label(new Vector2(330, y), tile.stats[i].Value.ToString(), Color.White);
+                    string display = tile.stats[i].Value.ToString();
+                    if (tile is BasicUnit)
+                    {
+                        Stat stat = null;
+                        if (((BasicUnit)tile).teamStats != null)
+                        {
+                            stat = ((BasicUnit)tile).teamStats[tile.stats[i].GetType()];
+                        }
+                        if(stat != null)
+                        {
+                            display += $" ({stat.Value.ToString()})";
+                        }
+                    }
+                    com = new Label(new Vector2(330, y-8), display, Color.White);
                     com.Scale = 1;
                 }
                 com.drawComponent = true;
@@ -344,6 +356,12 @@ namespace _0x46696E616C.CommandPattern
                             y += 128 * scale;
                         }
                     }
+                }
+                if (((Building)tile).QueueableThings.Find(l => l is BasicUnit) != null)
+                {
+                    Component com = new CommandButton(Game.GraphicsDevice, new SetSpawnPointCommand(CurrentPos, (Building)tile), new Vector2(757, 447), TextureValue.SpawnPoint, new Point(32));
+                    com.Scale = 2;
+                    EntityActions.AddComponent(com);
                 }
             }
             overlay.AddComponent(EntityActions);

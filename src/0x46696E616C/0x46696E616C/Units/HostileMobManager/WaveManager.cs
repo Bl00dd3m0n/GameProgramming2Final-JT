@@ -38,7 +38,7 @@ namespace MobHandler.HostileMobManager
             units = new List<IUnit>();
             clearUnits = new List<IUnit>();
             waveSpawnTime = 30f;
-            TeamStats = new Stats();
+            TeamStats = new Stats(new List<Stat>() { new Health("Health", 0), new MeleeDamage("Damage", 0), new Range("Range", 0), new HarvestPower("Harvest Power", 0), new BuildPower("Harvest Power", 0), new InventorySpace("InventorySpace", 0), });
         }
 
         private void CheckGameOver()

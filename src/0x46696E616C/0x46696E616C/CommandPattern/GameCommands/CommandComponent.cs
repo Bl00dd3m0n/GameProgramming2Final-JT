@@ -45,15 +45,6 @@ namespace _0x46696E616C.CommandPattern
         private Building spawnMarkerBuilding;
         public bool IsGameOver { get; private set; }
         internal Stats TeamStats { get; private set; }
-        public CommandComponent(Game game, Wallet startingResources) : base(game)
-        {
-            toBuild = new List<Building>();
-            resources = startingResources;
-            ID++;
-            this.Team = ID;
-            spawnMarkerBuilding = null;
-            TeamStats = new Stats();
-        }
         /// <summary>
         /// Test Constructor to easily get units
         /// </summary>
@@ -69,6 +60,7 @@ namespace _0x46696E616C.CommandPattern
             this.world = world;
             IsGameOver = false;
             SelectedUnits = new List<IUnit>();
+            TeamStats = new Stats(new List<Stat>() { new Health("Health", 0), new MeleeDamage("Damage", 0), new Range("Range", 0), new HarvestPower("Harvest Power", 0), new BuildPower("Harvest Power", 0), new InventorySpace("InventorySpace", 0), });
         }
         /// <summary>
         /// set a spawn point if the spawnmarker isn't null otherwise set the spawn marker
@@ -448,28 +440,32 @@ namespace _0x46696E616C.CommandPattern
 
         public void Update(ITech tech)
         {
-            List<Building> buildings = world.GetTiles(Team).Where(l => l is Building).Cast<Building>().ToList();
-            foreach (IUnit unit in world.GetUnits(Team))
+            if (tech is StatTech)
             {
-                if (tech is StatTech)
-                {
-                    if (unit.stats[((StatTech)tech).Upgrade.GetType()] != null)
-                    {
+                TeamStats[((StatTech)tech).Upgrade.GetType()] += ((StatTech)tech).Upgrade;
+            }
+            //List<Building> buildings = world.GetTiles(Team).Where(l => l is Building).Cast<Building>().ToList();
+            //foreach (IUnit unit in world.GetUnits(Team))
+            //{
+            //    if (tech is StatTech)
+            //    {
+            //        if (unit.stats[((StatTech)tech).Upgrade.GetType()] != null)
+            //        {
 
-                        unit.stats[((StatTech)tech).Upgrade.GetType()] += ((StatTech)tech).Upgrade;
-                    }
-                }
-            }
-            foreach (Building build in buildings)
-            {
-                if (tech is StatTech)
-                {
-                    if (build.stats[((StatTech)tech).Upgrade.GetType()] != null)
-                    {
-                        build.stats[((StatTech)tech).Upgrade.GetType()] += ((StatTech)tech).Upgrade;
-                    }
-                }
-            }
+            //            unit.stats[((StatTech)tech).Upgrade.GetType()] += ((StatTech)tech).Upgrade;
+            //        }
+            //    }
+            //}
+            //foreach (Building build in buildings)
+            //{
+            //    if (tech is StatTech)
+            //    {
+            //        if (build.stats[((StatTech)tech).Upgrade.GetType()] != null)
+            //        {
+            //            build.stats[((StatTech)tech).Upgrade.GetType()] += ((StatTech)tech).Upgrade;
+            //        }
+            //    }
+            //}
         }
     }
 }

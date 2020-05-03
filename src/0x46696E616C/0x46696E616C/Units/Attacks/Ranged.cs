@@ -18,7 +18,7 @@ namespace _0x46696E616C.Units.Attacks
         }
         public override void Attack(IEntity Target, IUnit Attacker, float Damage)
         {
-            shotManager.AddProjectile(new Projectile(Target.Position, 2.5f, Attacker.Position, NationBuilder.TileHandlerLibrary.TextureValue.FireBall, ((BasicUnit)Attacker).stats[typeof(MeleeDamage)].Value, (BasicUnit)Attacker));
+            shotManager.AddProjectile(new Projectile(Target.Position, 2.5f, Attacker.Position, NationBuilder.TileHandlerLibrary.TextureValue.FireBall, ((BasicUnit)Attacker).stats[typeof(MeleeDamage)].Value + ((BasicUnit)Attacker).teamStats[typeof(MeleeDamage)].Value, (BasicUnit)Attacker));
         }
     }
 }
