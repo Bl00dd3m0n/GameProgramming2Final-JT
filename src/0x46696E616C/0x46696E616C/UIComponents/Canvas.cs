@@ -72,7 +72,7 @@ namespace UIProject
             return null;
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public virtual void Draw(SpriteBatch spriteBatch)
         {
             for (int i = 0; i < components.Count; i++)
             {

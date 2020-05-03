@@ -44,6 +44,10 @@
   <ItemGroup>
     <Compile Include="CommandPattern\GameCommands\LearnCommand.cs" />
     <Compile Include="TechManager\Stats\RangedDamage.cs" />
+    <Compile Include="TechManager\Technologies\BuildUpgrade.cs" />
+    <Compile Include="TechManager\Technologies\HarvestUpgrade.cs" />
+    <Compile Include="TechManager\Technologies\HealthUpgrade.cs" />
+    <Compile Include="TechManager\Technologies\InventoryUpgrade.cs" />
     <Compile Include="UIComponents\Panel.cs" />
     <Compile Include="Units\AllyUnit\Ballista.cs" />
     <Compile Include="Units\AllyUnit\OffensiveUnits.cs" />

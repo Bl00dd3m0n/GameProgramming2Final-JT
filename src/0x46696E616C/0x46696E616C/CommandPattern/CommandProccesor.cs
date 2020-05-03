@@ -242,7 +242,7 @@ namespace _0x46696E616C.CommandPattern
         {
             if (EntityDetails != null)
                 overlay.RemoveComponent(EntityDetails);
-            EntityDetails = new Panel(Game, new Rectangle(new Point(217, 359), new Point(336, 121)));//TODO this will need to be more automatic if I add different resolutions/screen sizes
+            EntityDetails = new Panel(Game, new Rectangle(new Point(217, 359), new Point(336, 121)), this);//TODO this will need to be more automatic if I add different resolutions/screen sizes
             EntityDetails.Initialize();
             Component com = new ImageBox(tile.block.texture, new Vector2(227, 359), (tile.Size * 16).ToPoint(), Color.White);
             com.Scale = 2 / (tile.Size.X);
@@ -294,7 +294,7 @@ namespace _0x46696E616C.CommandPattern
         {
             if (EntityDetails != null)
                 overlay.RemoveComponent(EntityActions);
-            EntityActions = new Panel(Game, new Rectangle(new Point(591, 359), new Point(200, 120)));
+            EntityActions = new Panel(Game, new Rectangle(new Point(591, 359), new Point(200, 120)), this);
             EntityActions.Initialize();
             //BuildQueue size
             //Pos: (591,391) Size: (200,120)

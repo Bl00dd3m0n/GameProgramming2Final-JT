@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using _0x46696E616C.CommandPattern;
+using _0x46696E616C.CommandPattern.GameCommands;
 using _0x46696E616C.Util.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -28,8 +30,11 @@ namespace _0x46696E616C.UIComponents
 
         public float Scale => throw new NotSupportedException();
 
-        public Panel(Game game, Rectangle bounds) : base(game)
+        private CommandProccesor cp;
+
+        public Panel(Game game, Rectangle bounds, CommandProccesor cp) : base(game)
         {
+            this.cp = cp;
             this.bounds = bounds;
         }
 
@@ -53,9 +58,23 @@ namespace _0x46696E616C.UIComponents
             throw new NotSupportedException();
         }
 
-        public override void Draw(GameTime gameTime)
+        public override void Draw(SpriteBatch sb)
         {
-            base.Draw(gameTime);
+            foreach (CommandButton button in components.Where(l => l is CommandButton))//For all queueable objects if you can afford it, it shows up normally if not it shows up red
+            {
+                if (button.command is BuildSelectCommand)
+                {
+                    if (!cp.cc.CheckCost(((BuildSelectCommand)button.command).build))
+                    {
+                        button.Color = Color.Red;
+                    }
+                    else
+                    {
+                        button.Color = Color.White;
+                    }
+                }
+            }
+            base.Draw(sb);
         }
 
         protected override void UnloadContent()
