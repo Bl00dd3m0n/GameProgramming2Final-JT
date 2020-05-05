@@ -93,8 +93,8 @@ namespace _0x46696E616C.CommandPattern
         /// </summary>
         private void UnitInteraction()
         {
-            float dist = Vector2.Distance(TargetPosition + DistanceFromPosition, nextPoint);
-            if (Direction == zero && Target != null && !arrived && dist <= stats[typeof(Range)].Value + teamStats[typeof(Range)].Value)
+            float dist = Vector2.Distance(TargetPosition + DistanceFromPosition, Position);
+            if (Direction == zero && Target != null && !arrived && dist <= stats[typeof(Range)].Value*1.5 + teamStats[typeof(Range)].Value)
             {
                 if (Target is Building && ((ModifiableTile)Target).TeamAssociation == this.TeamAssociation)
                 {
@@ -111,7 +111,8 @@ namespace _0x46696E616C.CommandPattern
                         }
                     }
                     arrived = true;
-                    if (returnTarget != null) Harvest(returnTarget);
+                    if (returnTarget != null)
+                        Harvest(returnTarget);
                     else if (toBuild.Count > 0)
                         Build(toBuild.Pop());
                     returnTarget = null;//Set to null after setting target...keeps the unit from going random places the player wouldn't expect.

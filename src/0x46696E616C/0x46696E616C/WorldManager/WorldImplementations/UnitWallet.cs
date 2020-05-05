@@ -54,8 +54,14 @@ namespace _0x46696E616C
         public override bool Deposit(Wallet wallet)
         {
             // Dynamic resizing for the units inventory space
-            if (unit is BasicUnit) { if (unit.stats[typeof(InventorySpace)] != null) this.ResourceCap = (int)unit.stats[typeof(InventorySpace)].Value + (int)((BasicUnit)unit).teamStats[typeof(InventorySpace)].Value; }
-            else { if (unit.stats[typeof(InventorySpace)] != null) this.ResourceCap = (int)unit.stats[typeof(InventorySpace)].Value; }
+            if (unit is BasicUnit) {
+                if (((BasicUnit)unit).teamStats[typeof(InventorySpace)] != null)
+                    this.ResourceCap = (int)unit.stats[typeof(InventorySpace)].Value + (int)((BasicUnit)unit).teamStats[typeof(InventorySpace)].Value;
+            }
+            else {
+                if (unit.stats[typeof(InventorySpace)] != null)
+                    this.ResourceCap = (int)unit.stats[typeof(InventorySpace)].Value;
+            }
             if (CheckWalletSize(wallet))
             {
                 base.Deposit(wallet);
