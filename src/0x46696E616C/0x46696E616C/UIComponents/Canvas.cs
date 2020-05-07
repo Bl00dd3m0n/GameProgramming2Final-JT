@@ -46,7 +46,7 @@ namespace UIProject
             base.Update(gameTime);
         }
 
-        public virtual Button CheckClick(Point point, InputDefinitions input)
+        public virtual Button CheckClick(Point point, InputDefinitions input, StyleSheet[] sheets = null)
         {
             foreach (IComponent component in components)
             {
@@ -54,7 +54,7 @@ namespace UIProject
                 {
                     if (component is PageButton)
                     {
-                        ((PageButton)component).Click(Game, this);
+                        ((PageButton)component).Click(Game, sheets[((PageButton)component).PageOrder], this);
                         return (Button)component;
                     }
                     else if (component is InputButton)

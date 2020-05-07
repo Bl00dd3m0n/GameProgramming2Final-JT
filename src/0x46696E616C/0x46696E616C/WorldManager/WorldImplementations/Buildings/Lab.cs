@@ -28,7 +28,7 @@ namespace _0x46696E616C.Buildings
             queueableThings.Add(new InventoryUpgrade(new InventorySpace("InventorySpace", 5), TextureValue.Chest, new Vector2()));
             queueableThings.Add(new BuildUpgrade(new BuildPower("BuildPower", 10), TextureValue.BuildPower, new Vector2()));
             queueableThings.Add(new HarvestUpgrade(new HarvestPower("HarvestPower", 4), TextureValue.HarvestPower, new Vector2()));
-            queueableThings.Add(new HealthUpgrade(new Health("Health", 50), TextureValue.Priest, new Vector2()));
+            queueableThings.Add(new HealthUpgrade(new Health("Health", 50), TextureValue.Health, new Vector2()));
             Cost = new Wallet();
             Cost.Deposit(new Steel(), 100);
             Cost.Deposit(new Wood(), 200);

@@ -42,6 +42,7 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="CommandPattern\GameCommands\ExitGameCommand.cs" />
     <Compile Include="CommandPattern\GameCommands\LearnCommand.cs" />
     <Compile Include="TechManager\Stats\RangedDamage.cs" />
     <Compile Include="TechManager\Technologies\BuildUpgrade.cs" />

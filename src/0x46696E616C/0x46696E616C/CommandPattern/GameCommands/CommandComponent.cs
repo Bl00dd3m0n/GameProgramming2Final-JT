@@ -134,6 +134,12 @@ namespace _0x46696E616C.CommandPattern
                 }
             }
         }
+
+        internal void EndGame()
+        {
+            IsGameOver = true;
+        }
+
         /// <summary>
         /// Checks the cost of a building
         /// </summary>
@@ -444,28 +450,6 @@ namespace _0x46696E616C.CommandPattern
             {
                 TeamStats[((StatTech)tech).Upgrade.GetType()] += ((StatTech)tech).Upgrade;
             }
-            //List<Building> buildings = world.GetTiles(Team).Where(l => l is Building).Cast<Building>().ToList();
-            //foreach (IUnit unit in world.GetUnits(Team))
-            //{
-            //    if (tech is StatTech)
-            //    {
-            //        if (unit.stats[((StatTech)tech).Upgrade.GetType()] != null)
-            //        {
-
-            //            unit.stats[((StatTech)tech).Upgrade.GetType()] += ((StatTech)tech).Upgrade;
-            //        }
-            //    }
-            //}
-            //foreach (Building build in buildings)
-            //{
-            //    if (tech is StatTech)
-            //    {
-            //        if (build.stats[((StatTech)tech).Upgrade.GetType()] != null)
-            //        {
-            //            build.stats[((StatTech)tech).Upgrade.GetType()] += ((StatTech)tech).Upgrade;
-            //        }
-            //    }
-            //}
         }
     }
 }

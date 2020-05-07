@@ -13,9 +13,13 @@ namespace MainMenu.Component
     {
         public string path { get; set; }
         Canvas canv;
-        public PageButton(GraphicsDevice gd, Vector2 position, Point size, Color color, string text, Game game, string Path) : this(position, size, color, text, game)
+        StyleSheet ss;
+        public int PageOrder { get; set; }
+        public PageButton(GraphicsDevice gd, Vector2 position, Point size, Color color, string text, Game game, string Path, int PageOrder) : this(position, size, color, text, game)
         {
             this.path = Path;
+            this.ss = new StyleSheet();
+            this.PageOrder = PageOrder;
         }
 
         protected PageButton() : this(new Vector2(0), new Point(0), Color.Green, "Exit", null)
@@ -32,17 +36,17 @@ namespace MainMenu.Component
         /// <param name="game"></param>
         public override void Click(Game game)
         {
-            if (canv != null)
-            {
-                StyleSheet ss = new StyleSheet();
-                canv.RemoveAllComponents();
-                canv.LoadCanvas(ss.GetStyleSheet(game.GraphicsDevice, path, StyleSheet.ComponentTypes));
-            }
+            //if (canv != null)
+            //{
+            //    canv.RemoveAllComponents();
+            //    canv.LoadCanvas(ss.GetStyleSheet(game.GraphicsDevice, path, StyleSheet.ComponentTypes));
+            //}
             base.Click(game);
         }
-        public void Click(Game game, Canvas canv)
+        public void Click(Game game, StyleSheet ss, Canvas canv)
         {
             this.canv = canv;
+            this.ss = ss;
             Click(game);
         }
     }

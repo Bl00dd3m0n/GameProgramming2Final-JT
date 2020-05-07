@@ -18,7 +18,7 @@ namespace _0x46696E616C.Units.HostileMobManager
         public Mage(string name, Vector2 size, float totalHealth, float currentHealth, Vector2 position, BaseUnitState state, TextureValue texture, Color color, TextureValue icon, WorldHandler world, ProjectileManager projectile, float range, Stats teamStats) : base(name, size, totalHealth, currentHealth, position, state, texture, color, icon, world, range, teamStats)
         {
             this.projectile = projectile;
-            attack = new Ranged(projectile, stats[typeof(Range)].Value + teamStats[typeof(Range)].Value);
+            attack = new Ranged(projectile, TextureValue.FireBall);
             stats.Add(new MeleeDamage("Attack", 5));
             stats.Add(new Health("Health", 10));
         }

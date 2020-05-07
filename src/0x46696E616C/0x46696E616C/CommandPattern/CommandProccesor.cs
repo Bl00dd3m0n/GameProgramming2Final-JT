@@ -112,8 +112,7 @@ namespace _0x46696E616C.CommandPattern
                         catch (ArgumentOutOfRangeException) { }//Prevents a crash if there aren't any units at this point
                     }
                     if (tile != null)
-                    {
-                        overlay.RemoveAllComponents();
+                    { 
                         if (tile is IEntity)
                         {
                             SelectedUnitDisplay(tile);

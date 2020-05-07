@@ -43,7 +43,7 @@ namespace _0x46696E616C.UIComponents
             base.AddComponent(component);
         }
 
-        public override Button CheckClick(Point point, InputDefinitions input)
+        public override Button CheckClick(Point point, InputDefinitions input, StyleSheet[] sheets)
         {
             return base.CheckClick(point, input);
         }

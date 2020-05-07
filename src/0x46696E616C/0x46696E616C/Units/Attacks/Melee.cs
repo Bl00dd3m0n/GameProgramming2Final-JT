@@ -9,7 +9,7 @@ namespace _0x46696E616C.Units.Attacks
 {
     class Melee : AttackType
     {
-        public Melee(float range) : base(range)
+        public Melee(float range) : base()
         {
         }
 

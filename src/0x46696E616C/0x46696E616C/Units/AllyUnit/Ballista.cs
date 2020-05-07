@@ -25,13 +25,9 @@ namespace _0x46696E616C.Units.AllyUnit
             Cost.Deposit(new Steel(), 1);
             Cost.Deposit(new Wood(), 5);
             Cost.Deposit(new Money(), 20);
-            if (teamStats != null)
-            {
-                attack = new Ranged(projectile, stats[typeof(Range)].Value + teamStats[typeof(Range)].Value);
-            } else
-            {
-                attack = new Ranged(projectile, stats[typeof(Range)].Value);
-            }
+
+            attack = new Ranged(projectile, TextureValue.Arrow);
+
             stats.Add(new MeleeDamage("Attack", 50));
             stats.Add(new Health("Health", 10));
             this.projectile = projectile;

@@ -1,6 +1,7 @@
 ﻿using _0x46696E616C.Buildings;
 using _0x46696E616C.CommandPattern;
 using _0x46696E616C.CommandPattern.Commands;
+using _0x46696E616C.CommandPattern.GameCommands;
 using _0x46696E616C.ConcreteImplementations;
 using _0x46696E616C.ConcreteImplementations.Resources;
 using _0x46696E616C.Input;
@@ -10,6 +11,7 @@ using _0x46696E616C.Units.Attacks;
 using _0x46696E616C.Util.Collision;
 using _0x46696E616C.Util.Input;
 using _0x46696E616C.WorldManager.WorldImplementations.Buildings.HostileBuidlings;
+using MainMenu.Component;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -59,7 +61,6 @@ namespace _0x46696E616C
             collision = null;
             InProgress = false;
             CommandComponent.ID = 0;
-            ContentHandler.Clear();
         }
         /// <summary>
         /// Allows the game to perform any initialization it needs to before starting to run.
@@ -111,7 +112,7 @@ namespace _0x46696E616C
             #endregion
             #region util setup
             //creates a new input handler instance
-            input = new InputDefinitions(Game);
+            input = InputDefinitions.CreateInput(Game);
 
             cam = new Camera(Game, input, world, startPoint);
             #endregion
@@ -169,7 +170,12 @@ namespace _0x46696E616C
             world.Place(portal, startPoint);
             #endregion
             #endregion
-
+            CommandButton exit = new CommandButton(GraphicsDevice, new ExitGameCommand(), new Vector2(GraphicsDevice.Viewport.Width - 50, 0),TextureValue.None, new Point(50, 30));
+            exit.Scale = 1;
+            exit.color = Color.SlateGray;
+            exit.Text = "Exit";
+            exit.Draw(GraphicsDevice);
+            overlay.AddComponent(exit);
 
 
             //Initializer
