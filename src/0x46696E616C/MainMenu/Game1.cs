@@ -236,11 +236,11 @@ namespace MainMenu
                 {
                     if (CurrentPage == "Main Menu")
                     {
-                        LoadCanvas("MainMenu.ss");
+                        LoadCanvas("MainMenu.ss",0);
                     }
                     else
                     {
-                        LoadCanvas("SettingsPage.ss");
+                        LoadCanvas("SettingsPage.ss",1);
                     }
                 }
 
