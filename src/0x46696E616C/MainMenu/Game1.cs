@@ -98,11 +98,11 @@ namespace MainMenu
             canv.Initialize();
             mK = new MouseKeyboard(this);
             this.Components.Add(mK);
-            if (File.Exists("MainMenu.ss"))
+            if (!File.Exists("MainMenu.ss"))
             {
                 GenerateStyleSheet("MainMenu");
             }
-            if (File.Exists("SettingsPage.ss"))
+            if (!File.Exists("SettingsPage.ss"))
             {
                 GenerateStyleSheet("SettingsPage");
             }
@@ -234,7 +234,7 @@ namespace MainMenu
 #if DEBUG
                 if (Keyboard.GetState().IsKeyDown(Keys.U))
                 {
-                    if (CurrentPage == "Main Menu")
+                    if (currentPage == "Main Menu")
                     {
                         LoadCanvas("MainMenu.ss",0);
                     }
