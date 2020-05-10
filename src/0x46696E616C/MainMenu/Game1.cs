@@ -29,7 +29,6 @@ namespace MainMenu
         InputDefinitions inputDef;
         string currentPage;
         ActualGame PlayedGame;
-        bool gameStarted;
         /// <summary>
         /// 0 - Main Menu
         /// 1 - Settings Menu
@@ -48,16 +47,10 @@ namespace MainMenu
 
         private void ResetEverything()
         {
-            graphics = null;
-            spriteBatch = null;
-            canv = null;
-            mK = null;
             startGame = false;
-            ss = null;
-            inputDef = null;
-            currentPage = null;
-            PlayedGame = null;
-            LoadContent();
+            //LoadCanvas("MainMenu.ss", 0);
+            currentPage = "Main Menu";
+
         }
 
         /// <summary>
@@ -79,51 +72,40 @@ namespace MainMenu
         /// </summary>
         protected override void LoadContent()
         {
+
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+
             // TODO: use this.Content to load your game content here
-            if (mainMenuBackground == null && settingMenuBackground == null)
+
+            mainMenuBackground = this.Content.Load<Texture2D>("MainMenu");
+            settingMenuBackground = this.Content.Load<Texture2D>("SettingsPage");
+            Cursor = this.Content.Load<Texture2D>("Cursor");
+            inputDef = InputDefinitions.CreateInput(this);
+
+            MouseKeyboard keyboard = new MouseKeyboard(this);
+            mK = new MouseKeyboard(this);
+            this.Components.Add(mK);
+
+            canv = new Canvas(this);
+            ss = new StyleSheet();
+            canv.Initialize();
+
+            if (!File.Exists("MainMenu.ss"))
             {
-                mainMenuBackground = this.Content.Load<Texture2D>("MainMenu");
-                settingMenuBackground = this.Content.Load<Texture2D>("SettingsPage");
+                GenerateStyleSheet("MainMenu");
             }
-            if (Cursor == null)
+            if (!File.Exists("SettingsPage.ss"))
             {
-                Cursor = this.Content.Load<Texture2D>("Cursor");
+                GenerateStyleSheet("SettingsPage");
             }
-            if (canv != null)
-            {
-                canv = new Canvas(this);
-                canv.Initialize();
+            LoadCanvas("MainMenu.ss", 0);
+            currentPage = "Main Menu";
 
-                ss = new StyleSheet();
+            PlayedGame = new ActualGame(this, "World");
+            PlayedGame.Initialize();
 
-
-
-                if (!File.Exists("MainMenu.ss"))
-                {
-                    GenerateStyleSheet("MainMenu");
-                }
-                if (!File.Exists("SettingsPage.ss"))
-                {
-                    GenerateStyleSheet("SettingsPage");
-                }
-                LoadCanvas("MainMenu.ss", 0);
-                currentPage = "Main Menu";
-                inputDef = InputDefinitions.CreateInput(this);
-
-                MouseKeyboard keyboard = new MouseKeyboard(this);
-
-                mK = new MouseKeyboard(this);
-                this.Components.Add(mK);
-            }
-            if (!gameStarted)
-            {
-                base.LoadContent();
-                PlayedGame = new ActualGame(this, "World");
-                PlayedGame.Initialize();
-                PlayedGame.Enabled = false;
-            }
+            base.LoadContent();
         }
         /// <summary>
         /// Generates a specified style sheet by call
@@ -191,6 +173,7 @@ namespace MainMenu
         {
             if (!startGame)
             {
+                mK.Update(gameTime);
                 if (inputDef.CheckInput(Controls.Deselect))
                 {
                     if (currentPage == "MainMenu")
@@ -207,11 +190,15 @@ namespace MainMenu
                 if (inputDef.CheckInput(Controls.Select))
                 {
                     Button button = canv.CheckClick(mK.InputPos.ToPoint(), inputDef, Pages);
+                    if (button != null)
+                        button.Clicked = false;
                     if (button is StartButton)
                     {
                         //this.Components.Remove(mK);
-                        canv.RemoveAllComponents();
-
+                        //canv.RemoveAllComponents();
+                        //PlayedGame = ((StartButton)button).LoadedGame();
+                        //PlayedGame.Initialize();
+                        PlayedGame.StartGame();
                         startGame = true;
                     }
                     else if (button is PageButton)
@@ -221,7 +208,7 @@ namespace MainMenu
                 }
                 inputDef.Update(gameTime);
             }
-            else
+            else if (PlayedGame != null)
             {
                 PlayedGame.Update(gameTime);
             }
@@ -258,7 +245,15 @@ namespace MainMenu
                     }
                 }
 
+
+
 #endif
+                if (Keyboard.GetState().IsKeyDown(Keys.I))
+                {
+                    Canvas test = new Canvas(this);
+                    test.LoadCanvas(Pages[0].GetStyleSheet(GraphicsDevice, "Path", StyleSheet.ComponentTypes));
+                    test = null;
+                }
                 if (currentPage == "Main Menu")
                 {
                     spriteBatch.Draw(mainMenuBackground, new Vector2(0), Color.White);
@@ -277,9 +272,14 @@ namespace MainMenu
                 this.Components.Clear();
                 ResetEverything();
             }
-            else if (PlayedGame != null)
+            else if (PlayedGame != null && startGame)
             {
                 PlayedGame.Draw(gameTime);
+            }
+            else if (PlayedGame == null && startGame)
+            {
+                this.Components.Clear();
+                ResetEverything();
             }
             base.Draw(gameTime);
 

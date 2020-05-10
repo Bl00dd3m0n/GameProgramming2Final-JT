@@ -45,7 +45,7 @@ namespace _0x46696E616C
         public bool InProgress { get; private set; }
         public ActualGame(Game game, string World) : base(game)
         {
-            InProgress = true;
+
         }
         private void Clean()
         {
@@ -90,6 +90,7 @@ namespace _0x46696E616C
         public void StartGame()
         {
             SetUpGame();
+            InProgress = true;
         }
 
         private void SetUpGame()
@@ -184,7 +185,7 @@ namespace _0x46696E616C
             cam.Initialize();
             overlay.Initialize();
             process.Initialize();
-            world.Save("WorldCheck.wrld");
+            //world.Save("WorldCheck.wrld");
         }
 
 
