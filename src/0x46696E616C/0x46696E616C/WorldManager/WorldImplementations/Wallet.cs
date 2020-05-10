@@ -31,7 +31,15 @@ namespace _0x46696E616C.ConcreteImplementations
         {
             this.resources = wallet.resources;
         }
-
+        public Wallet(Dictionary<IResource, float> resources)
+        {
+            this.resources = new List<IResource>();
+            foreach(KeyValuePair<IResource, float> resourceItem in resources)
+            {
+                this.resources.Add(resourceItem.Key);
+                Deposit(resourceItem.Key, resourceItem.Value);
+            }
+        }
         /// <summary>
         /// Gets the amount of a resource type held by the player
         /// </summary>
@@ -159,6 +167,11 @@ namespace _0x46696E616C.ConcreteImplementations
         }
 
         public static implicit operator Wallet(List<IResource> v)
+        {
+            return new Wallet(v);
+        }
+
+        public static implicit operator Wallet(Dictionary<IResource, float> v)
         {
             return new Wallet(v);
         }

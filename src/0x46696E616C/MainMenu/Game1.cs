@@ -48,9 +48,8 @@ namespace MainMenu
         private void ResetEverything()
         {
             startGame = false;
-            //LoadCanvas("MainMenu.ss", 0);
+            LoadCanvas("MainMenu.ss", 0);
             currentPage = "Main Menu";
-
         }
 
         /// <summary>
@@ -72,7 +71,7 @@ namespace MainMenu
         /// </summary>
         protected override void LoadContent()
         {
-
+            base.LoadContent();
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
@@ -103,9 +102,6 @@ namespace MainMenu
             currentPage = "Main Menu";
 
             PlayedGame = new ActualGame(this, "World");
-            PlayedGame.Initialize();
-
-            base.LoadContent();
         }
         /// <summary>
         /// Generates a specified style sheet by call
@@ -190,14 +186,11 @@ namespace MainMenu
                 if (inputDef.CheckInput(Controls.Select))
                 {
                     Button button = canv.CheckClick(mK.InputPos.ToPoint(), inputDef, Pages);
-                    if (button != null)
-                        button.Clicked = false;
                     if (button is StartButton)
                     {
                         //this.Components.Remove(mK);
                         //canv.RemoveAllComponents();
-                        //PlayedGame = ((StartButton)button).LoadedGame();
-                        //PlayedGame.Initialize();
+                        PlayedGame = ((StartButton)button).LoadedGame();
                         PlayedGame.StartGame();
                         startGame = true;
                     }
@@ -232,22 +225,6 @@ namespace MainMenu
             {
                 GraphicsDevice.Clear(Color.CornflowerBlue);
                 spriteBatch.Begin();
-#if DEBUG
-                if (Keyboard.GetState().IsKeyDown(Keys.U))
-                {
-                    if (currentPage == "Main Menu")
-                    {
-                        LoadCanvas("MainMenu.ss",0);
-                    }
-                    else
-                    {
-                        LoadCanvas("SettingsPage.ss",1);
-                    }
-                }
-
-
-
-#endif
                 if (Keyboard.GetState().IsKeyDown(Keys.I))
                 {
                     Canvas test = new Canvas(this);
@@ -267,19 +244,22 @@ namespace MainMenu
                 spriteBatch.End();
                 // TODO: Add your drawing code here
             }
-            if (PlayedGame != null && !PlayedGame.InProgress)
+            else
             {
-                this.Components.Clear();
-                ResetEverything();
-            }
-            else if (PlayedGame != null && startGame)
-            {
-                PlayedGame.Draw(gameTime);
-            }
-            else if (PlayedGame == null && startGame)
-            {
-                this.Components.Clear();
-                ResetEverything();
+                if (PlayedGame != null && !PlayedGame.InProgress)
+                {
+                    this.Components.Clear();
+                    ResetEverything();
+                }
+                else if (PlayedGame != null && startGame)
+                {
+                    PlayedGame.Draw(gameTime, spriteBatch);
+                }
+                else if (PlayedGame == null && startGame)
+                {
+                    this.Components.Clear();
+                    ResetEverything();
+                }
             }
             base.Draw(gameTime);
 

@@ -14,7 +14,6 @@ namespace UIProject
 {
     public class Canvas : DrawableGameComponent
     {
-        protected SpriteBatch spriteBatch;
         public List<IComponent> Components { get { return components; } }
         protected List<IComponent> components;
         protected SpriteFont font;
@@ -30,19 +29,29 @@ namespace UIProject
 
         protected override void LoadContent()
         {
-            spriteBatch = new SpriteBatch(GraphicsDevice);
             if (ContentHandler.Font == null)
             {
                 font = Game.Content.Load<SpriteFont>("Ariel");
-            } else
+            }
+            else
             {
                 font = ContentHandler.Font;
             }
-            base.LoadContent();
         }
 
         public override void Update(GameTime gameTime)
         {
+            foreach (IComponent component in components)
+            {
+                if (component is Button && ((Button)component).clickedTimer > 0)
+                {
+                    ((Button)component).clickedTimer = ((((Button)component).clickedTimer * 1000) - gameTime.ElapsedGameTime.Milliseconds)/1000;
+                    if (((Button)component).clickedTimer <= 0)
+                    {
+                        ((Button)component).Clicked = false;
+                    }
+                }
+            }
             base.Update(gameTime);
         }
 
@@ -52,6 +61,10 @@ namespace UIProject
             {
                 if (component.bounds.Contains(point))
                 {
+                    if (component is Button)
+                    {
+
+                    }
                     if (component is PageButton)
                     {
                         ((PageButton)component).Click(Game, sheets[((PageButton)component).PageOrder], this);
@@ -99,7 +112,7 @@ namespace UIProject
                         }
                     }
                 }
-                else if(components[i] is Panel) 
+                else if (components[i] is Panel)
                 {
                     ((Panel)components[i]).Draw(spriteBatch);
                 }

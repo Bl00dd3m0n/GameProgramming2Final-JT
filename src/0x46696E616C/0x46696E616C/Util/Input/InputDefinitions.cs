@@ -42,7 +42,8 @@ namespace _0x46696E616C.Util.Input
 
         public static InputDefinitions CreateInput(Game game)
         {
-            if (inputDef == null) inputDef = new InputDefinitions(game);
+            if (inputDef == null)
+                inputDef = new InputDefinitions(game);
             return inputDef;
         }
 

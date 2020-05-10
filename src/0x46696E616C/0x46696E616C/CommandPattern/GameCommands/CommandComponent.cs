@@ -45,6 +45,15 @@ namespace _0x46696E616C.CommandPattern
         private Building spawnMarkerBuilding;
         public bool IsGameOver { get; private set; }
         internal Stats TeamStats { get; private set; }
+
+        /// <summary>
+        /// Test Constructor to easily get units
+        /// </summary>
+        /// <param name="game"></param>
+        /// <param name="startingResources"></param>
+        public CommandComponent(Game game, WorldHandler world) : this(game, new Wallet(), world)
+        {
+        }
         /// <summary>
         /// Test Constructor to easily get units
         /// </summary>
@@ -281,7 +290,7 @@ namespace _0x46696E616C.CommandPattern
             CleanList();
             if (world.GetTiles(Team).Where(l => l is Building).Count() <= 0 && world.GetUnits(Team).Count <= 0)
             {
-                IsGameOver = true;
+                //IsGameOver = true;
             }
             base.Update(gameTime);
         }

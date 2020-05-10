@@ -52,7 +52,8 @@ namespace _0x46696E616C.CommandPattern
         }
         public override void Update(GameTime gameTime)
         {
-            CurrentPos = camera.ConvertToWorldSpace(input.InputPos);
+            if (camera != null)
+                CurrentPos = camera.ConvertToWorldSpace(input.InputPos);
             Command command = null;
             if (Game.IsActive)
             {
@@ -112,7 +113,7 @@ namespace _0x46696E616C.CommandPattern
                         catch (ArgumentOutOfRangeException) { }//Prevents a crash if there aren't any units at this point
                     }
                     if (tile != null)
-                    { 
+                    {
                         if (tile is IEntity)
                         {
                             SelectedUnitDisplay(tile);
@@ -208,7 +209,6 @@ namespace _0x46696E616C.CommandPattern
                 }
                 if (UnitsTheSame && unitSelection.Count > 0)
                 {
-                    overlay.RemoveAllComponents();
                     AddQueueables((Tile)unitSelection[0]);
                     if (unitSelection.Count == 1) SelectedUnitDisplay((ModifiableTile)unitSelection[0]);
                     else displaySelectedUnits(unitSelection);
@@ -263,7 +263,7 @@ namespace _0x46696E616C.CommandPattern
                 }
                 else
                 {
-                    com = new ImageBox(tile.stats[i].Texture, new Vector2(300, y-8), new Point(1, 1), Color.White);
+                    com = new ImageBox(tile.stats[i].Texture, new Vector2(300, y - 8), new Point(1, 1), Color.White);
                     com.Scale = 0.25f;
                     EntityDetails.AddComponent(com);
                     string display = tile.stats[i].Value.ToString();
@@ -274,12 +274,12 @@ namespace _0x46696E616C.CommandPattern
                         {
                             stat = ((BasicUnit)tile).teamStats[tile.stats[i].GetType()];
                         }
-                        if(stat != null)
+                        if (stat != null)
                         {
                             display += $" ({stat.Value.ToString()})";
                         }
                     }
-                    com = new Label(new Vector2(330, y-8), display, Color.White);
+                    com = new Label(new Vector2(330, y - 8), display, Color.White);
                     com.Scale = 1;
                 }
                 com.drawComponent = true;

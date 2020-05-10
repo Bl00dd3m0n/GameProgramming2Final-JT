@@ -18,18 +18,18 @@
 public class OpenSimplexNoise
 {
 
-    private static readonly double STRETCH_CONSTANT_2D = -0.211324865405187;    //(1/Math.sqrt(2+1)-1)/2;
-    private static readonly double SQUISH_CONSTANT_2D = 0.366025403784439;      //(Math.sqrt(2+1)-1)/2;
-    private static readonly double STRETCH_CONSTANT_3D = -1.0 / 6;              //(1/Math.sqrt(3+1)-1)/3;
-    private static readonly double SQUISH_CONSTANT_3D = 1.0 / 3;                //(Math.sqrt(3+1)-1)/3;
-    private static readonly double STRETCH_CONSTANT_4D = -0.138196601125011;    //(1/Math.sqrt(4+1)-1)/4;
-    private static readonly double SQUISH_CONSTANT_4D = 0.309016994374947;      //(Math.sqrt(4+1)-1)/4;
+    private const double STRETCH_CONSTANT_2D = -0.211324865405187;    //(1/Math.sqrt(2+1)-1)/2;
+    private const double SQUISH_CONSTANT_2D = 0.366025403784439;      //(Math.sqrt(2+1)-1)/2;
+    private const double STRETCH_CONSTANT_3D = -1.0 / 6;              //(1/Math.sqrt(3+1)-1)/3;
+    private const double SQUISH_CONSTANT_3D = 1.0 / 3;                //(Math.sqrt(3+1)-1)/3;
+    private const double STRETCH_CONSTANT_4D = -0.138196601125011;    //(1/Math.sqrt(4+1)-1)/4;
+    private const double SQUISH_CONSTANT_4D = 0.309016994374947;      //(Math.sqrt(4+1)-1)/4;
 
-    private static readonly double NORM_CONSTANT_2D = 47;
-    private static readonly double NORM_CONSTANT_3D = 103;
-    private static readonly double NORM_CONSTANT_4D = 30;
+    private const double NORM_CONSTANT_2D = 47;
+    private const double NORM_CONSTANT_3D = 103;
+    private const double NORM_CONSTANT_4D = 30;
 
-    private static readonly long DEFAULT_SEED = 0;
+    private const long DEFAULT_SEED = 0;
 
     private short[] perm;
     private short[] permGradIndex3D;

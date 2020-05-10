@@ -64,7 +64,8 @@ namespace NationBuilder.DataHandlerLibrary
                     textures.Add(TextureValue.ServerFarmIcon, SetTexture(TextureValue.ServerFarmIcon, game));
                     textures.Add(TextureValue.SolarPanelIcon, SetTexture(TextureValue.SolarPanelIcon, game));
                     textures.Add(TextureValue.SteelFactoryIcon, SetTexture(TextureValue.SteelFactoryIcon, game));
-                    //Stats UI 
+                    //UI
+                    textures.Add(TextureValue.Overlay, SetTexture(TextureValue.Overlay, game));
                     textures.Add(TextureValue.Damage, SetTexture(TextureValue.Damage, game));
                     textures.Add(TextureValue.Chest, SetTexture(TextureValue.Chest, game));
                     textures.Add(TextureValue.Range, SetTexture(TextureValue.Range, game));

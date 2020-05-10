@@ -25,7 +25,6 @@ namespace _0x46696E616C.UIComponents
         WorldHandler world;
         InputDefinitions input;
         CommandProccesor cp;
-        Texture2D OverlayTexture;
         Texture2D CameraView;
         DescriptionBox description;
         Vector2 ZeroVector;
@@ -37,13 +36,13 @@ namespace _0x46696E616C.UIComponents
             cp.overlay = this;
             ZeroVector = Vector2.Zero;
         }
-        public override void Draw(GameTime gameTime)
+        public override void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Begin();
-            ComponentOverlay();
-            spriteBatch.Draw(OverlayTexture, Vector2.Zero, Color.White);
-            DrawMap();
-            DrawText();
+            ComponentOverlay(spriteBatch);
+            spriteBatch.Draw(ContentHandler.DrawnTexture(TextureValue.Overlay), Vector2.Zero, Color.White);
+            //DrawMap(spriteBatch);
+            DrawText(spriteBatch);
             foreach (CommandButton button in components.Where(l => l is CommandButton))//For all queueable objects if you can afford it, it shows up normally if not it shows up red
             {
                 if (button.command is BuildSelectCommand)
@@ -69,7 +68,7 @@ namespace _0x46696E616C.UIComponents
         /// <summary>
         /// Drawing for selected buildings and the spawn marker(Visual placement markers - Buildings/spawn markers)
         /// </summary>
-        private void ComponentOverlay()
+        private void ComponentOverlay(SpriteBatch spriteBatch)
         {
             if (cp.cc.SelectedBuild != null)
             {
@@ -149,7 +148,7 @@ namespace _0x46696E616C.UIComponents
         /// <summary>
         /// For now it just draws the resource text
         /// </summary>
-        private void DrawText()
+        private void DrawText(SpriteBatch spriteBatch)
         {
             List<string> resources = cp.cc.Resources();
             foreach (string resource in resources)
@@ -165,8 +164,7 @@ namespace _0x46696E616C.UIComponents
 
         protected override void LoadContent()
         {
-            OverlayTexture = Game.Content.Load<Texture2D>("Overlay");
-            DrawViewPortRepresentation();
+            //DrawViewPortRepresentation();
             description = new DescriptionBox(new Point(550, 200));
             description.Draw(GraphicsDevice);
             base.LoadContent();
@@ -192,7 +190,7 @@ namespace _0x46696E616C.UIComponents
             CameraView.SetData(bounds, 0, cp.camera.Size.X * cp.camera.Size.Y);
         }
 
-        private void DrawMap()
+        private void DrawMap(SpriteBatch spriteBatch)
         {
             //Draw the worlds map scaled down
             float scale = 0.5f;

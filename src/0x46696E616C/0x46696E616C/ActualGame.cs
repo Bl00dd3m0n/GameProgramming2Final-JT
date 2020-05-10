@@ -10,6 +10,7 @@ using _0x46696E616C.UIComponents;
 using _0x46696E616C.Units.Attacks;
 using _0x46696E616C.Util.Collision;
 using _0x46696E616C.Util.Input;
+using _0x46696E616C.WorldManager.ConcreteImplementations.Resources;
 using _0x46696E616C.WorldManager.WorldImplementations.Buildings.HostileBuidlings;
 using MainMenu.Component;
 using Microsoft.Xna.Framework;
@@ -42,6 +43,7 @@ namespace _0x46696E616C
         WaveManager wave;
         ProjectileManager projectileManager;
         CollisionHandler collision;
+        WorldHandler world;
         public bool InProgress { get; private set; }
         public ActualGame(Game game, string World) : base(game)
         {
@@ -49,16 +51,17 @@ namespace _0x46696E616C
         }
         private void Clean()
         {
-            Game.Components.Clear();
             cc = null;
             cam = null;
             process = null;
             input = null;
+            overlay.RemoveAllComponents();
             overlay = null;
             wave = null;
             projectileManager = null;
             collision = null;
             InProgress = false;
+            world = null;
             CommandComponent.ID = 0;
         }
         /// <summary>
@@ -70,7 +73,6 @@ namespace _0x46696E616C
         public override void Initialize()
         {
             // TODO: Add your initialization logic here
-
             base.Initialize();
         }
 
@@ -80,15 +82,14 @@ namespace _0x46696E616C
         /// </summary>
         protected override void LoadContent()
         {
+            // TODO: use this.Content to load your game content here
 
             // Create a new SpriteBatch, which can be used to draw textures.
-            spriteBatch = new SpriteBatch(GraphicsDevice);
-            // TODO: use this.Content to load your game content here
-            ContentHandler.LoadContent(Game);
         }
 
         public void StartGame()
         {
+            ContentHandler.LoadContent(Game);
             SetUpGame();
             InProgress = true;
         }
@@ -96,7 +97,7 @@ namespace _0x46696E616C
         private void SetUpGame()
         {
             //Create a new world
-            WorldHandler world = new WorldHandler(Game, "TempWorld");
+            world = new WorldHandler(Game, "TempWorld");
             //318,98 - Temp spawn point until I randomize it
             Vector2 startPoint = new Vector2(318, 98);
             collision = new CollisionHandler(Game, world);
@@ -104,13 +105,7 @@ namespace _0x46696E616C
             //Probably could be moved to a save file to setup templates for start
             #region Resource Setup  
             //Initialize the new wallet to start with....this can probably be moved to a file
-            Wallet startingResources = new Wallet();
-            startingResources.Deposit(new Wood(), 500);
-            startingResources.Deposit(new Steel(), 500);
-            startingResources.Deposit(new Money(), 500);
-            startingResources.Deposit(new Likes(), 500);
-            startingResources.Deposit(new Iron(), 500);
-            startingResources.Deposit(new Energy(), 500);
+            Wallet startingResources = new Wallet( new Dictionary<IResource, float>() { { new Wood(), 500 },{ new Steel(), 500 },{ new Money(), 500 },{ new Likes(), 500 },{ new Iron(), 500 },{ new Energy(), 500 }  });
             #endregion
             #region util setup
             //creates a new input handler instance
@@ -181,11 +176,7 @@ namespace _0x46696E616C
 
 
             //Initializer
-            wave.Initialize();
-            cam.Initialize();
             overlay.Initialize();
-            process.Initialize();
-            //world.Save("WorldCheck.wrld");
         }
 
 
@@ -214,7 +205,7 @@ namespace _0x46696E616C
                 cc.Update(gameTime);
                 collision.Update(gameTime);
             }
-            if (InProgress && (cc.IsGameOver || wave.Won))
+            if (InProgress && (cc.IsGameOver /*|| wave.Won*/))
             {
                 Clean();
                 InProgress = false;
@@ -228,21 +219,21 @@ namespace _0x46696E616C
 
             base.Update(gameTime);
         }
-        bool debug = true;
+        bool debug = false;
         /// <summary>
         /// This is called when the game should draw itself.
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
-        public override void Draw(GameTime gameTime)
+        public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
 
             GraphicsDevice.Clear(Color.Black);
             // TODO: Add your drawing code here
             if (InProgress && !cc.IsGameOver)
             {
-                cam.Draw(gameTime);
+                cam.Draw(spriteBatch);
                 projectileManager.Draw(spriteBatch);
-                overlay.Draw(gameTime);
+                overlay.Draw(spriteBatch);
                 spriteBatch.Begin();
                 spriteBatch.DrawString(ContentHandler.Font, cc.Time(), new Vector2(700, 0), Color.White);
                 if (debug)

@@ -65,6 +65,7 @@ namespace NationBuilder.TileHandlerLibrary
         HarvestPower,
         BuildPower,
         Health,
+        Overlay,
     }
     [Serializable]
     public struct BlockData
