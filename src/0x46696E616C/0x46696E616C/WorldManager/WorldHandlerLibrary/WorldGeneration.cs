@@ -16,14 +16,12 @@ namespace NationBuilder.WorldHandlerLibrary
 {
     public class WorldGeneration
     {
-        Game game;
         OpenSimplexNoise ElevationNoise;
         OpenSimplexNoise MoistureNoise;
         Vector2 MapSize;
 
-        public WorldGeneration(Game game, string WorldName, long Seed, Vector2 MapSize)
+        public WorldGeneration(string WorldName, long Seed, Vector2 MapSize)
         {
-            this.game = game;
             ElevationNoise = new OpenSimplexNoise(Seed);
             MoistureNoise = new OpenSimplexNoise(Seed - 10);
             this.MapSize = MapSize;

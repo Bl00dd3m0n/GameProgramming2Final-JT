@@ -33,7 +33,7 @@ namespace WorldManager.MapData
             tiles = new Tile[(int)mapSize.X, (int)mapSize.Y, 2];
             this.mapSize = mapSize;
             this.Seed = Seed;
-            wg = new WorldGeneration(game, this.GetType().Name.ToString(), Seed, mapSize);
+            wg = new WorldGeneration(this.GetType().Name.ToString(), Seed, mapSize);
             mobs = new List<IEntity>();
         }
         /// <summary>
@@ -42,6 +42,8 @@ namespace WorldManager.MapData
         /// <param name="gd"></param>
         public void GenerateMap(GraphicsDevice gd)
         {
+            if (mobs != null)
+                mobs.Clear();
             Color[] colors = new Color[(int)((mapSize.X * mapSize.Y))];
             for (int y = 0; y < mapSize.Y; y++)
             {
@@ -61,13 +63,15 @@ namespace WorldManager.MapData
             {
                 for (int x = 0; x < mapSize.X; x++)
                 {
-                    if (tiles[x, y, 1] != null) colors[(int)((x) + (y) * (mapSize.X))] = tiles[x, y, 1].tileColor;
-                    else colors[(int)((x) + (y) * (mapSize.X))] = tiles[x, y, 0].tileColor;
+                    if (tiles[x, y, 0] != null)
+                    {
+                        if (tiles[x, y, 1] != null) colors[(int)((x) + (y) * (mapSize.X))] = tiles[x, y, 1].tileColor;
+                        else colors[(int)((x) + (y) * (mapSize.X))] = tiles[x, y, 0].tileColor;
+                    }
                 }
             }
             mapTexture = new Texture2D(gd, (int)mapSize.X, (int)mapSize.Y);
             mapTexture.SetData(colors, 0, (int)((mapSize.X * mapSize.Y)));
-
         }
 
         /// <summary>

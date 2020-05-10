@@ -20,7 +20,7 @@ namespace UIProject
         SaveXml<List<Component>> save;
         List<IComponent> ssComponents;
         List<IComponent> SSComponents { get { return ssComponents.ToList(); } }
-        public static Type[] ComponentTypes = new Type[] { typeof(Button), typeof(StartButton), typeof(ExitButton), typeof(Label), typeof(PageButton), typeof(InputButton) };
+        public Type[] ComponentTypes = new Type[] { typeof(Button), typeof(StartButton), typeof(ExitButton), typeof(Label), typeof(PageButton), typeof(InputButton) };
         public StyleSheet()
         {
             save = new SaveXml<List<Component>>();
@@ -46,7 +46,7 @@ namespace UIProject
             }
             else
             {
-                return ssComponents;
+                return ssComponents.ToList();//If I reset my components in the canvas this gets reset I think....should solve the issue
             }
         }
 

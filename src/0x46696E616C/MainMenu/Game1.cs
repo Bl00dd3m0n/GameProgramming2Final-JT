@@ -45,13 +45,6 @@ namespace MainMenu
             Pages = new StyleSheet[] { new StyleSheet(), new StyleSheet() };
         }
 
-        private void ResetEverything()
-        {
-            startGame = false;
-            LoadCanvas("MainMenu.ss", 0);
-            currentPage = "Main Menu";
-        }
-
         /// <summary>
         /// Allows the game to perform any initialization it needs to before starting to run.
         /// This is where it can query for any required services and load any non-graphic
@@ -84,7 +77,6 @@ namespace MainMenu
 
             MouseKeyboard keyboard = new MouseKeyboard(this);
             mK = new MouseKeyboard(this);
-            this.Components.Add(mK);
 
             canv = new Canvas(this);
             ss = new StyleSheet();
@@ -102,6 +94,7 @@ namespace MainMenu
             currentPage = "Main Menu";
 
             PlayedGame = new ActualGame(this, "World");
+            PlayedGame.StartGame();
         }
         /// <summary>
         /// Generates a specified style sheet by call
@@ -188,10 +181,7 @@ namespace MainMenu
                     Button button = canv.CheckClick(mK.InputPos.ToPoint(), inputDef, Pages);
                     if (button is StartButton)
                     {
-                        //this.Components.Remove(mK);
-                        //canv.RemoveAllComponents();
-                        PlayedGame = ((StartButton)button).LoadedGame();
-                        PlayedGame.StartGame();
+                        PlayedGame.TempStart();
                         startGame = true;
                     }
                     else if (button is PageButton)
@@ -211,9 +201,9 @@ namespace MainMenu
         {
             int test = Page;
             if (Pages.Length > Page)
-                canv.LoadCanvas(Pages[Page].GetStyleSheet(GraphicsDevice, Path, StyleSheet.ComponentTypes));
+                canv.LoadCanvas(Pages[Page].GetStyleSheet(GraphicsDevice, Path, Pages[Page].ComponentTypes));
             else
-                canv.LoadCanvas(ss.GetStyleSheet(GraphicsDevice, Path, StyleSheet.ComponentTypes));
+                canv.LoadCanvas(ss.GetStyleSheet(GraphicsDevice, Path, ss.ComponentTypes));
         }
         /// <summary>
         /// This is called when the game should draw itself.
@@ -228,7 +218,7 @@ namespace MainMenu
                 if (Keyboard.GetState().IsKeyDown(Keys.I))
                 {
                     Canvas test = new Canvas(this);
-                    test.LoadCanvas(Pages[0].GetStyleSheet(GraphicsDevice, "Path", StyleSheet.ComponentTypes));
+                    test.LoadCanvas(Pages[0].GetStyleSheet(GraphicsDevice, "Path", Pages[0].ComponentTypes));
                     test = null;
                 }
                 if (currentPage == "Main Menu")
@@ -248,17 +238,11 @@ namespace MainMenu
             {
                 if (PlayedGame != null && !PlayedGame.InProgress)
                 {
-                    this.Components.Clear();
-                    ResetEverything();
+                    startGame = false;
                 }
                 else if (PlayedGame != null && startGame)
                 {
                     PlayedGame.Draw(gameTime, spriteBatch);
-                }
-                else if (PlayedGame == null && startGame)
-                {
-                    this.Components.Clear();
-                    ResetEverything();
                 }
             }
             base.Draw(gameTime);

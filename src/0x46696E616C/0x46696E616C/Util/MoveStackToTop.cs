@@ -7,15 +7,15 @@ using _0x46696E616C.Buildings;
 
 namespace Util
 {
-    public class MoveStackToTop
+    public class MoveStackToTop<T>
     {
-        public static Stack<Building> Move(Stack<Building> toBuild, Building toTop)
+        public static Stack<T> Move(Stack<T> toBuild, T toTop)
         {
-            Stack<Building> newStack = new Stack<Building>();
-            List<Building> building = new List<Building>(toBuild);
-            int val = building.FindIndex(l => l == toTop);
+            Stack<T> newStack = new Stack<T>();
+            List<T> building = new List<T>(toBuild);
+            int val = building.FindIndex(l => l.Equals(toTop));
             building.RemoveAt(val);
-            foreach(Building b in building)
+            foreach(T b in building)
             {
                 newStack.Push(b);
             }

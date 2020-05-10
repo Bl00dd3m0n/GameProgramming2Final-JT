@@ -64,6 +64,10 @@ namespace _0x46696E616C.Units.Attacks
             base.Update(gameTime);
         }
 
+        internal void Clear()
+        {
+            projectiles.Clear();
+        }
 
         public void AddProjectile(Projectile projectile)
         {

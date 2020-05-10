@@ -41,7 +41,7 @@ namespace _0x46696E616C.UIComponents
             spriteBatch.Begin();
             ComponentOverlay(spriteBatch);
             spriteBatch.Draw(ContentHandler.DrawnTexture(TextureValue.Overlay), Vector2.Zero, Color.White);
-            //DrawMap(spriteBatch);
+            DrawMap(spriteBatch);
             DrawText(spriteBatch);
             foreach (CommandButton button in components.Where(l => l is CommandButton))//For all queueable objects if you can afford it, it shows up normally if not it shows up red
             {
@@ -164,7 +164,7 @@ namespace _0x46696E616C.UIComponents
 
         protected override void LoadContent()
         {
-            //DrawViewPortRepresentation();
+            DrawViewPortRepresentation();
             description = new DescriptionBox(new Point(550, 200));
             description.Draw(GraphicsDevice);
             base.LoadContent();

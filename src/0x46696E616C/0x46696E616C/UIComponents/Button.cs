@@ -17,7 +17,7 @@ namespace UIProject
         public virtual void Click(Game game)
         {
             Clicked = true;
-            clickedTimer = 0.25f;
+            clickedTimer = 0.5f;
         }
         #region constructors
         public Button(GraphicsDevice gd) : this() { graphics = gd; }

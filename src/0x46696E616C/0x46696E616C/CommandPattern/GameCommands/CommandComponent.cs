@@ -143,7 +143,10 @@ namespace _0x46696E616C.CommandPattern
                 }
             }
         }
-
+        internal void TempStartGame()
+        {
+            IsGameOver = false;
+        }
         internal void EndGame()
         {
             IsGameOver = true;

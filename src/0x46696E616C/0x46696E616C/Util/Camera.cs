@@ -115,8 +115,6 @@ namespace Util
                 }
             }
             sb.End();
-            sb.Begin();
-            sb.End();
         }
 
         private void DrawScreen(SpriteBatch sb, int x, int y, int i)

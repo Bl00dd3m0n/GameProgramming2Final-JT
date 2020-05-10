@@ -31,6 +31,11 @@ namespace WorldManager
             save = new SaveJson<Map>();
         }
 
+        internal void ResetWorld(Game game)
+        {
+            map.GenerateMap(game.GraphicsDevice);
+        }
+
         public void AddCollision(CollisionHandler collision)
         {
             this.collider = collision;

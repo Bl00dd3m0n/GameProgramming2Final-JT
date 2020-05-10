@@ -67,6 +67,11 @@ namespace _0x46696E616C.Util.Collision
             }
         }
 
+        internal void Clear()
+        {
+            colliders.Clear();
+        }
+
         private bool CheckCollision(ICollider checkingCollider, ICollider collider)
         {
             colliderRect = new Rectangle(collider.Position.ToPoint(), collider.Size.ToPoint());

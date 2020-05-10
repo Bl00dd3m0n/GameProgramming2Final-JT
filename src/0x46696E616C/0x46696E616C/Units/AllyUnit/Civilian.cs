@@ -243,7 +243,7 @@ namespace _0x46696E616C.CommandPattern
                 }
                 else
                 {
-                    toBuild = MoveStackToTop.Move(toBuild, (Building)Target);
+                    toBuild = MoveStackToTop<Building>.Move(toBuild, (Building)Target);
                 }
             }
         }

@@ -39,7 +39,7 @@ namespace MainMenu.Component
         public void Click(InputDefinitions input, Game game)
         {
             this.input = input;
-            Click(game);
+            this.Click(game);
         }
 
         internal void UpdateControl(MouseKeyboardBindings controls)
