@@ -50,7 +50,6 @@ namespace _0x46696E616C
         private void Clean()
         {
             Game.Components.Clear();
-            spriteBatch = null;
             cc = null;
             cam = null;
             process = null;
@@ -86,9 +85,11 @@ namespace _0x46696E616C
             spriteBatch = new SpriteBatch(GraphicsDevice);
             // TODO: use this.Content to load your game content here
             ContentHandler.LoadContent(Game);
+        }
+
+        public void StartGame()
+        {
             SetUpGame();
-
-
         }
 
         private void SetUpGame()

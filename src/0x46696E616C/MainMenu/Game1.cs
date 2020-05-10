@@ -29,6 +29,7 @@ namespace MainMenu
         InputDefinitions inputDef;
         string currentPage;
         ActualGame PlayedGame;
+        bool gameStarted;
         /// <summary>
         /// 0 - Main Menu
         /// 1 - Settings Menu
@@ -90,24 +91,39 @@ namespace MainMenu
             {
                 Cursor = this.Content.Load<Texture2D>("Cursor");
             }
-            canv = new Canvas(this);
-            ss = new StyleSheet();
-            inputDef = InputDefinitions.CreateInput(this);
+            if (canv != null)
+            {
+                canv = new Canvas(this);
+                canv.Initialize();
 
-            MouseKeyboard keyboard = new MouseKeyboard(this);
-            canv.Initialize();
-            mK = new MouseKeyboard(this);
-            this.Components.Add(mK);
-            if (!File.Exists("MainMenu.ss"))
-            {
-                GenerateStyleSheet("MainMenu");
+                ss = new StyleSheet();
+
+
+
+                if (!File.Exists("MainMenu.ss"))
+                {
+                    GenerateStyleSheet("MainMenu");
+                }
+                if (!File.Exists("SettingsPage.ss"))
+                {
+                    GenerateStyleSheet("SettingsPage");
+                }
+                LoadCanvas("MainMenu.ss", 0);
+                currentPage = "Main Menu";
+                inputDef = InputDefinitions.CreateInput(this);
+
+                MouseKeyboard keyboard = new MouseKeyboard(this);
+
+                mK = new MouseKeyboard(this);
+                this.Components.Add(mK);
             }
-            if (!File.Exists("SettingsPage.ss"))
+            if (!gameStarted)
             {
-                GenerateStyleSheet("SettingsPage");
+                base.LoadContent();
+                PlayedGame = new ActualGame(this, "World");
+                PlayedGame.Initialize();
+                PlayedGame.Enabled = false;
             }
-            LoadCanvas("MainMenu.ss", 0);
-            currentPage = "Main Menu";
         }
         /// <summary>
         /// Generates a specified style sheet by call
@@ -195,9 +211,7 @@ namespace MainMenu
                     {
                         //this.Components.Remove(mK);
                         canv.RemoveAllComponents();
-                        PlayedGame = ((StartButton)button).LoadedGame();
-                        PlayedGame.Initialize();
-                        //this.Components.Add(PlayedGame);
+
                         startGame = true;
                     }
                     else if (button is PageButton)
@@ -217,7 +231,7 @@ namespace MainMenu
         {
             int test = Page;
             if (Pages.Length > Page)
-                canv.LoadCanvas(Pages[Page].GetStyleSheet(GraphicsDevice, Path, StyleSheet.ComponentTypes)); 
+                canv.LoadCanvas(Pages[Page].GetStyleSheet(GraphicsDevice, Path, StyleSheet.ComponentTypes));
             else
                 canv.LoadCanvas(ss.GetStyleSheet(GraphicsDevice, Path, StyleSheet.ComponentTypes));
         }
