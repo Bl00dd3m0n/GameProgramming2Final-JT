@@ -45,9 +45,10 @@ namespace _0x46696E616C
         CollisionHandler collision;
         WorldHandler world;
         public bool InProgress { get; private set; }
+        private bool newGame;
         public ActualGame(Game game, string World) : base(game)
         {
-
+            newGame = true;
         }
 
         public void StartGame()
@@ -61,98 +62,13 @@ namespace _0x46696E616C
         {
             if (world != null)
             {
-                OtherStart();
+                world.ResetWorld(Game);
             }
             //Create a new world
             else
             {
                 world = new WorldHandler(Game, "TempWorld");
-                //318,98 - Temp spawn point until I randomize it
-                Vector2 startPoint = new Vector2(318, 98);
-                collision = new CollisionHandler(Game, world);
-                world.AddCollision(collision);
-                //Probably could be moved to a save file to setup templates for start
-                #region Resource Setup  
-                //Initialize the new wallet to start with....this can probably be moved to a file
-                Wallet startingResources = new Wallet(new Dictionary<IResource, float>() { { new Wood(), 500 }, { new Steel(), 500 }, { new Money(), 500 }, { new Likes(), 500 }, { new Iron(), 500 }, { new Energy(), 500 } });
-                #endregion
-                #region util setup
-                //creates a new input handler instance
-                input = InputDefinitions.CreateInput(Game);
-
-                cam = new Camera(Game, input, world, startPoint);
-                #endregion
-                projectileManager = new ProjectileManager(Game, world, cam, collision);
-                #region componenets
-                //Game components
-                cc = new CommandComponent(Game, startingResources, world);
-                process = new CommandProccesor(Game, new List<IUnit>(), world, input, cc, cam);
-                overlay = new Overlay(Game, input, world, process);
-                #endregion
-                //Wave handler
-                wave = new WaveManager(Game, world, projectileManager);
-                //Adds a unit to start
-                #region startUnits
-                List<IUnit> units = new List<IUnit>();
-                units.Add(new Civilian("Base unit", new Vector2(1, 1), 100, 100, startPoint + new Vector2(4, 5), BaseUnitState.Idle, TextureValue.Civilian, world, TextureValue.Civilian, 1, projectileManager, cc.TeamStats).AddQueueables());
-                world.AddMob(units[0]);
-                ((BasicUnit)units[0]).SetTeam(1);
-                #endregion
-
-                #region buildingPlacement
-                #region Allies
-                //Center
-                Center center = new Center(TextureValue.Center, startPoint, TextureValue.CenterIcon, world, projectileManager, cc.TeamStats);
-                center.AddQueueables();
-                center.SetTeam(cc.Team);
-                center.SetSpawn(startPoint + center.Size + new Vector2(0, 1));
-                center.PlacedTile();
-                world.Place(center, startPoint);
-                center.Subscribe((IBuildingObserver)cc);
-                center.Damage(-5000);
-                #endregion
-                #region Enemies
-                //Portal
-                startPoint = new Vector2(82, 190);
-                for (int i = 0; i < 3; i++)
-                {
-                    Portal portal = new Portal(TextureValue.Portal, startPoint, TextureValue.Portal, world, projectileManager, wave.TeamStats, wave);
-                    startPoint += new Vector2(i * 8, 0);
-                    portal.SetTeam(cc.Team + 1);
-                    portal.SetSpawn(startPoint + portal.Size + new Vector2(0, 1));
-                    portal.PlacedTile();
-                    world.Place(portal, startPoint);
-                    portal.Subscribe((IBuildingObserver)cc);
-                }
-                #endregion
-                #endregion
-                CommandButton exit = new CommandButton(GraphicsDevice, new ExitGameCommand(), new Vector2(GraphicsDevice.Viewport.Width - 50, 0), TextureValue.None, new Point(50, 30));
-                exit.Scale = 1;
-                exit.color = Color.SlateGray;
-                exit.Text = "Exit";
-                exit.Draw(GraphicsDevice);
-                overlay.AddComponent(exit);
-
             }
-            //Initializer
-            overlay.Initialize();
-        }
-
-
-        /// <summary>
-        /// UnloadContent will be called once per game and is the place to unload
-        /// game-specific content.
-        /// </summary>
-        protected override void UnloadContent()
-        {
-            // TODO: Unload any non ContentManager content here
-        }
-
-        private void OtherStart()
-        {
-            InProgress = true;
-            //Create a new world
-            world.ResetWorld(Game);
             //318,98 - Temp spawn point until I randomize it
             Vector2 startPoint = new Vector2(318, 98);
             collision = new CollisionHandler(Game, world);
@@ -163,15 +79,21 @@ namespace _0x46696E616C
             Wallet startingResources = new Wallet(new Dictionary<IResource, float>() { { new Wood(), 500 }, { new Steel(), 500 }, { new Money(), 500 }, { new Likes(), 500 }, { new Iron(), 500 }, { new Energy(), 500 } });
             #endregion
             #region util setup
-            //creates a new input handler instance
-            input = InputDefinitions.CreateInput(Game);
-
+            if (newGame)
+            {
+                //creates a new input handler instance
+                input = InputDefinitions.CreateInput(Game);
+                cam = new Camera(Game, input, world, startPoint);
+            }
             #endregion
+            projectileManager = new ProjectileManager(Game, world, cam, collision);
             #region componenets
             //Game components
             cc = new CommandComponent(Game, startingResources, world);
+
             process = new CommandProccesor(Game, new List<IUnit>(), world, input, cc, cam);
             overlay = new Overlay(Game, input, world, process);
+
             #endregion
             //Wave handler
             wave = new WaveManager(Game, world, projectileManager);
@@ -186,10 +108,11 @@ namespace _0x46696E616C
             #region buildingPlacement
             #region Allies
             //Center
-            Building center = new Center(TextureValue.Center, startPoint, TextureValue.CenterIcon, world, projectileManager, cc.TeamStats).AddQueueables();
+            Center center = new Center(TextureValue.Center, startPoint, TextureValue.CenterIcon, world, projectileManager, cc.TeamStats);
+            center.AddQueueables();
             center.SetTeam(cc.Team);
             center.SetSpawn(startPoint + center.Size + new Vector2(0, 1));
-            center.PlacedTile();
+            center.PlacedTile(GraphicsDevice);
             world.Place(center, startPoint);
             center.Subscribe((IBuildingObserver)cc);
             center.Damage(-5000);
@@ -197,18 +120,16 @@ namespace _0x46696E616C
             #region Enemies
             //Portal
             startPoint = new Vector2(82, 190);
-
             for (int i = 0; i < 3; i++)
             {
                 Portal portal = new Portal(TextureValue.Portal, startPoint, TextureValue.Portal, world, projectileManager, wave.TeamStats, wave);
                 startPoint += new Vector2(i * 8, 0);
                 portal.SetTeam(cc.Team + 1);
                 portal.SetSpawn(startPoint + portal.Size + new Vector2(0, 1));
-                portal.PlacedTile();
+                portal.PlacedTile(GraphicsDevice);
                 world.Place(portal, startPoint);
                 portal.Subscribe((IBuildingObserver)cc);
             }
-
             #endregion
             #endregion
             CommandButton exit = new CommandButton(GraphicsDevice, new ExitGameCommand(), new Vector2(GraphicsDevice.Viewport.Width - 50, 0), TextureValue.None, new Point(50, 30));
@@ -221,7 +142,19 @@ namespace _0x46696E616C
 
             //Initializer
             overlay.Initialize();
+            newGame = false;
         }
+
+
+        /// <summary>
+        /// UnloadContent will be called once per game and is the place to unload
+        /// game-specific content.
+        /// </summary>
+        protected override void UnloadContent()
+        {
+            // TODO: Unload any non ContentManager content here
+        }
+
 
         /// <summary>
         /// Allows the game to run logic such as updating the world,
@@ -244,6 +177,7 @@ namespace _0x46696E616C
             {
                 InProgress = false;
                 CommandComponent.ID = 0;
+                world.Clear();
             }
             /*if(InProgress && (cc.SelectedBuild == null && cc.SelectedUnits.Count > 0) && input.CheckInput(Controls.Deselect))
             {

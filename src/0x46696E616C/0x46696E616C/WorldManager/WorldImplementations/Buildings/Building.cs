@@ -104,7 +104,7 @@ namespace _0x46696E616C.Buildings
                         if (trainingObject is BasicUnit)
                         {
                             ((BasicUnit)trainingObject).UpdatePosition(gd, spawnPoint);
-                            ((BasicUnit)trainingObject).PlacedTile();
+                            ((BasicUnit)trainingObject).PlacedTile(gd);
                             ((BasicUnit)trainingObject).SetTeam(this.TeamAssociation);
                         }
                         return trainingQueue.Dequeue();

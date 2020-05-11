@@ -222,7 +222,7 @@ namespace _0x46696E616C.CommandPattern
                 if (wh.Place(SelectedBuild, Position))
                 {
                     SelectedBuild.UpdatePosition(Game.GraphicsDevice, Position);
-                    SelectedBuild.PlacedTile();
+                    SelectedBuild.PlacedTile(Game.GraphicsDevice);
 
 
 

@@ -128,14 +128,27 @@ namespace WorldManager.TileHandlerLibrary
             }
             else
             {
-                base.UpdatePosition(gd, position);
-                if (healthBar.Health == null)
+                if (!placed)
                 {
-                    healthBar = new HealthBar(new Rectangle(new Point((int)position.X, (int)position.Y - 1), new Point((int)(Size.X * 16), (int)(5))));
+                    base.UpdatePosition(gd, position);
+                    if (healthBar.Health == null)
+                    {
+                        healthBar = new HealthBar(new Rectangle(new Point((int)position.X, (int)position.Y - 1), new Point((int)(Size.X * 16), (int)(5))));
+                    }
+                    healthBar.UpdateHealth(this, gd);
+                    healthBar.Position = position;
                 }
-                healthBar.UpdateHealth(this, gd);
-                healthBar.Position = position;
             }
+        }
+        public override Tile PlacedTile(GraphicsDevice gd)
+        {
+            if (healthBar.Health == null)
+            {
+                healthBar = new HealthBar(new Rectangle(new Point((int)Position.X, (int)Position.Y - 1), new Point((int)(Size.X * 16), (int)(5))));
+            }
+            healthBar.UpdateHealth(this, gd);
+            healthBar.Position = Position;
+            return base.PlacedTile(gd);
         }
         //checks if the tile has the tag
         public bool HasTag(string v)

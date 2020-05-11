@@ -30,9 +30,14 @@ namespace WorldManager
             map.GenerateMap(game.GraphicsDevice);
             save = new SaveJson<Map>();
         }
-
+        public void Clear()
+        {
+            map.Clear();
+            map = null;
+        }
         internal void ResetWorld(Game game)
         {
+            if(map == null) map = new Map(game, new Vector2(game.GraphicsDevice.Viewport.Width / 2, game.GraphicsDevice.Viewport.Height / 2), Seed);
             map.GenerateMap(game.GraphicsDevice);
         }
 

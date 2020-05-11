@@ -28,6 +28,16 @@ namespace WorldManager.MapData
         WorldGeneration wg { get; set; }
         public List<IEntity> mobs { get; private set; }
 
+        internal void Clear()
+        {
+            mapSize = Vector2.Zero;
+            tiles = null;
+            mapTexture = null;
+            Seed = 0;
+            wg = null;
+            mobs.Clear();
+        }
+
         public Map(Game game, Vector2 mapSize, long Seed)
         {
             tiles = new Tile[(int)mapSize.X, (int)mapSize.Y, 2];
@@ -49,11 +59,11 @@ namespace WorldManager.MapData
             {
                 for (int x = 0; x < mapSize.X; x++)
                 {
-                    tiles[x, y, 0] = GenerateTerrain(new Vector2(x, y)).PlacedTile();
+                    tiles[x, y, 0] = GenerateTerrain(new Vector2(x, y)).PlacedTile(gd);
                     tiles[x, y, 1] = GenerateDecor(new Vector2(x, y));
                     if (tiles[x, y, 1] != null)
                     {
-                        tiles[x, y, 1].PlacedTile();
+                        tiles[x, y, 1].PlacedTile(gd);
                         ((ModifiableTile)tiles[x, y, 1]).Subscribe(this); //The map subscribes to every tile and if they update the map is notified
                     }
                 }

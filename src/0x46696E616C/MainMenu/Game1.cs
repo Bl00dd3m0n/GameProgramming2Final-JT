@@ -94,7 +94,6 @@ namespace MainMenu
             currentPage = "Main Menu";
 
             PlayedGame = new ActualGame(this, "World");
-            PlayedGame.StartGame();
         }
         /// <summary>
         /// Generates a specified style sheet by call
@@ -181,7 +180,7 @@ namespace MainMenu
                     Button button = canv.CheckClick(mK.InputPos.ToPoint(), inputDef, Pages);
                     if (button is StartButton)
                     {
-                        PlayedGame.TempStart();
+                        PlayedGame.StartGame();
                         startGame = true;
                     }
                     else if (button is PageButton)
@@ -205,6 +204,7 @@ namespace MainMenu
             else
                 canv.LoadCanvas(ss.GetStyleSheet(GraphicsDevice, Path, ss.ComponentTypes));
         }
+
         /// <summary>
         /// This is called when the game should draw itself.
         /// </summary>
