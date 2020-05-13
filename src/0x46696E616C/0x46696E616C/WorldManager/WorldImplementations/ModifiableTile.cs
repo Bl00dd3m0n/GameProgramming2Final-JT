@@ -134,10 +134,15 @@ namespace WorldManager.TileHandlerLibrary
                     if (healthBar.Health == null)
                     {
                         healthBar = new HealthBar(new Rectangle(new Point((int)position.X, (int)position.Y - 1), new Point((int)(Size.X * 16), (int)(5))));
+
                     }
-                    healthBar.UpdateHealth(this, gd);
                     healthBar.Position = position;
                 }
+
+            }
+            if(healthBar != null)
+            {
+                healthBar.UpdateHealth(this, gd);
             }
         }
         public override Tile PlacedTile(GraphicsDevice gd)

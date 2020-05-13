@@ -18,7 +18,7 @@ namespace _0x46696E616C.Buildings
 
         public List<IResource> productionTypes { get; protected set; }
 
-        public SolarPanel(TextureValue texture, Vector2 position, TextureValue icon, WorldHandler world, ProjectileManager proj, Stats teamStats) : base(texture, position, icon, world, proj, teamStats)
+        public SolarPanel(TextureValue texture, Vector2 position, TextureValue icon, ProjectileManager proj, Stats teamStats) : base(texture, position, icon, proj, teamStats)
         {
             ProductionAMinute = new List<int>() { 60 };
             productionTypes = new List<IResource>() { new Energy() };
@@ -39,7 +39,7 @@ namespace _0x46696E616C.Buildings
 
         public override Building NewInstace(TextureValue tex, Vector2 position, TextureValue Icon)
         {
-            return new SolarPanel(tex, position, Icon, world, proj, teamStats);
+            return new SolarPanel(tex, position, Icon, proj, teamStats);
         }
     }
 }

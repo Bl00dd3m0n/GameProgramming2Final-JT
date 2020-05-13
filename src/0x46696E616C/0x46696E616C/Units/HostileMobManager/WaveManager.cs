@@ -66,7 +66,7 @@ namespace MobHandler.HostileMobManager
             {
                 foreach (IUnit unit in units)
                 {
-                    ((HostileMob)unit).Update(gameTime);
+                    ((HostileMob)unit).Update(gameTime, world);
                     if (((HostileMob)unit).State == WorldManager.TileHandlerLibrary.tileState.dead) clearUnits.Add(unit);
                 }
                 foreach(IUnit unit in clearUnits)
@@ -85,8 +85,8 @@ namespace MobHandler.HostileMobManager
         public void BasicWaveStart()
         {
             List<IUnit> tempUnits = new List<IUnit>();
-            tempUnits.Add(new HeadlessHorseman("Headless Horseman", new Vector2(1), (Wave * 100) + 100, (Wave * 100) + 100, new Vector2(318, 120), BaseUnitState.Idle, TextureValue.HeadlessHorseman, Color.Red, TextureValue.HeadlessHorseman, world, 1, TeamStats));
-            tempUnits.Add(new Mage("Mage", new Vector2(1), (Wave * 50) + 100, (Wave * 100) + 100, new Vector2(318, 113), BaseUnitState.Idle, TextureValue.Mage, Color.Red, TextureValue.Mage, world, projectileManager, 10, TeamStats));
+            tempUnits.Add(new HeadlessHorseman("Headless Horseman", new Vector2(1), (Wave * 100) + 100, (Wave * 100) + 100, new Vector2(318, 120), BaseUnitState.Idle, TextureValue.HeadlessHorseman, Color.Red, TextureValue.HeadlessHorseman, 1, TeamStats));
+            tempUnits.Add(new Mage("Mage", new Vector2(1), (Wave * 50) + 100, (Wave * 100) + 100, new Vector2(318, 113), BaseUnitState.Idle, TextureValue.Mage, Color.Red, TextureValue.Mage, projectileManager, 10, TeamStats));
 
             foreach (IUnit unit in tempUnits)
             {

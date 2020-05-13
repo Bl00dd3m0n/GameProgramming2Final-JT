@@ -24,7 +24,7 @@ using WorldManager.TileHandlerLibrary;
 
 namespace _0x46696E616C.CommandPattern
 {
-    class CommandComponent : GameComponent, ICommandComponent, IBuildingObserver, ITechObserver
+    public class CommandComponent : GameComponent, ICommandComponent, IBuildingObserver, ITechObserver
     {
         Wallet resources;
         internal List<IUnit> SelectedUnits;
@@ -126,17 +126,17 @@ namespace _0x46696E616C.CommandPattern
                 {
                     if (unit is Civilian && target is IHarvestable)
                     {
-                        ((Civilian)unit).Harvest(target);
+                        ((Civilian)unit).Harvest(target, world);
                     }
                     else
                     {
                         if (unit is Civilian)
                         {
-                            ((Civilian)unit).Attack(target);
+                            ((Civilian)unit).Attack(target, world);
                         }
                         else if (unit is OffensiveUnits)
                         {
-                            ((OffensiveUnits)unit).Attack(target);
+                            ((OffensiveUnits)unit).Attack(target, world);
                         }
                     }
 
@@ -182,7 +182,7 @@ namespace _0x46696E616C.CommandPattern
             {
                 if (unit is BasicUnit && ((BasicUnit)unit).TeamAssociation == this.Team)
                 {
-                    ((BasicUnit)unit).Move(Position);
+                    ((BasicUnit)unit).Move(Position, world);
                 }
             }
         }
@@ -198,11 +198,11 @@ namespace _0x46696E616C.CommandPattern
                 {
                     if (unit is Civilian)
                     {
-                        ((Civilian)unit).Garrison(building);
+                        ((Civilian)unit).Garrison(building,world);
                     }
                     else if (unit is OffensiveUnits)
                     {
-                        ((OffensiveUnits)unit).Garrison(building);
+                        ((OffensiveUnits)unit).Garrison(building, world);
                     }
                 }
             }
@@ -233,7 +233,7 @@ namespace _0x46696E616C.CommandPattern
                         {
                             if (unit is Civilian)
                             {
-                                ((Civilian)unit).Build(SelectedBuild);
+                                ((Civilian)unit).Build(SelectedBuild, world);
                                 ((Civilian)unit).QueueBuild(SelectedBuild);
                             }
                         }
@@ -276,7 +276,7 @@ namespace _0x46696E616C.CommandPattern
             {
                 if (unit is BasicUnit)
                 {
-                    ((BasicUnit)unit).Update(gameTime);
+                    ((BasicUnit)unit).Update(gameTime, world);
                 }
             }
             timer += gameTime.ElapsedGameTime.Milliseconds;
@@ -305,21 +305,21 @@ namespace _0x46696E616C.CommandPattern
             for (int i = 0; i < toBuild.Count; i++)
             {
                 toBuild[i].healthBar.UpdateHealth(toBuild[i], Game.GraphicsDevice);
-                toBuild[i].Construct(); //TODO implement worker proficiency at repairing/building here(More workers/better tech should speed this process up)
+                toBuild[i].Construct();
                 if (toBuild[i].CurrentHealth >= toBuild[i].TotalHealth)
                 {
                     if (toBuild[i].HasTag("Wood Collector"))
                     {
                         for (int j = 0; j < toBuild[i].GarrisonedUnits.Count; j++)
                         {
-                            ((Civilian)toBuild[i].GarrisonedUnits[j]).Harvest(world.FindNearest("Wood", toBuild[i].GarrisonedUnits[j].Position));
+                            ((Civilian)toBuild[i].GarrisonedUnits[j]).Harvest(world.FindNearest("Wood", toBuild[i].GarrisonedUnits[j].Position), world);
                         }
                     }
                     else if (toBuild[i].HasTag("Iron Collector"))
                     {
                         for (int j = 0; j < toBuild[i].GarrisonedUnits.Count; j++)
                         {
-                            ((Civilian)toBuild[i].GarrisonedUnits[j]).Harvest(world.FindNearest("Iron", toBuild[i].GarrisonedUnits[j].Position));
+                            ((Civilian)toBuild[i].GarrisonedUnits[j]).Harvest(world.FindNearest("Iron", toBuild[i].GarrisonedUnits[j].Position), world);
                         }
                     }
                     toBuild[i].Subscribe((ITechObserver)this);
@@ -384,7 +384,7 @@ namespace _0x46696E616C.CommandPattern
 
                         if (item is BasicUnit)
                         {
-                            ((BasicUnit)item).Move(buildings[i].GetSpawn());
+                            ((BasicUnit)item).Move(buildings[i].GetSpawn(), world);
                             world.AddMob((BasicUnit)item);
                         }
                     }
@@ -451,7 +451,7 @@ namespace _0x46696E616C.CommandPattern
             {
                 if (unit is Civilian)
                 {
-                    ((Civilian)unit).Build(building);
+                    ((Civilian)unit).Build(building, world);
                 }
             }
         }

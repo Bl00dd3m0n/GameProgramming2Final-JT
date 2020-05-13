@@ -21,14 +21,14 @@ namespace _0x46696E616C.WorldManager.WorldImplementations.Buildings.HostileBuidl
     class Portal : Building
     {
         WaveManager wave;
-        public Portal(TextureValue texture, Vector2 position, TextureValue icon, WorldHandler world, ProjectileManager proj, Stats stats, WaveManager wave) : base(texture, position, icon, world, proj, stats)
+        public Portal(TextureValue texture, Vector2 position, TextureValue icon, ProjectileManager proj, Stats teamStats, WaveManager wave) : base(texture, position, icon, proj, teamStats)
         {
             energyCost = 0;
             name = "Portal";
             Position = position;
             Size = new Vector2(4, 4);
             stats.Add(new Health("Health", 5000));
-            currentHealth = 100000;
+            currentHealth = 5000;
             tags.Add("Portal");
             healthBar = new HealthBar(new Rectangle(new Point((int)position.X, (int)position.Y - 1), new Point((int)(Size.X * 16), (int)(Size.Y))));
             BuildingDescription = "The Portal summons waves";
@@ -37,7 +37,7 @@ namespace _0x46696E616C.WorldManager.WorldImplementations.Buildings.HostileBuidl
 
         public override Building NewInstace(TextureValue tex, Vector2 position, TextureValue Icon)
         {
-            return new Portal(tex, position, Icon, world,proj,stats, wave);
+            return new Portal(tex, position, Icon,proj,stats, wave);
         }
 
         public override void AddQueueable(IQueueable<TextureValue> item)

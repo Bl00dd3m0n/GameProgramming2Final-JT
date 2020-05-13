@@ -37,7 +37,9 @@ namespace _0x46696E616C.Buildings
         public Queue<IQueueable<TextureValue>> trainingQueue { get; set; }
 
         protected List<IQueueable<TextureValue>> queueableThings { get; set; }
+
         public List<IQueueable<TextureValue>> QueueableThings { get { return queueableThings.ToList(); } }
+
         public TextureValue Icon { get; protected set; }
 
         public override Vector2 Position { get { return base.Position; } }
@@ -54,15 +56,13 @@ namespace _0x46696E616C.Buildings
 
         protected string BuildingDescription { get; set; }
 
-        protected WorldHandler world;
-
         protected ProjectileManager proj;
 
         protected float trainTimer;
 
         protected Stats teamStats;
 
-        public Building(TextureValue texture, Vector2 position, TextureValue Icon, WorldHandler world, ProjectileManager proj, Stats teamStats) : base(texture, position, Color.Blue)
+        public Building(TextureValue texture, Vector2 position, TextureValue Icon, ProjectileManager proj, Stats teamStats) : base(texture, position, Color.Blue)
         {
             Cost = new Wallet();
             name = "Building";
@@ -77,7 +77,6 @@ namespace _0x46696E616C.Buildings
             trainingQueue = new Queue<IQueueable<TextureValue>>();
             BuildingDescription = "";
             techObservers = new List<ITechObserver>();
-            this.world = world;
             this.proj = proj;
             this.teamStats = teamStats;
         }
@@ -104,7 +103,7 @@ namespace _0x46696E616C.Buildings
                         if (trainingObject is BasicUnit)
                         {
                             ((BasicUnit)trainingObject).UpdatePosition(gd, spawnPoint);
-                            ((BasicUnit)trainingObject).PlacedTile(gd);
+                            //((BasicUnit)trainingObject).PlacedTile(gd);
                             ((BasicUnit)trainingObject).SetTeam(this.TeamAssociation);
                         }
                         return trainingQueue.Dequeue();

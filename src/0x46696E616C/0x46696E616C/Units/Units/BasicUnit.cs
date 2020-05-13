@@ -46,11 +46,10 @@ namespace _0x46696E616C.CommandPattern.Commands
         protected Vector2 yOne;
         protected Vector2 DistanceFromPosition; // This checks to see if the player is still at the same place
         A_Star aStar;
-        protected WorldHandler world { get; set; }
         protected float range;
         public Stats teamStats { get; protected set; }
         //TODO List of commands needed to be implemented for the units
-        public BasicUnit(string name, Vector2 size, float totalHealth, float currentHealth, Vector2 position, BaseUnitState state, TextureValue texture, Color color, TextureValue icon, WorldHandler world, float range, Stats teamStats) : base(texture, position, color)
+        public BasicUnit(string name, Vector2 size, float totalHealth, float currentHealth, Vector2 position, BaseUnitState state, TextureValue texture, Color color, TextureValue icon, float range, Stats teamStats) : base(texture, position, color)
         {
             Cost = new Wallet();// TODO charge for units
             this.name = name;
@@ -62,7 +61,6 @@ namespace _0x46696E616C.CommandPattern.Commands
             Direction = new Vector2(0, 0);
             speed = 0;
             this.Icon = icon;
-            this.world = world;
             aStar = new A_Star();
             waypoints = new List<Vector2>();
             zero = Vector2.Zero;
@@ -74,7 +72,8 @@ namespace _0x46696E616C.CommandPattern.Commands
             if (teamStats != null)
             {
                 attack = new Melee(stats[typeof(Range)].Value + teamStats[typeof(Range)].Value);
-            } else
+            }
+            else
             {
                 attack = new Melee(stats[typeof(Range)].Value);
             }
@@ -94,7 +93,7 @@ namespace _0x46696E616C.CommandPattern.Commands
 
         public virtual BasicUnit NewInstace(float currentHealth, Vector2 position)
         {
-            return new BasicUnit(this.name, this.Size, this.TotalHealth, currentHealth, position, BaseUnitState.Idle, this.block.texture, this.tileColor, this.Icon, world, this.stats[typeof(Range)].Value, teamStats).AddQueueables();
+            return new BasicUnit(this.name, this.Size, this.TotalHealth, currentHealth, position, BaseUnitState.Idle, this.block.texture, this.tileColor, this.Icon, this.stats[typeof(Range)].Value, teamStats).AddQueueables();
         }
 
 
@@ -103,16 +102,16 @@ namespace _0x46696E616C.CommandPattern.Commands
             throw new NotImplementedException();
         }
 
-        public virtual void Update(GameTime gameTime)
+        public virtual void Update(GameTime gameTime, WorldHandler world)
         {
-            UpdateMove(gameTime);
+            UpdateMove(gameTime, world);
         }
 
         /// <summary>
         /// Moves by waypoint
         /// </summary>
         ///<see cref="Probably implement some sort of A* and flocking ai either here or in the Command Component"/>>
-        protected virtual void UpdateMove(GameTime gameTime)
+        protected virtual void UpdateMove(GameTime gameTime, WorldHandler world)
         {
             Direction = zero;
             float distance = Vector2.Distance(Position, nextPoint);
@@ -166,7 +165,7 @@ namespace _0x46696E616C.CommandPattern.Commands
         /// Generates waypoints using A*
         /// </summary>
         /// <param name="Position"></param>
-        public virtual void Move(Vector2 Position)
+        public virtual void Move(Vector2 Position, WorldHandler world)
         {
             Vector2 newPosition = new Vector2();
             Vector2 selectedPosition = Position;

@@ -25,7 +25,7 @@ namespace _0x46696E616C.Buildings
 
         public List<IResource> ChargeTypes { get; protected set; }
 
-        public Center(TextureValue texture, Vector2 position, TextureValue icon, WorldHandler world, ProjectileManager proj, Stats teamStats) : base(texture, position, icon, world, proj, teamStats)
+        public Center(TextureValue texture, Vector2 position, TextureValue icon, ProjectileManager proj, Stats teamStats) : base(texture, position, icon, proj, teamStats)
         {
             Cost = new Wallet();
             Cost.Deposit(new Steel(), 200);
@@ -46,13 +46,13 @@ namespace _0x46696E616C.Buildings
 
         public override Building AddQueueables()
         {
-            queueableThings.Add(new Civilian("Base unit", new Vector2(1, 1), 100, 0, GetSpawn() + new Vector2(4, 5), BaseUnitState.Idle, TextureValue.Civilian, world, TextureValue.Civilian, 1.1f, proj, teamStats));
-            queueableThings.Add(new Ballista("Ballista", new Vector2(1, 1), 100, 0, GetSpawn() + new Vector2(4, 5), BaseUnitState.Idle, TextureValue.Ballista, Color.Blue,TextureValue.Ballista, world, proj, 30, teamStats));
+            queueableThings.Add(new Civilian("Base unit", new Vector2(1, 1), 100, 0, GetSpawn() + new Vector2(4, 5), BaseUnitState.Idle, TextureValue.Civilian, TextureValue.Civilian, 1.1f, proj, teamStats));
+            queueableThings.Add(new Ballista("Ballista", new Vector2(1, 1), 100, 0, GetSpawn() + new Vector2(4, 5), BaseUnitState.Idle, TextureValue.Ballista, Color.Blue,TextureValue.Ballista, proj, 30, teamStats));
             return this;
         }
         public override Building NewInstace(TextureValue tex, Vector2 position, TextureValue Icon)
         {
-            return new Center(tex, position, Icon, world, proj, teamStats).AddQueueables();
+            return new Center(tex, position, Icon, proj, teamStats).AddQueueables();
         }
 
         public override void Collect(Wallet resource)

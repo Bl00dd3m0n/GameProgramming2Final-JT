@@ -41,6 +41,7 @@ namespace _0x46696E616C.CommandPattern
         public Overlay overlay { get; set; }
         public Panel EntityDetails;
         public Panel EntityActions;
+        internal bool clicked;
         public CommandProccesor(Game game, List<IUnit> startingUnits, WorldHandler wh, InputDefinitions input, CommandComponent command, Camera camera) : base(game)
         {
             this.cc = command;
@@ -83,7 +84,7 @@ namespace _0x46696E616C.CommandPattern
         {
             if (input.CheckInput(Controls.Select))
             {
-
+                clicked = true;
                 if (cc.SelectedBuild != null)
                 {
                     return new BuildCommand(cc.SelectedBuild, wh, (CurrentPos).ToPoint().ToVector2());
@@ -133,6 +134,7 @@ namespace _0x46696E616C.CommandPattern
             }
             else if (input.CheckInput(Controls.Interact))
             {
+                clicked = true;
                 Tile tile = wh.GetTile(CurrentPos);
                 if (tile is ReferenceTile)
                 {
@@ -223,18 +225,23 @@ namespace _0x46696E616C.CommandPattern
 
         private void displaySelectedUnits(List<IUnit> units)
         {
+            if (EntityDetails != null)
+                overlay.RemoveComponent(EntityDetails);
+            EntityDetails = new Panel(Game, new Rectangle(new Point(217, 359), new Point(336, 121)), this);//TODO this will need to be more automatic if I add different resolutions/screen sizes
+            EntityDetails.Initialize();
             Component com = null;
             float comX = 217;
             foreach (IUnit unit in units)
             {
                 com = new ImageBox(((ModifiableTile)unit).block.texture, new Vector2(comX, 359), new Point(1, 1), Color.White);
                 com.Scale = 1;
-                overlay.AddComponent(com);
+                EntityDetails.AddComponent(com);
                 com = new ImageBox(unit.healthBar.Health, new Vector2(comX, 359 + 19), new Point(1, 1), Color.White);
                 com.Scale = 1;
-                overlay.AddComponent(com);
+                EntityDetails.AddComponent(com);
                 comX += (unit.Size.X * 16) + 5;
             }
+            overlay.AddComponent(EntityDetails);
         }
 
         private void SelectedUnitDisplay(ModifiableTile tile)
@@ -256,14 +263,14 @@ namespace _0x46696E616C.CommandPattern
             {
                 if (tile.stats[i] is Health)
                 {
-                    com = new ImageBox(tile.healthBar.Health, new Vector2(227, 359 + 32), new Point((int)com.Scale, 1), Color.White);
+                    com = new ImageBoxHealth(tile.healthBar.Health, new Vector2(227, 359 + 32), new Point((int)com.Scale, 1), Color.White, tile);
                     com.Scale = 2;
                     EntityDetails.AddComponent(com);
                     com = com = new Label(new Vector2(224, 359 + 46), $"{tile.CurrentHealth}/{tile.TotalHealth}", Color.White);
                 }
                 else
                 {
-                    com = new ImageBox(tile.stats[i].Texture, new Vector2(300, y - 8), new Point(1, 1), Color.White);
+                    com = new ImageBox(tile.stats[i].Texture, new Vector2(300, y - 8), new Point(16), Color.White);
                     com.Scale = 0.25f;
                     EntityDetails.AddComponent(com);
                     string display = tile.stats[i].Value.ToString();

@@ -166,16 +166,6 @@ namespace _0x46696E616C.ConcreteImplementations
             return true;
         }
 
-        /*public static implicit operator Wallet(List<IResource> v)
-        {
-            return new Wallet(v);
-        }
-
-        public static implicit operator Wallet(Dictionary<IResource, float> v)
-        {
-            return new Wallet(v);
-        }*/
-
         //Returns the teams resources
         internal List<string> ResourceString()
         {

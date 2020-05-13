@@ -86,7 +86,7 @@ namespace _0x46696E616C
                 cam = new Camera(Game, input, world, startPoint);
             }
             #endregion
-            projectileManager = new ProjectileManager(Game, world, cam, collision);
+            projectileManager = new ProjectileManager(Game, cam, collision);
             #region componenets
             //Game components
             cc = new CommandComponent(Game, startingResources, world);
@@ -100,7 +100,7 @@ namespace _0x46696E616C
             //Adds a unit to start
             #region startUnits
             List<IUnit> units = new List<IUnit>();
-            units.Add(new Civilian("Base unit", new Vector2(1, 1), 100, 100, startPoint + new Vector2(4, 5), BaseUnitState.Idle, TextureValue.Civilian, world, TextureValue.Civilian, 1, projectileManager, cc.TeamStats).AddQueueables());
+            units.Add(new Civilian("Base unit", new Vector2(1, 1), 100, 100, startPoint + new Vector2(4, 5), BaseUnitState.Idle, TextureValue.Civilian, TextureValue.Civilian, 1, projectileManager, cc.TeamStats).AddQueueables());
             world.AddMob(units[0]);
             ((BasicUnit)units[0]).SetTeam(1);
             #endregion
@@ -108,7 +108,7 @@ namespace _0x46696E616C
             #region buildingPlacement
             #region Allies
             //Center
-            Center center = new Center(TextureValue.Center, startPoint, TextureValue.CenterIcon, world, projectileManager, cc.TeamStats);
+            Center center = new Center(TextureValue.Center, startPoint, TextureValue.CenterIcon, projectileManager, cc.TeamStats);
             center.AddQueueables();
             center.SetTeam(cc.Team);
             center.SetSpawn(startPoint + center.Size + new Vector2(0, 1));
@@ -122,7 +122,7 @@ namespace _0x46696E616C
             startPoint = new Vector2(82, 190);
             for (int i = 0; i < 3; i++)
             {
-                Portal portal = new Portal(TextureValue.Portal, startPoint, TextureValue.Portal, world, projectileManager, wave.TeamStats, wave);
+                Portal portal = new Portal(TextureValue.Portal, startPoint, TextureValue.Portal, projectileManager, wave.TeamStats, wave);
                 startPoint += new Vector2(i * 8, 0);
                 portal.SetTeam(cc.Team + 1);
                 portal.SetSpawn(startPoint + portal.Size + new Vector2(0, 1));
@@ -172,6 +172,7 @@ namespace _0x46696E616C
                 process.Update(gameTime);
                 cc.Update(gameTime);
                 collision.Update(gameTime);
+                overlay.Update(gameTime);
             }
             if (InProgress && (cc.IsGameOver /*|| wave.Won*/))
             {
@@ -212,7 +213,6 @@ namespace _0x46696E616C
                     spriteBatch.DrawString(ContentHandler.Font, $"{cam.Position.ToPoint()} {Tile.Zoom}", new Vector2(0, 40), Color.White);
                     spriteBatch.DrawString(ContentHandler.Font, $"{2f / Tile.Zoom}", new Vector2(0, 60), Color.White);
                 }
-                spriteBatch.Draw(ContentHandler.DrawnTexture(TextureValue.Cursor), Mouse.GetState().Position.ToVector2(), null, Color.Red, 0, new Vector2(0, 0), 0.25f, SpriteEffects.None, 0);
                 spriteBatch.End();
             }
             base.Draw(gameTime);

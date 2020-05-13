@@ -49,6 +49,7 @@
     <Compile Include="TechManager\Technologies\HarvestUpgrade.cs" />
     <Compile Include="TechManager\Technologies\HealthUpgrade.cs" />
     <Compile Include="TechManager\Technologies\InventoryUpgrade.cs" />
+    <Compile Include="UIComponents\ImageBoxHealth.cs" />
     <Compile Include="UIComponents\Panel.cs" />
     <Compile Include="Units\AllyUnit\Ballista.cs" />
     <Compile Include="Units\AllyUnit\OffensiveUnits.cs" />

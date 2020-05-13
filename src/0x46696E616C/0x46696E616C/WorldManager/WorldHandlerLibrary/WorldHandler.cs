@@ -19,10 +19,10 @@ namespace WorldManager
 {
     public class WorldHandler
     {
-        Map map;
-        long Seed;
-        SaveJson<Map> save;
-        CollisionHandler collider;
+        protected Map map;
+        protected long Seed;
+        protected SaveJson<Map> save;
+        protected CollisionHandler collider;
         public WorldHandler(Game game, string WorldName)
         {
             Seed = 14153456352343;

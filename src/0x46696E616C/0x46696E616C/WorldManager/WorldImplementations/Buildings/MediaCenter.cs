@@ -19,7 +19,7 @@ namespace _0x46696E616C.Buildings
 
         public List<IResource> ChargeTypes { get; protected set; } 
 
-        public MediaCenter(TextureValue texture, Vector2 position, TextureValue icon, WorldHandler world, ProjectileManager proj, Stats teamStats) : base(texture, position, icon, world, proj, teamStats)
+        public MediaCenter(TextureValue texture, Vector2 position, TextureValue icon, ProjectileManager proj, Stats teamStats) : base(texture, position, icon, proj, teamStats)
         {
             Cost = new Wallet();
             Cost.Deposit(new Steel(), 100);
@@ -37,7 +37,7 @@ namespace _0x46696E616C.Buildings
         }
         public override Building NewInstace(TextureValue tex, Vector2 position, TextureValue Icon)
         {
-            return new MediaCenter(tex, position, Icon, world ,proj, teamStats);
+            return new MediaCenter(tex, position, Icon, proj, teamStats);
         }
     }
 }

@@ -22,16 +22,14 @@ namespace _0x46696E616C.Units.Attacks
     {
         List<Projectile> projectiles;
         List<Projectile> HitProjectiles;
-        WorldHandler world;
         Camera cam;
         CollisionHandler collision;
-        public ProjectileManager(Game game, WorldHandler world, Camera cam, CollisionHandler collision) : base(game)
+        public ProjectileManager(Game game, Camera cam, CollisionHandler collision) : base(game)
         {
             projectiles = new List<Projectile>();
             HitProjectiles = new List<Projectile>();
-            this.world = world;
-            this.cam = cam;
             this.collision = collision;
+            this.cam = cam;
         }
 
         public void Draw(SpriteBatch spriteBatch)

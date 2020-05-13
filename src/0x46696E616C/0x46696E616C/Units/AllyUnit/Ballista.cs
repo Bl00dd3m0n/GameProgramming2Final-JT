@@ -19,7 +19,7 @@ namespace _0x46696E616C.Units.AllyUnit
     internal class Ballista : OffensiveUnits
     {
         ProjectileManager projectile;
-        public Ballista(string name, Vector2 size, float totalHealth, float currentHealth, Vector2 position, BaseUnitState state, TextureValue texture, Color color, TextureValue icon, WorldHandler world, ProjectileManager projectile, float range, Stats teamStats) : base(name, size, totalHealth, currentHealth, position, state, texture, color, icon, world, range, teamStats)
+        public Ballista(string name, Vector2 size, float totalHealth, float currentHealth, Vector2 position, BaseUnitState state, TextureValue texture, Color color, TextureValue icon, ProjectileManager projectile, float range, Stats teamStats) : base(name, size, totalHealth, currentHealth, position, state, texture, color, icon, range, teamStats)
         {
             Cost = new Wallet();
             Cost.Deposit(new Steel(), 1);
@@ -40,7 +40,7 @@ namespace _0x46696E616C.Units.AllyUnit
         /// <returns></returns>
         public override BasicUnit NewInstace(float currentHealth, Vector2 position)
         {
-            return new Ballista(this.name, this.Size, this.TotalHealth, currentHealth, position, BaseUnitState.Idle, this.block.texture, this.tileColor, this.Icon, this.world, projectile, this.stats[typeof(Range)].Value, teamStats);
+            return new Ballista(this.name, this.Size, this.TotalHealth, currentHealth, position, BaseUnitState.Idle, this.block.texture, this.tileColor, this.Icon, projectile, this.stats[typeof(Range)].Value, teamStats);
         }
     }
 }

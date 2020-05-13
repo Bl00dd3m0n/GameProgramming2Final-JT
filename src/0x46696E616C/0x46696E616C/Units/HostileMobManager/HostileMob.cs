@@ -21,7 +21,7 @@ namespace _0x46696E616C.Units.HostileMobManager
         float InteractTimer;
         private Color color;
 
-        public HostileMob(string name, Vector2 size, float totalHealth, float currentHealth, Vector2 position, BaseUnitState state, TextureValue texture, Color color, TextureValue icon, WorldHandler world, float range, Stats teamStats) : base(name, size, totalHealth, currentHealth, position, state, texture, color, icon, world, range, teamStats)
+        public HostileMob(string name, Vector2 size, float totalHealth, float currentHealth, Vector2 position, BaseUnitState state, TextureValue texture, Color color, TextureValue icon, float range, Stats teamStats) : base(name, size, totalHealth, currentHealth, position, state, texture, color, icon, range, teamStats)
         {
             waypoints = new List<Vector2>();
             speed = 50;
@@ -29,18 +29,18 @@ namespace _0x46696E616C.Units.HostileMobManager
             tags.Add("CanAttack");
         }
 
-        public override void Update(GameTime gameTime)
+        public override void Update(GameTime gameTime, WorldHandler world)
         {
-            UpdateMove(gameTime);
+            UpdateMove(gameTime, world);
             InteractTimer += gameTime.ElapsedGameTime.Milliseconds;
             if (InteractTimer / 1000 >= 1)
             {
-                Interact();
+                Interact(world);
                 InteractTimer = 0;
             }
             base.Update();
         }
-        public void Interact()
+        public void Interact(WorldHandler world)
         {
             if (Target != null)
             {
@@ -50,7 +50,7 @@ namespace _0x46696E616C.Units.HostileMobManager
                     if (((ModifiableTile)Target).State == tileState.dead)
                     {
                         Target = null;
-                        FindTarget();
+                        FindTarget(world);
                     }
                 }
             }
@@ -63,9 +63,9 @@ namespace _0x46696E616C.Units.HostileMobManager
         /// Moves by waypoint
         /// </summary>
         ///<see cref="Probably implement some sort of A* and flocking ai either here or in the Command Component"/>>
-        protected override void UpdateMove(GameTime gameTime)
+        protected override void UpdateMove(GameTime gameTime, WorldHandler world)
         {
-            base.UpdateMove(gameTime);
+            base.UpdateMove(gameTime, world);
             checkPosTimer += gameTime.ElapsedGameTime.Milliseconds;
             if (waypoints.Count() > 0 && Vector2.Distance(Position, TargetPosition + DistanceFromPosition) < stats[typeof(Range)].Value + teamStats[typeof(Range)].Value && UnitState == BaseUnitState.attack)
             {
@@ -73,9 +73,9 @@ namespace _0x46696E616C.Units.HostileMobManager
             }
             if (checkPosTimer / 1000 >= 1f)
             {
-                if (Target == null || (Target!= null && TargetPosition != Target.Position))
+                if (Target == null || (Target!= null && TargetPosition != Target.Position) && (Vector2.Distance(TargetPosition, Position) < 10))//A* for far distances causes extreme strain on the game limiting target updating distance to allow the game to scale a bit more.
                 {
-                    FindTarget();
+                    FindTarget(world);
                 }
                 checkPosTimer = 0;
             }
@@ -91,29 +91,29 @@ namespace _0x46696E616C.Units.HostileMobManager
         /// Generates waypoints using A*
         /// </summary>
         /// <param name="Position"></param>
-        public override void Move(Vector2 Position)
+        public override void Move(Vector2 Position, WorldHandler world)
         {
             if (world.GetUnit(Position) == null && world.GetTile(Position) == null)
             {
                 UnitState = BaseUnitState.Idle;
                 Target = null;
             }
-            base.Move(Position);
+            base.Move(Position, world);
         }
-        protected void Attack(IEntity entity)
+        protected void Attack(IEntity entity, WorldHandler world)
         {
             Target = entity;
             UnitState = BaseUnitState.attack;
-            Move(entity.Position);
+            Move(entity.Position, world);
         }
-        public void FindTarget()
+        public void FindTarget(WorldHandler world)
         {
             IEntity entity = world.FindNearest(this.TeamAssociation - 1, this.Position);
             if (entity != null)
             {
                 if (entity is ModifiableTile)
                 {
-                    Attack(entity);
+                    Attack(entity, world);
                 }
             }
         }

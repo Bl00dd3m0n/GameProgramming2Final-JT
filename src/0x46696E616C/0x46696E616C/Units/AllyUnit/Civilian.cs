@@ -30,7 +30,7 @@ namespace _0x46696E616C.CommandPattern
         IEntity returnTarget;
         float timer = 0;
         ProjectileManager proj;
-        public Civilian(string name, Vector2 size, float totalHealth, float currentHealth, Vector2 position, BaseUnitState state, TextureValue texture, WorldHandler world, TextureValue Icon, float range, ProjectileManager proj, Stats teamStats) : base(name, size, totalHealth, currentHealth, position, state, texture, Color.Blue, Icon, world, range, teamStats)
+        public Civilian(string name, Vector2 size, float totalHealth, float currentHealth, Vector2 position, BaseUnitState state, TextureValue texture, TextureValue Icon, float range, ProjectileManager proj, Stats teamStats) : base(name, size, totalHealth, currentHealth, position, state, texture, Color.Blue, Icon, range, teamStats)
         {
             this.proj = proj;
             stats.Add(new BuildPower("Build Power", 10));
@@ -54,28 +54,28 @@ namespace _0x46696E616C.CommandPattern
         public override BasicUnit AddQueueables()
         {
             QueueableThings = new List<IQueueable<TextureValue>>();
-            QueueableThings.Add(new Center(TextureValue.Center, Vector2.Zero, TextureValue.CenterIcon, world, proj, teamStats));
-            QueueableThings.Add(new FireWall(TextureValue.FireWall, Vector2.Zero, TextureValue.FireWallIcon, world, proj, teamStats));
-            QueueableThings.Add(new InternetCafe(TextureValue.InternetCafe, Vector2.Zero, TextureValue.InternetCafeIcon, world, proj, teamStats));
-            QueueableThings.Add(new Lab(TextureValue.Lab, Vector2.Zero, TextureValue.LabIcon, world, proj, teamStats));
-            QueueableThings.Add(new MediaCenter(TextureValue.MediaCenter, Vector2.Zero, TextureValue.MediaCenterIcon, world, proj, teamStats));
-            QueueableThings.Add(new Mines(TextureValue.Mines, Vector2.Zero, TextureValue.MinesIcon, world, proj, teamStats));
-            QueueableThings.Add(new PowerSupply(TextureValue.PowerSupply, Vector2.Zero, TextureValue.PowerSupplyIcon, world, proj, teamStats));
-            QueueableThings.Add(new ServerFarm(TextureValue.ServerFarm, Vector2.Zero, TextureValue.ServerFarmIcon, world, proj, teamStats));
-            QueueableThings.Add(new SolarPanel(TextureValue.SolarPanel, Vector2.Zero, TextureValue.SolarPanelIcon, world, proj, teamStats));
-            QueueableThings.Add(new SteelFactory(TextureValue.SteelFactory, Vector2.Zero, TextureValue.SteelFactoryIcon, world, proj, teamStats));
+            QueueableThings.Add(new Center(TextureValue.Center, Vector2.Zero, TextureValue.CenterIcon, proj, teamStats));
+            QueueableThings.Add(new FireWall(TextureValue.FireWall, Vector2.Zero, TextureValue.FireWallIcon, proj, teamStats));
+            QueueableThings.Add(new InternetCafe(TextureValue.InternetCafe, Vector2.Zero, TextureValue.InternetCafeIcon, proj, teamStats));
+            QueueableThings.Add(new Lab(TextureValue.Lab, Vector2.Zero, TextureValue.LabIcon, proj, teamStats));
+            QueueableThings.Add(new MediaCenter(TextureValue.MediaCenter, Vector2.Zero, TextureValue.MediaCenterIcon, proj, teamStats));
+            QueueableThings.Add(new Mines(TextureValue.Mines, Vector2.Zero, TextureValue.MinesIcon, proj, teamStats));
+            QueueableThings.Add(new PowerSupply(TextureValue.PowerSupply, Vector2.Zero, TextureValue.PowerSupplyIcon, proj, teamStats));
+            QueueableThings.Add(new ServerFarm(TextureValue.ServerFarm, Vector2.Zero, TextureValue.ServerFarmIcon, proj, teamStats));
+            QueueableThings.Add(new SolarPanel(TextureValue.SolarPanel, Vector2.Zero, TextureValue.SolarPanelIcon, proj, teamStats));
+            QueueableThings.Add(new SteelFactory(TextureValue.SteelFactory, Vector2.Zero, TextureValue.SteelFactoryIcon, proj, teamStats));
             return this;
         }
 
-        public override void Update(GameTime gameTime)
+        public override void Update(GameTime gameTime, WorldHandler world)
         {
             timer += gameTime.ElapsedGameTime.Milliseconds;
-            base.Update(gameTime);
+            base.Update(gameTime, world);
             if (timer / 1000 >= 1)
             {
-                UnitInteraction();
+                UnitInteraction(world);
             }
-            if (waypoints.Count() > 0 && Vector2.Distance(Position, TargetPosition + DistanceFromPosition) < stats[typeof(Range)].Value + teamStats[typeof(Range)].Value)
+            if (waypoints.Count() > 0 && Vector2.Distance(Position, TargetPosition + DistanceFromPosition) < stats[typeof(Range)].Value)
             {
                 waypoints.Clear();
             }
@@ -83,7 +83,7 @@ namespace _0x46696E616C.CommandPattern
             {
                 if (Target != null && Target.Position.ToPoint() != TargetPosition.ToPoint()) // Keeps tracking the units
                 {
-                    Move(Target.Position);
+                    Move(Target.Position, world);
                 }
                 timer = 0;
             }
@@ -91,10 +91,10 @@ namespace _0x46696E616C.CommandPattern
         /// <summary>
         /// Interact with each tile based on what type of tile it is if the unit is within range of their target.
         /// </summary>
-        private void UnitInteraction()
+        private void UnitInteraction(WorldHandler world)
         {
             float dist = Vector2.Distance(TargetPosition + DistanceFromPosition, Position);
-            if (Direction == zero && Target != null && !arrived && dist <= stats[typeof(Range)].Value*1.5 + teamStats[typeof(Range)].Value)
+            if (Direction == zero && Target != null && !arrived && dist <= stats[typeof(Range)].Value*1.5)
             {
                 if (Target is Building && ((ModifiableTile)Target).TeamAssociation == this.TeamAssociation)
                 {
@@ -112,9 +112,9 @@ namespace _0x46696E616C.CommandPattern
                     }
                     arrived = true;
                     if (returnTarget != null)
-                        Harvest(returnTarget);
+                        Harvest(returnTarget, world);
                     else if (toBuild.Count > 0)
-                        Build(toBuild.Pop());
+                        Build(toBuild.Pop(), world);
                     returnTarget = null;//Set to null after setting target...keeps the unit from going random places the player wouldn't expect.
 
                 }
@@ -124,7 +124,7 @@ namespace _0x46696E616C.CommandPattern
                     Wallet wal = ((HarvestableUnit)Target).Harvest(stats[typeof(HarvestPower)].Value + teamStats[typeof(HarvestPower)].Value);
                     if (((HarvestableUnit)Target).State == tileState.dead) //When the source dies find a new thing to harvest
                     {
-                        Harvest(world.FindNearest(((HarvestableUnit)Target).type.GetType().Name.ToString(), this.Position));
+                        Harvest(world.FindNearest(((HarvestableUnit)Target).type.GetType().Name.ToString(), this.Position), world);
                     }
                     bool returnResources = unitWallet.Deposit(wal);
                     if (returnResources)//If the unit wallet is full return it to the nearest building that collects the type of the harvestable resource
@@ -133,7 +133,7 @@ namespace _0x46696E616C.CommandPattern
                         returnTarget = Target;
                         try
                         {
-                            Garrison(world.FindNearest(type.Name.ToString() + " Collector", this.Position));
+                            Garrison(world.FindNearest(type.Name.ToString() + " Collector", this.Position),world);
                         }
                         catch (NullReferenceException) { }
                     }
@@ -152,9 +152,9 @@ namespace _0x46696E616C.CommandPattern
         /// Moves by waypoint
         /// </summary>
         ///<see cref="Probably implement some sort of A* and flocking ai either here or in the Command Component"/>>
-        protected override void UpdateMove(GameTime gameTime)
+        protected override void UpdateMove(GameTime gameTime, WorldHandler world)
         {
-            base.UpdateMove(gameTime);
+            base.UpdateMove(gameTime, world);
         }
         /// <summary>
         /// if the unit has hit a waypoint go to the next one
@@ -167,20 +167,21 @@ namespace _0x46696E616C.CommandPattern
         /// Generates waypoints using A*
         /// </summary>
         /// <param name="Position"></param>
-        public override void Move(Vector2 Position)
+        public override void Move(Vector2 Position, WorldHandler world)
         {
             if (world.GetUnit(Position) == null && world.GetTile(Position) == null) Target = null;  
-            base.Move(Position);
+            base.Move(Position, world);
         }
         /// <summary>
         /// Targets a placed building to build
         /// </summary>
         /// <param name="target"></param>
-        public void Build(IEntity target)
+        public void Build(IEntity target, WorldHandler world)
         {
             ResetUnit();
+            if (target is ReferenceTile) target = ((ReferenceTile)target).tile;
             Target = target;
-            Move(target.Position);
+            Move(target.Position, world);
             UnitState = BaseUnitState.build;
             arrived = false;
         }
@@ -189,11 +190,12 @@ namespace _0x46696E616C.CommandPattern
         /// Attack the targetted unit
         /// </summary>
         /// <param name="target"></param>
-        public void Attack(IEntity target)
+        public void Attack(IEntity target, WorldHandler world)
         {
             ResetUnit();
+            if (target is ReferenceTile) target = ((ReferenceTile)target).tile;
             this.Target = target;
-            Move(Target.Position);
+            Move(Target.Position, world);
             UnitState = BaseUnitState.attack;
             arrived = false;
         }
@@ -201,11 +203,12 @@ namespace _0x46696E616C.CommandPattern
         /// Garrison in the targetted building
         /// </summary>
         /// <param name="target"></param>
-        public void Garrison(IEntity target)
+        public void Garrison(IEntity target, WorldHandler world)
         {
             ResetUnit();
+            if (target is ReferenceTile) target = ((ReferenceTile)target).tile;
             this.Target = target;
-            Move(Target.Position);
+            Move(Target.Position, world);
             arrived = false;
         }
         /// <summary>
@@ -225,11 +228,12 @@ namespace _0x46696E616C.CommandPattern
         /// Move to the harvestable unit
         /// </summary>
         /// <param name="target"></param>
-        public void Harvest(IEntity target)
+        public void Harvest(IEntity target, WorldHandler world)
         {
             ResetUnit();
+            if (target is ReferenceTile) target = ((ReferenceTile)target).tile;
             this.Target = target;
-            this.Move(target.Position);
+            this.Move(target.Position, world);
             UnitState = BaseUnitState.harvest;
             arrived = false;
         }
@@ -255,7 +259,7 @@ namespace _0x46696E616C.CommandPattern
         /// <returns></returns>
         public override BasicUnit NewInstace(float currentHealth, Vector2 position)
         {
-            return new Civilian(this.name, this.Size, this.TotalHealth, currentHealth, position, BaseUnitState.Idle, this.block.texture, this.world, this.Icon, this.stats[typeof(Range)].Value, proj, teamStats).AddQueueables();
+            return new Civilian(this.name, this.Size, this.TotalHealth, currentHealth, position, BaseUnitState.Idle, this.block.texture, this.Icon, this.stats[typeof(Range)].Value, proj, teamStats).AddQueueables();
         }
     }
 }

@@ -169,6 +169,7 @@ namespace Util
             {
                 if (tileWithHealth.healthBar.Health != null)
                 {
+                    tileWithHealth.healthBar.UpdateHealth(tileWithHealth, GraphicsDevice);
                     sb.Draw(tileWithHealth.healthBar.Health, (tileWithHealth.healthBar.Position * Tile.Zoom * 16) - (position * Tile.Zoom * 16), null, Color.White, 0, Vector2.Zero, Tile.Zoom, SpriteEffects.None, 0);
                 }
             }
