@@ -62,7 +62,7 @@ namespace _0x46696E616C.Buildings
 
         protected Stats teamStats;
 
-        public Building(TextureValue texture, Vector2 position, TextureValue Icon, ProjectileManager proj, Stats teamStats) : base(texture, position, Color.Blue)
+        public Building(TextureValue texture, Vector2 position, TextureValue Icon, ProjectileManager proj, Stats teamStats) : base(texture, position, teamStats, Color.Blue)
         {
             Cost = new Wallet();
             name = "Building";

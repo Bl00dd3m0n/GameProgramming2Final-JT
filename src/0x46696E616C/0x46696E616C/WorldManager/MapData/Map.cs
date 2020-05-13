@@ -79,7 +79,7 @@ namespace WorldManager.MapData
                     }
                 }
             }
-
+            DrawMapUI(gd);
         }
         protected void DrawMapUI(GraphicsDevice gd)
         {

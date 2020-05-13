@@ -49,7 +49,7 @@ namespace _0x46696E616C.CommandPattern.Commands
         protected float range;
         public Stats teamStats { get; protected set; }
         //TODO List of commands needed to be implemented for the units
-        public BasicUnit(string name, Vector2 size, float totalHealth, float currentHealth, Vector2 position, BaseUnitState state, TextureValue texture, Color color, TextureValue icon, float range, Stats teamStats) : base(texture, position, color)
+        public BasicUnit(string name, Vector2 size, float totalHealth, float currentHealth, Vector2 position, BaseUnitState state, TextureValue texture, Color color, TextureValue icon, float range, Stats teamStats) : base(texture, position, teamStats, color)
         {
             Cost = new Wallet();// TODO charge for units
             this.name = name;

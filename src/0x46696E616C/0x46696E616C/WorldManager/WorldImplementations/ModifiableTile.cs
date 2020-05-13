@@ -58,10 +58,12 @@ namespace WorldManager.TileHandlerLibrary
         protected List<string> tags;
 
         public bool built { get; protected set; }
+        public Stats TeamStats { get; private set; }
 
-        public ModifiableTile(TextureValue texture, Vector2 position, Color color) : base(texture, position, color)
+        public ModifiableTile(TextureValue texture, Vector2 position, Stats teamStats, Color color) : base(texture, position, color)
         {
             stats = new Stats();
+            this.TeamStats = teamStats;
             built = false;
             MapWatcher = new List<IMapObserver>();
             healthBar = new HealthBar(new Rectangle(this.Position.ToPoint() - new Point(0, (int)(this.Size.Y * 16 + 1)), Size.ToPoint()));

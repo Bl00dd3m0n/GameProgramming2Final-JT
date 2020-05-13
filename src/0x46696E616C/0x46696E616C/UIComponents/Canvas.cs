@@ -1,4 +1,5 @@
 ﻿using _0x46696E616C.UIComponents;
+using _0x46696E616C.UIComponents.Stats;
 using _0x46696E616C.Util.Input;
 using MainMenu.Component;
 using Microsoft.Xna.Framework;
@@ -43,9 +44,13 @@ namespace UIProject
         {
             foreach (IComponent component in components)
             {
+                if (component is UpdatePanel)
+                {
+                    ((UpdatePanel)component).Update(gameTime);
+                }
                 if (component is Button && ((Button)component).clickedTimer > 0)
                 {
-                    ((Button)component).clickedTimer = ((((Button)component).clickedTimer * 1000) - gameTime.ElapsedGameTime.Milliseconds)/1000;
+                    ((Button)component).clickedTimer = ((((Button)component).clickedTimer * 1000) - gameTime.ElapsedGameTime.Milliseconds) / 1000;
                     if (((Button)component).clickedTimer <= 0)
                     {
                         ((Button)component).Clicked = false;
@@ -91,24 +96,29 @@ namespace UIProject
             {
                 if (components[i] is Component)
                 {
-                    if (((Component)components[i]).drawComponent)
+                    Component component = (Component)components[i];
+                    if (components[i] is StatComponent)
                     {
-                        if (components[i] is Button && ((Button)components[i]).Clicked)
+                        component = ((StatComponent)component).component;
+                    }
+                    if (component.drawComponent)
+                    {
+                        if (component is Button && ((Button)component).Clicked)
                         {
-                            spriteBatch.Draw(components[i].picture, components[i].Position, Color.LightGray);
+                            spriteBatch.Draw(component.picture, component.Position, Color.LightGray);
                         }
-                        else if (components[i].picture != null)
+                        else if (component.picture != null)
                         {
-                            spriteBatch.Draw(components[i].picture, components[i].Position, null, components[i].Color, 0, new Vector2(0), components[i].Scale, SpriteEffects.None, 0);
+                            spriteBatch.Draw(component.picture, component.Position, null, component.Color, 0, new Vector2(0), component.Scale, SpriteEffects.None, 0);
                         }
-                        if (components[i].Text != null && components[i].Text != string.Empty)
+                        if (component.Text != null && component.Text != string.Empty)
                         {
-                            Vector2 position = components[i].Position;
-                            if (!(components[i] is Label))
+                            Vector2 position = component.Position;
+                            if (!(component is Label))
                             {
-                                position = components[i].Position + (components[i].Size.ToVector2() / 2) - (font.MeasureString(components[i].Text) / 2);
+                                position = component.Position + (component.Size.ToVector2() / 2) - (font.MeasureString(component.Text) / 2);
                             }
-                            spriteBatch.DrawString(font, components[i].Text, position, Color.Black);
+                            spriteBatch.DrawString(font, component.Text, position, Color.Black);
                         }
                     }
                 }

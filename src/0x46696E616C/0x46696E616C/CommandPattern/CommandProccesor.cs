@@ -7,6 +7,7 @@ using _0x46696E616C.MobHandler.Units;
 using _0x46696E616C.TechManager.Stats;
 using _0x46696E616C.TechManager.Technologies;
 using _0x46696E616C.UIComponents;
+using _0x46696E616C.UIComponents.Stats;
 using _0x46696E616C.Units;
 using _0x46696E616C.Units.HostileMobManager;
 using _0x46696E616C.Util.Input;
@@ -248,7 +249,7 @@ namespace _0x46696E616C.CommandPattern
         {
             if (EntityDetails != null)
                 overlay.RemoveComponent(EntityDetails);
-            EntityDetails = new Panel(Game, new Rectangle(new Point(217, 359), new Point(336, 121)), this);//TODO this will need to be more automatic if I add different resolutions/screen sizes
+            EntityDetails = new UpdatePanel(tile, Game, new Rectangle(new Point(217, 359), new Point(336, 121)), this);//TODO this will need to be more automatic if I add different resolutions/screen sizes
             EntityDetails.Initialize();
             Component com = new ImageBox(tile.block.texture, new Vector2(227, 359), (tile.Size * 16).ToPoint(), Color.White);
             com.Scale = 2 / (tile.Size.X);
@@ -266,7 +267,7 @@ namespace _0x46696E616C.CommandPattern
                     com = new ImageBoxHealth(tile.healthBar.Health, new Vector2(227, 359 + 32), new Point((int)com.Scale, 1), Color.White, tile);
                     com.Scale = 2;
                     EntityDetails.AddComponent(com);
-                    com = com = new Label(new Vector2(224, 359 + 46), $"{tile.CurrentHealth}/{tile.TotalHealth}", Color.White);
+                    com = new StatComponent(new Label(new Vector2(224, 359 + 46), $"{tile.CurrentHealth}/{tile.TotalHealth}", Color.White), tile.stats[typeof(Health)]);
                 }
                 else
                 {
@@ -286,7 +287,7 @@ namespace _0x46696E616C.CommandPattern
                             display += $" ({stat.Value.ToString()})";
                         }
                     }
-                    com = new Label(new Vector2(330, y - 8), display, Color.White);
+                    com = new StatComponent(new Label(new Vector2(330, y - 8), display, Color.White), tile.stats[i]);
                     com.Scale = 1;
                 }
                 com.drawComponent = true;

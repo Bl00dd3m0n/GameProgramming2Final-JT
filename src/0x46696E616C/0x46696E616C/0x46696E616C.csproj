@@ -51,6 +51,8 @@
     <Compile Include="TechManager\Technologies\InventoryUpgrade.cs" />
     <Compile Include="UIComponents\ImageBoxHealth.cs" />
     <Compile Include="UIComponents\Panel.cs" />
+    <Compile Include="UIComponents\Stats\StatComponent.cs" />
+    <Compile Include="UIComponents\UpdatePanel.cs" />
     <Compile Include="Units\AllyUnit\Ballista.cs" />
     <Compile Include="Units\AllyUnit\OffensiveUnits.cs" />
     <Compile Include="Units\AllyUnit\Priest.cs" />
