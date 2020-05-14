@@ -18,18 +18,18 @@
 public class OpenSimplexNoise
 {
 
-    private static readonly double STRETCH_CONSTANT_2D = -0.211324865405187;    //(1/Math.sqrt(2+1)-1)/2;
-    private static readonly double SQUISH_CONSTANT_2D = 0.366025403784439;      //(Math.sqrt(2+1)-1)/2;
-    private static readonly double STRETCH_CONSTANT_3D = -1.0 / 6;              //(1/Math.sqrt(3+1)-1)/3;
-    private static readonly double SQUISH_CONSTANT_3D = 1.0 / 3;                //(Math.sqrt(3+1)-1)/3;
-    private static readonly double STRETCH_CONSTANT_4D = -0.138196601125011;    //(1/Math.sqrt(4+1)-1)/4;
-    private static readonly double SQUISH_CONSTANT_4D = 0.309016994374947;      //(Math.sqrt(4+1)-1)/4;
+    private const double STRETCH_CONSTANT_2D = -0.211324865405187;    //(1/Math.sqrt(2+1)-1)/2;
+    private const double SQUISH_CONSTANT_2D = 0.366025403784439;      //(Math.sqrt(2+1)-1)/2;
+    private const double STRETCH_CONSTANT_3D = -1.0 / 6;              //(1/Math.sqrt(3+1)-1)/3;
+    private const double SQUISH_CONSTANT_3D = 1.0 / 3;                //(Math.sqrt(3+1)-1)/3;
+    private const double STRETCH_CONSTANT_4D = -0.138196601125011;    //(1/Math.sqrt(4+1)-1)/4;
+    private const double SQUISH_CONSTANT_4D = 0.309016994374947;      //(Math.sqrt(4+1)-1)/4;
 
-    private static readonly double NORM_CONSTANT_2D = 47;
-    private static readonly double NORM_CONSTANT_3D = 103;
-    private static readonly double NORM_CONSTANT_4D = 30;
+    private const double NORM_CONSTANT_2D = 47;
+    private const double NORM_CONSTANT_3D = 103;
+    private const double NORM_CONSTANT_4D = 30;
 
-    private static readonly long DEFAULT_SEED = 0;
+    private const long DEFAULT_SEED = 0;
 
     private short[] perm;
     private short[] permGradIndex3D;
@@ -2547,7 +2547,7 @@ public class OpenSimplexNoise
             + gradients4D[index + 3] * dw;
     }
 
-    private static int fastFloor(double x)
+    private int fastFloor(double x)
     {
         int xi = (int)x;
         return x < xi ? xi - 1 : xi;
@@ -2555,7 +2555,7 @@ public class OpenSimplexNoise
 
     //Gradients for 2D. They approximate the directions to the
     //vertices of an octagon from the center.
-    private static sbyte[] gradients2D = new sbyte[] {
+    private sbyte[] gradients2D = {
          5,  2,    2,  5,
         -5,  2,   -2,  5,
          5, -2,    2, -5,
@@ -2566,7 +2566,7 @@ public class OpenSimplexNoise
     //vertices of a rhombicuboctahedron from the center, skewed so
     //that the triangular and square facets can be inscribed inside
     //circles of the same radius.
-    private static sbyte[] gradients3D = new sbyte[] {
+    private sbyte[] gradients3D = new sbyte[] {
         -11,  4,  4,     -4,  11,  4,    -4,  4,  11,
          11,  4,  4,      4,  11,  4,     4,  4,  11,
         -11, -4,  4,     -4, -11,  4,    -4, -4,  11,
@@ -2581,7 +2581,7 @@ public class OpenSimplexNoise
     //vertices of a disprismatotesseractihexadecachoron from the center,
     //skewed so that the tetrahedral and cubic facets can be inscribed inside
     //spheres of the same radius.
-    private static sbyte[] gradients4D = new sbyte[] {
+    private sbyte[] gradients4D = new sbyte[] {
          3,  1,  1,  1,      1,  3,  1,  1,      1,  1,  3,  1,      1,  1,  1,  3,
         -3,  1,  1,  1,     -1,  3,  1,  1,     -1,  1,  3,  1,     -1,  1,  1,  3,
          3, -1,  1,  1,      1, -3,  1,  1,      1, -1,  3,  1,      1, -1,  1,  3,

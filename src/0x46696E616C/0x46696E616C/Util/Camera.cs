@@ -24,7 +24,9 @@ namespace Util
         Rectangle ViewPort;
         Rectangle bounds;
         float MoveSpeed;
+        Vector2 TilePos;
         public Point Size { get { return ViewPort.Size; } }
+        Vector2 Zero;
         public Vector2 Position
         {
             get
@@ -33,7 +35,6 @@ namespace Util
             }
         }
         Vector2 position;
-        SpriteBatch sb;
         InputDefinitions input;
         Vector2 Dir;
 
@@ -52,17 +53,9 @@ namespace Util
             Dir = new Vector2(0, 0);
             this.world = worldHandler;
             bounds = new Rectangle(new Vector2(0, 0).ToPoint(), (world.GetSize()).ToPoint());
+            Zero = Vector2.Zero;
         }
 
-        public override void Initialize()
-        {
-            base.Initialize();
-        }
-        protected override void LoadContent()
-        {
-            sb = new SpriteBatch(Game.GraphicsDevice);
-            base.LoadContent();
-        }
         public override void Update(GameTime gameTime)
         {
             timer = gameTime.ElapsedGameTime.Milliseconds;
@@ -105,7 +98,7 @@ namespace Util
             ViewPort.Location = position.ToPoint();
         }
 
-        public override void Draw(GameTime gameTime)
+        public void Draw(SpriteBatch sb)
         {
             sb.Begin();
             //Layer tiles by type
@@ -120,62 +113,63 @@ namespace Util
                 {
                     for (int x = ViewPort.Left; x < (ViewPort.Right * (4 - Tile.Zoom)) + (OverX * (4 - Tile.Zoom)); x++)
                     {
-                        DrawScreen(x, y, i);
+                        DrawScreen(sb,x, y, i);
                     }
                 }
             }
             sb.End();
-            sb.Begin();
-            //DrawMap();//Overlay shouldn't be affected by the camera
-            sb.End();
-            base.Draw(gameTime);
         }
 
-        private void DrawScreen(int x, int y, int i)
+        private void DrawScreen(SpriteBatch sb, int x, int y, int i)
         {
             Tile tile = null;
             if (x >= 0 && x < bounds.Width && y >= 0 && y < bounds.Height)
             {
+                TilePos = new Vector2(x, y);
                 //Background tiles are drawn first
                 if (i == 0)
                 {
-                    tile = world.GetBackgroundTile(new Vector2(x, y));
-                    sb.Draw(ContentHandler.DrawnTexture(tile.block.texture), (tile.Position * Tile.Zoom * 16) - (position * Tile.Zoom * 16), null, Color.White, 0, Vector2.Zero, Tile.Zoom, SpriteEffects.None, 0);
+                    tile = world.GetBackgroundTile(TilePos);
+                    sb.Draw(ContentHandler.DrawnTexture(tile.block.texture), (tile.Position * Tile.Zoom * 16) - (position * Tile.Zoom * 16), null, Color.White, 0, Zero, Tile.Zoom, SpriteEffects.None, 0);
                 }
                 //Units are drawn second
                 else if (i == 1)
                 {
-                    tile = (ModifiableTile)world.GetUnit(new Vector2(x, y));
+                    tile = (ModifiableTile)world.GetUnit(TilePos);
                     if (tile != null && tile.block.texture != TextureValue.None)
                     {
 
                         Texture2D texture = ContentHandler.DrawnTexture(tile.block.texture);
                         ((BasicUnit)tile).UpdatePosition(Game.GraphicsDevice, tile.Position);
-                        sb.Draw(ContentHandler.DrawnTexture(tile.block.texture), (tile.Position * Tile.Zoom * 16) - (position * Tile.Zoom * 16), null, Color.White, 0, Vector2.Zero, Tile.Zoom, SpriteEffects.None, 0);
-                        DrawHealth((ModifiableTile)tile);
+                        sb.Draw(ContentHandler.DrawnTexture(tile.block.texture), (tile.Position * Tile.Zoom * 16) - (position * Tile.Zoom * 16), null, Color.White, 0, Zero, Tile.Zoom, SpriteEffects.None, 0);
+                        DrawHealth(sb, (ModifiableTile)tile);
                     }
                 }
                 //Draw buildings third
                 else
                 {
-                    tile = world.GetTile(new Vector2(x, y));
+                    tile = world.GetTile(TilePos);
                     if (tile != null && tile.block.texture != TextureValue.None)
                     {
                         Texture2D texture = ContentHandler.DrawnTexture(tile.block.texture);
                         tile.UpdatePosition(Game.GraphicsDevice, tile.Position);
-                        sb.Draw(ContentHandler.DrawnTexture(tile.block.texture), (tile.Position * Tile.Zoom * 16) - (position * Tile.Zoom * 16), null, Color.White, 0, Vector2.Zero, Tile.Zoom, SpriteEffects.None, 0);
-                        DrawHealth((ModifiableTile)tile);
+                        sb.Draw(ContentHandler.DrawnTexture(tile.block.texture), (tile.Position * Tile.Zoom * 16) - (position * Tile.Zoom * 16), null, Color.White, 0, Zero, Tile.Zoom, SpriteEffects.None, 0);
+                        if (!(tile is IHarvestable))
+                        {
+                            DrawHealth(sb, (ModifiableTile)tile);
+                        }
                     }
                 }
             }
         }
-        private void DrawHealth(ModifiableTile tileWithHealth)
+        private void DrawHealth(SpriteBatch sb, ModifiableTile tileWithHealth)
         {
             //If a tile has a health bar draw it.
             if (tileWithHealth.healthBar != null)
             {
                 if (tileWithHealth.healthBar.Health != null)
                 {
+                    tileWithHealth.healthBar.UpdateHealth(tileWithHealth, GraphicsDevice);
                     sb.Draw(tileWithHealth.healthBar.Health, (tileWithHealth.healthBar.Position * Tile.Zoom * 16) - (position * Tile.Zoom * 16), null, Color.White, 0, Vector2.Zero, Tile.Zoom, SpriteEffects.None, 0);
                 }
             }

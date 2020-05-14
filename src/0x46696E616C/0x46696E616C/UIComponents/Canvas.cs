@@ -1,4 +1,6 @@
-﻿using _0x46696E616C.Util.Input;
+﻿using _0x46696E616C.UIComponents;
+using _0x46696E616C.UIComponents.Stats;
+using _0x46696E616C.Util.Input;
 using MainMenu.Component;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -13,7 +15,6 @@ namespace UIProject
 {
     public class Canvas : DrawableGameComponent
     {
-        protected SpriteBatch spriteBatch;
         public List<IComponent> Components { get { return components; } }
         protected List<IComponent> components;
         protected SpriteFont font;
@@ -29,31 +30,49 @@ namespace UIProject
 
         protected override void LoadContent()
         {
-            spriteBatch = new SpriteBatch(GraphicsDevice);
             if (ContentHandler.Font == null)
             {
                 font = Game.Content.Load<SpriteFont>("Ariel");
-            } else
+            }
+            else
             {
                 font = ContentHandler.Font;
             }
-            base.LoadContent();
         }
 
         public override void Update(GameTime gameTime)
         {
+            foreach (IComponent component in components)
+            {
+                if (component is UpdatePanel)
+                {
+                    ((UpdatePanel)component).Update(gameTime);
+                }
+                if (component is Button && ((Button)component).clickedTimer > 0)
+                {
+                    ((Button)component).clickedTimer = ((((Button)component).clickedTimer * 1000) - gameTime.ElapsedGameTime.Milliseconds) / 1000;
+                    if (((Button)component).clickedTimer <= 0)
+                    {
+                        ((Button)component).Clicked = false;
+                    }
+                }
+            }
             base.Update(gameTime);
         }
 
-        public virtual Button CheckClick(Point point, InputDefinitions input)
+        public virtual Button CheckClick(Point point, InputDefinitions input, StyleSheet[] sheets = null)
         {
             foreach (IComponent component in components)
             {
                 if (component.bounds.Contains(point))
                 {
+                    if (component is Button)
+                    {
+
+                    }
                     if (component is PageButton)
                     {
-                        ((PageButton)component).Click(Game, this);
+                        ((PageButton)component).Click(Game, sheets[((PageButton)component).PageOrder], this);
                         return (Button)component;
                     }
                     else if (component is InputButton)
@@ -71,25 +90,41 @@ namespace UIProject
             return null;
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public virtual void Draw(SpriteBatch spriteBatch)
         {
             for (int i = 0; i < components.Count; i++)
             {
-                if (((Component)components[i]).drawComponent)
+                if (components[i] is Component)
                 {
-                    if (components[i] is Button && ((Button)components[i]).Clicked)
+                    Component component = (Component)components[i];
+                    if (components[i] is StatComponent)
                     {
-                        spriteBatch.Draw(components[i].picture, components[i].Position, Color.LightGray);
+                        component = ((StatComponent)component).component;
                     }
-                    else if (components[i].picture != null)
+                    if (component.drawComponent)
                     {
-                        spriteBatch.Draw(components[i].picture, components[i].Position, null, components[i].Color, 0, new Vector2(0), components[i].Scale, SpriteEffects.None, 0);
+                        if (component is Button && ((Button)component).Clicked)
+                        {
+                            spriteBatch.Draw(component.picture, component.Position, Color.LightGray);
+                        }
+                        else if (component.picture != null)
+                        {
+                            spriteBatch.Draw(component.picture, component.Position, null, component.Color, 0, new Vector2(0), component.Scale, SpriteEffects.None, 0);
+                        }
+                        if (component.Text != null && component.Text != string.Empty)
+                        {
+                            Vector2 position = component.Position;
+                            if (!(component is Label))
+                            {
+                                position = component.Position + (component.Size.ToVector2() / 2) - (font.MeasureString(component.Text) / 2);
+                            }
+                            spriteBatch.DrawString(font, component.Text, position, Color.Black);
+                        }
                     }
-                    if (components[i].Text != null && components[i].Text != string.Empty)
-                    {
-                        Vector2 position = components[i].Position + (components[i].Size.ToVector2() / 2) - (font.MeasureString(components[i].Text) / 2);
-                        spriteBatch.DrawString(font, components[i].Text, position, Color.Black);
-                    }
+                }
+                else if (components[i] is Panel)
+                {
+                    ((Panel)components[i]).Draw(spriteBatch);
                 }
             }
         }
@@ -97,9 +132,15 @@ namespace UIProject
         {
             components.Add(component);
         }
+
         public virtual void RemoveComponent(int value)
         {
             components.RemoveAt(value);
+        }
+
+        public virtual void RemoveComponent(IComponent component)
+        {
+            components.Remove(component);
         }
 
         public void RemoveAllComponents()

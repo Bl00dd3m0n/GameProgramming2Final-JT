@@ -42,6 +42,17 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="CommandPattern\GameCommands\ExitGameCommand.cs" />
+    <Compile Include="CommandPattern\GameCommands\LearnCommand.cs" />
+    <Compile Include="TechManager\Stats\RangedDamage.cs" />
+    <Compile Include="TechManager\Technologies\BuildUpgrade.cs" />
+    <Compile Include="TechManager\Technologies\HarvestUpgrade.cs" />
+    <Compile Include="TechManager\Technologies\HealthUpgrade.cs" />
+    <Compile Include="TechManager\Technologies\InventoryUpgrade.cs" />
+    <Compile Include="UIComponents\ImageBoxHealth.cs" />
+    <Compile Include="UIComponents\Panel.cs" />
+    <Compile Include="UIComponents\Stats\StatComponent.cs" />
+    <Compile Include="UIComponents\UpdatePanel.cs" />
     <Compile Include="Units\AllyUnit\Ballista.cs" />
     <Compile Include="Units\AllyUnit\OffensiveUnits.cs" />
     <Compile Include="Units\AllyUnit\Priest.cs" />
@@ -69,7 +80,7 @@
     <Compile Include="TechManager\IQueueable.cs" />
     <Compile Include="TechManager\ITech.cs" />
     <Compile Include="TechManager\ITechObserver.cs" />
-    <Compile Include="TechManager\Stats\AttackPower.cs" />
+    <Compile Include="TechManager\Stats\MeleeDamage.cs" />
     <Compile Include="TechManager\Stats\BuildPower.cs" />
     <Compile Include="TechManager\Stats\HarvestPower.cs" />
     <Compile Include="TechManager\Stats\Health.cs" />

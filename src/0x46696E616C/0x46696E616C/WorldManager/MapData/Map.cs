@@ -21,55 +21,84 @@ namespace WorldManager.MapData
     {
         public Vector2 mapSize { get; private set; }
         [JsonIgnore]
-        public Tile[,,] tiles;
+        protected Tile[,,] map;
         [JsonIgnore]
         public Texture2D mapTexture { get; private set; }
         long Seed { get; set; }
         WorldGeneration wg { get; set; }
         public List<IEntity> mobs { get; private set; }
 
+        internal void Clear()
+        {
+            for (int y = 0; y < mapSize.Y; y++)
+            {
+                for (int x = 0; x < mapSize.X; x++)
+                {
+                    if (map[x, y, 1] is Building)
+                    {
+                        ((Building)map[x, y, 1]).Die();
+                    }
+                    map[x, y, 0] = null;
+                    map[x, y, 1] = null;
+                }
+            }
+            mapSize = Vector2.Zero;
+            map = null;
+            mapTexture = null;
+            Seed = 0;
+            wg = null;
+            mobs.Clear();
+        }
+        protected Map() { }
         public Map(Game game, Vector2 mapSize, long Seed)
         {
-            tiles = new Tile[(int)mapSize.X, (int)mapSize.Y, 2];
+            map = new Tile[(int)mapSize.X, (int)mapSize.Y, 2];
             this.mapSize = mapSize;
             this.Seed = Seed;
-            wg = new WorldGeneration(game, this.GetType().Name.ToString(), Seed, mapSize);
+            wg = new WorldGeneration(this.GetType().Name.ToString(), Seed, mapSize);
             mobs = new List<IEntity>();
         }
         /// <summary>
         /// using the opensimplex noise function generates a map using a seed to generate the background
         /// </summary>
         /// <param name="gd"></param>
-        public void GenerateMap(GraphicsDevice gd)
+        public virtual void GenerateMap(GraphicsDevice gd)
         {
-            Color[] colors = new Color[(int)((mapSize.X * mapSize.Y))];
+            if (mobs != null)
+                mobs.Clear();
             for (int y = 0; y < mapSize.Y; y++)
             {
                 for (int x = 0; x < mapSize.X; x++)
                 {
-                    tiles[x, y, 0] = GenerateTerrain(new Vector2(x, y)).PlacedTile();
-                    tiles[x, y, 1] = GenerateDecor(new Vector2(x, y));
-                    if (tiles[x, y, 1] != null)
+                    map[x, y, 0] = GenerateTerrain(new Vector2(x, y)).PlacedTile(gd);
+                    map[x, y, 1] = GenerateDecor(new Vector2(x, y));
+                    if (map[x, y, 1] != null)
                     {
-                        tiles[x, y, 1].PlacedTile();
-                        ((ModifiableTile)tiles[x, y, 1]).Subscribe(this); //The map subscribes to every tile and if they update the map is notified
+                        map[x, y, 1].PlacedTile(gd);
+                        ((ModifiableTile)map[x, y, 1]).Subscribe(this); //The map subscribes to every tile and if they update the map is notified
                     }
                 }
             }
+            DrawMapUI(gd);
+        }
+        protected void DrawMapUI(GraphicsDevice gd)
+        {
+            Color[] colors = new Color[(int)((mapSize.X * mapSize.Y))];
             //Generates a map texture based on the background
             for (int y = 0; y < mapSize.Y; y++)
             {
                 for (int x = 0; x < mapSize.X; x++)
                 {
-                    if (tiles[x, y, 1] != null) colors[(int)((x) + (y) * (mapSize.X))] = tiles[x, y, 1].tileColor;
-                    else colors[(int)((x) + (y) * (mapSize.X))] = tiles[x, y, 0].tileColor;
+                    if (map[x, y, 0] != null)
+                    {
+                        if (map[x, y, 1] != null) colors[(int)((x) + (y) * (mapSize.X))] = map[x, y, 1].tileColor;
+                        else colors[(int)((x) + (y) * (mapSize.X))] = map[x, y, 0].tileColor;
+                    }
                 }
             }
             mapTexture = new Texture2D(gd, (int)mapSize.X, (int)mapSize.Y);
             mapTexture.SetData(colors, 0, (int)((mapSize.X * mapSize.Y)));
-
         }
-
         /// <summary>
         /// places a building at a certain point
         /// </summary>
@@ -86,14 +115,14 @@ namespace WorldManager.MapData
                         if (y == 0 && x == 0)
                         {
                             building.Subscribe(this);
-                            tiles[(int)position.X + x, (int)position.Y + y, 1] = building;
+                            map[(int)position.X + x, (int)position.Y + y, 1] = building;
 
                         }
                         else
                         {
-                            tiles[(int)position.X + x, (int)position.Y + y, 1] = new ReferenceTile((ModifiableTile)tiles[(int)position.X, (int)position.Y, 1]);
-                            ((ModifiableTile)tiles[(int)position.X + x, (int)position.Y + y, 1]).Subscribe(this);
-                            ((ModifiableTile)tiles[(int)position.X, (int)position.Y, 1]).Subscribe((ReferenceTile)tiles[(int)position.X + x, (int)position.Y + y, 1]);
+                            map[(int)position.X + x, (int)position.Y + y, 1] = new ReferenceTile((ModifiableTile)map[(int)position.X, (int)position.Y, 1]);
+                            ((ModifiableTile)map[(int)position.X + x, (int)position.Y + y, 1]).Subscribe(this);
+                            ((ModifiableTile)map[(int)position.X, (int)position.Y, 1]).Subscribe((ReferenceTile)map[(int)position.X + x, (int)position.Y + y, 1]);
                         }
                     }
                     catch (IndexOutOfRangeException ex)
@@ -128,14 +157,14 @@ namespace WorldManager.MapData
             {
                 for (int x = 0; x < mapSize.X; x++)
                 {
-                    if (tiles[x, y, 1] != null)
+                    if (map[x, y, 1] != null)
                     {
-                        if (((ModifiableTile)tiles[x, y, 1]).HasTag(v))
+                        if (((ModifiableTile)map[x, y, 1]).HasTag(v))
                         {
-                            if (Vector2.Distance(tiles[x, y, 1].Position, Position) < distance || distance == 0)
+                            if (Vector2.Distance(map[x, y, 1].Position, Position) < distance || distance == 0)
                             {
-                                tile = (IEntity)tiles[x, y, 1];
-                                distance = Vector2.Distance(tiles[x, y, 1].Position, Position);
+                                tile = (IEntity)map[x, y, 1];
+                                distance = Vector2.Distance(map[x, y, 1].Position, Position);
                             }
                         }
                     }
@@ -156,11 +185,11 @@ namespace WorldManager.MapData
             {
                 for (int x = 0; x < mapSize.X; x++)
                 {
-                    if (tiles[x, y, 1] != null)
+                    if (map[x, y, 1] != null)
                     {
-                        if (((ModifiableTile)tiles[x, y, 1]).TeamAssociation.Equals(team))
+                        if (((ModifiableTile)map[x, y, 1]).TeamAssociation.Equals(team))
                         {
-                            taggedTiles.Add((IEntity)tiles[x, y, 1]);
+                            taggedTiles.Add((IEntity)map[x, y, 1]);
                         }
                     }
                 }
@@ -175,11 +204,11 @@ namespace WorldManager.MapData
             {
                 for (int x = 0; x < mapSize.X; x++)
                 {
-                    if (tiles[x, y, 1] != null)
+                    if (map[x, y, 1] != null)
                     {
-                        if (((ModifiableTile)tiles[x, y, 1]).HasTag(v))
+                        if (((ModifiableTile)map[x, y, 1]).HasTag(v))
                         {
-                            taggedTiles.Add((IEntity)tiles[x, y, 1]);
+                            taggedTiles.Add((IEntity)map[x, y, 1]);
                         }
                     }
                 }
@@ -196,7 +225,7 @@ namespace WorldManager.MapData
                 for (int x = 0; x < mapSize.X; x++)
                 {
                     ModifiableTile modTile = null;
-                    if (tiles[x, y, 1] != null) modTile = (ModifiableTile)tiles[x, y, 1];
+                    if (map[x, y, 1] != null) modTile = (ModifiableTile)map[x, y, 1];
                     else if (GetUnits(new Vector2(x, y)) != null)
                         modTile = (ModifiableTile)GetUnits(new Vector2(x, y));
                     if (modTile != null)
@@ -223,7 +252,7 @@ namespace WorldManager.MapData
         {
             try
             {
-                return (ModifiableTile)tiles[(int)position.X, (int)position.Y, 1];
+                return (ModifiableTile)map[(int)position.X, (int)position.Y, 1];
             }
             catch (IndexOutOfRangeException)
             {
@@ -239,7 +268,7 @@ namespace WorldManager.MapData
         {
             try
             {
-                return tiles[(int)position.X, (int)position.Y, 0];
+                return map[(int)position.X, (int)position.Y, 0];
             }
             catch (IndexOutOfRangeException)
             {
@@ -262,7 +291,7 @@ namespace WorldManager.MapData
         /// <returns></returns>
         internal ModifiableTile GenerateDecor(Vector2 position)
         {
-            return wg.AddDecor(tiles[(int)position.X, (int)position.Y, 0].block, position.X, position.Y);
+            return wg.AddDecor(map[(int)position.X, (int)position.Y, 0].block, position.X, position.Y);
         }
         /// <summary>
         /// if a modifiable tile dies it updates the map and removes it from either the list of mobs or the map array
@@ -283,7 +312,7 @@ namespace WorldManager.MapData
                             mobs.RemoveAt(index);
                         }
                     }
-                    else tiles[(int)observer.Position.X, (int)observer.Position.Y, 1] = null;
+                    else map[(int)observer.Position.X, (int)observer.Position.Y, 1] = null;
                 }
             }
         }

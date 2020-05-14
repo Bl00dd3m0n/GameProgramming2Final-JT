@@ -28,7 +28,6 @@ namespace MainMenu.Component
         public override void Click(Game game)
         {
             game.Exit();
-            base.Click(game);
         }
     }
 }

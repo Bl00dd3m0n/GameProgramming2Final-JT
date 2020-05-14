@@ -9,10 +9,8 @@ namespace _0x46696E616C.Units.Attacks
 {
     public abstract class AttackType
     {
-        public float range { get; protected set; }
-        public AttackType(float range)
+        public AttackType()
         {
-            this.range = range;
         }
         //Animation needs to be implemented here
         public virtual void Attack(IEntity target, IUnit Attacker, float Damage)

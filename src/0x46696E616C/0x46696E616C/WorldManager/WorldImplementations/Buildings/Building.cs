@@ -19,6 +19,7 @@ using _0x46696E616C.TechManager.Stats;
 using WorldManager;
 using System.Linq;
 using _0x46696E616C.Units.Attacks;
+using _0x46696E616C.TechManager.Technologies;
 
 namespace _0x46696E616C.Buildings
 {
@@ -36,7 +37,9 @@ namespace _0x46696E616C.Buildings
         public Queue<IQueueable<TextureValue>> trainingQueue { get; set; }
 
         protected List<IQueueable<TextureValue>> queueableThings { get; set; }
+
         public List<IQueueable<TextureValue>> QueueableThings { get { return queueableThings.ToList(); } }
+
         public TextureValue Icon { get; protected set; }
 
         public override Vector2 Position { get { return base.Position; } }
@@ -53,19 +56,20 @@ namespace _0x46696E616C.Buildings
 
         protected string BuildingDescription { get; set; }
 
-        protected WorldHandler world;
-
         protected ProjectileManager proj;
 
-        public Building(TextureValue texture, Vector2 position, TextureValue Icon, WorldHandler world, ProjectileManager proj) : base(texture, position, Color.Blue)
+        protected float trainTimer;
+
+        protected Stats teamStats;
+
+        public Building(TextureValue texture, Vector2 position, TextureValue Icon, ProjectileManager proj, Stats teamStats) : base(texture, position, teamStats, Color.Blue)
         {
             Cost = new Wallet();
             name = "Building";
             Position = new Vector2(0, 0);
             Size = new Vector2(0, 0);
-            stats.Add(new Health("Health", 0));
-            CurrentHealth = 0;
-            energyCost = 0;
+            stats.Add(new Health("Health", 100000));
+            currentHealth = 0;
             healthBar = new HealthBar(new Rectangle(this.Position.ToPoint() - new Point(0, (int)(this.Size.Y * 16 + 1)), Size.ToPoint()));
             GarrisonedUnits = new List<IUnit>();
             this.Icon = Icon;//if the texture values change this breaks it find a better way to do this
@@ -73,8 +77,8 @@ namespace _0x46696E616C.Buildings
             trainingQueue = new Queue<IQueueable<TextureValue>>();
             BuildingDescription = "";
             techObservers = new List<ITechObserver>();
-            this.world = world;
             this.proj = proj;
+            this.teamStats = teamStats;
         }
 
         public void Subscribe(IBuildingObserver observer)
@@ -86,23 +90,38 @@ namespace _0x46696E616C.Buildings
         {
             techObservers.Add(observer);
         }
-
+        //this method is called every second
         public IQueueable<TextureValue> Train(GraphicsDevice gd)
         {
             if (trainingQueue.Count > 0)
             {
                 trainingObject = trainingQueue.Peek();
-                if (((IEntity)trainingObject).CurrentHealth >= ((IEntity)trainingObject).TotalHealth)
+                if (trainingObject is IEntity)
                 {
-                    if (trainingObject is BasicUnit)
+                    if (((IEntity)trainingObject).CurrentHealth >= ((IEntity)trainingObject).TotalHealth)
                     {
-                        ((BasicUnit)trainingObject).UpdatePosition(gd, spawnPoint);
-                        ((BasicUnit)trainingObject).PlacedTile();
-                        ((BasicUnit)trainingObject).SetTeam(this.TeamAssociation);
+                        if (trainingObject is BasicUnit)
+                        {
+                            ((BasicUnit)trainingObject).UpdatePosition(gd, spawnPoint);
+                            //((BasicUnit)trainingObject).PlacedTile(gd);
+                            ((BasicUnit)trainingObject).SetTeam(this.TeamAssociation);
+                        }
+                        return trainingQueue.Dequeue();
                     }
-                    return trainingQueue.Dequeue();
+                    ((BasicUnit)trainingObject).CurrentHealth += 10f;//this probably should be updated too
                 }
-                ((BasicUnit)trainingObject).CurrentHealth += 10f;//this probably should be updated too
+                else if (trainingObject is ITech)
+                {
+                    if (trainTimer >= ((Technology)trainingObject).LearnTime)
+                    {
+                        trainTimer = 0;
+                        Learn((ITech)trainingObject);
+                        trainingQueue.Dequeue();
+                        return null;
+                    }
+                    trainTimer++;//Since it's supposed to be called every one second it's fair to add 1 every time
+                }
+
             }
             return null;
         }
@@ -115,7 +134,7 @@ namespace _0x46696E616C.Buildings
                 {
                     if (unit is BasicUnit)
                     {
-                        CurrentHealth += ((BasicUnit)unit).stats[typeof(BuildPower)].Value;
+                        CurrentHealth += ((BasicUnit)unit).stats[typeof(BuildPower)].Value + ((BasicUnit)unit).teamStats[typeof(BuildPower)].Value;
                     }
                     if (CurrentHealth > TotalHealth)
                         CurrentHealth = TotalHealth;
@@ -126,6 +145,15 @@ namespace _0x46696E616C.Buildings
         public virtual void AddQueueable(IQueueable<TextureValue> item) // For Tech
         {
             queueableThings.Add(item);//workaround for not being able to have UnitComponent
+        }
+
+
+        public void Learn(ITech tech)
+        {
+            foreach (ITechObserver observer in techObservers)
+            {
+                observer.Update(tech);
+            }
         }
 
         public override void Damage(float amount)

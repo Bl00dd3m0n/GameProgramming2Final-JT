@@ -17,7 +17,6 @@ namespace _0x46696E616C.Util.Collision
         List<ICollider> colliders { get; set; }
         List<ICollider> deletedColliders;
         WorldHandler world;
-        float timer;
         Rectangle checkColliderRect;
         Rectangle colliderRect;
         public CollisionHandler(Game game, WorldHandler world) : base(game)
@@ -66,6 +65,11 @@ namespace _0x46696E616C.Util.Collision
                     }
                 }
             }
+        }
+
+        internal void Clear()
+        {
+            colliders.Clear();
         }
 
         private bool CheckCollision(ICollider checkingCollider, ICollider collider)

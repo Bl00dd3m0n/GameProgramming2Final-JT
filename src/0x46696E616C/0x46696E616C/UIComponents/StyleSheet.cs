@@ -18,7 +18,9 @@ namespace UIProject
         private string FilePath;
         Type[] componentTypes;
         SaveXml<List<Component>> save;
-        public static Type[] ComponentTypes = new Type[] { typeof(Button), typeof(StartButton), typeof(ExitButton), typeof(Label), typeof(PageButton), typeof(InputButton) };
+        List<IComponent> ssComponents;
+        List<IComponent> SSComponents { get { return ssComponents.ToList(); } }
+        public Type[] ComponentTypes = new Type[] { typeof(Button), typeof(StartButton), typeof(ExitButton), typeof(Label), typeof(PageButton), typeof(InputButton) };
         public StyleSheet()
         {
             save = new SaveXml<List<Component>>();
@@ -26,18 +28,26 @@ namespace UIProject
 
         public List<IComponent> GetStyleSheet(GraphicsDevice gd, string path, Type[] types)
         {
-            this.FilePath = path;
-            List<Component> components = new List<Component>();
-            if (File.Exists(path))
+            if (ssComponents == null || ssComponents.Count <= 0)
             {
-                components = save.LoadFromXml(FilePath, types);
-                foreach (Component component in components)
+                this.FilePath = path;
+                List<Component> components = new List<Component>();
+                if (File.Exists(path))
                 {
-                    component.Draw(gd);
-                    component.Scale = 1;
+                    components = save.LoadFromXml(FilePath, types);
+                    foreach (Component component in components)
+                    {
+                        component.Draw(gd);
+                        component.Scale = 1;
+                    }
                 }
+                ssComponents = components.Cast<IComponent>().ToList();
+                return components.Cast<IComponent>().ToList();
             }
-            return components.Cast<IComponent>().ToList();
+            else
+            {
+                return ssComponents.ToList();//If I reset my components in the canvas this gets reset I think....should solve the issue
+            }
         }
 
         public void SaveStyleSheet(List<IComponent> list, string Path)

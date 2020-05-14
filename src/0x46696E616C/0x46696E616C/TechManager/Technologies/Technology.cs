@@ -14,9 +14,11 @@ namespace _0x46696E616C.TechManager.Technologies
     {
         public TextureValue Icon { get; protected set; }
 
-        public Vector2 Position { get; protected set; }
+        public Vector2 Position { get; set; }
 
-        public Wallet cost { get; protected set; }
+        public Wallet Cost { get; protected set; }
+
+        public float LearnTime { get; protected set; }
 
         public Technology(TextureValue icon, Vector2 position)
         {

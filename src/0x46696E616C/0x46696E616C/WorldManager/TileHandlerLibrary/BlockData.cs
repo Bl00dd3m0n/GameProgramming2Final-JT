@@ -30,6 +30,8 @@ namespace NationBuilder.TileHandlerLibrary
         Portal,
         //Units
         Civilian,
+        Ballista,
+        Priest,
 
         None,
         Cursor,
@@ -62,8 +64,8 @@ namespace NationBuilder.TileHandlerLibrary
         Range,
         HarvestPower,
         BuildPower,
-        Ballista,
-        Priest,
+        Health,
+        Overlay,
     }
     [Serializable]
     public struct BlockData

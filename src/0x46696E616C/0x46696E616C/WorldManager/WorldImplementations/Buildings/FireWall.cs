@@ -18,7 +18,7 @@ namespace _0x46696E616C.Buildings
         public List<int> ChargeAMinute { get; protected set; }
 
         public List<IResource> ChargeTypes { get; protected set; }
-        public FireWall(TextureValue texture, Vector2 position, TextureValue icon, WorldHandler world, ProjectileManager proj) : base(texture, position, icon, world,proj)
+        public FireWall(TextureValue texture, Vector2 position, TextureValue icon, ProjectileManager proj, Stats teamStats) : base(texture, position, icon, proj, teamStats)
         {
             Cost = new Wallet();
             Cost.Deposit(new Steel(), 50);
@@ -30,13 +30,13 @@ namespace _0x46696E616C.Buildings
             Position = position;
             Size = new Vector2(1, 1);
             stats.Add(new Health("Health", 2000));
-            CurrentHealth = 0;
+            currentHealth = 0;
             healthBar = new HealthBar(new Rectangle(new Point((int)position.X, (int)position.Y - 1), new Point((int)(Size.X * 16), (int)(Size.Y))));
             BuildingDescription = "A wall used to keep enemies away from your buildings";
         }
         public override Building NewInstace( TextureValue tex, Vector2 position, TextureValue Icon)
         {
-            return new FireWall( tex, position, Icon, world, proj);
+            return new FireWall(tex, position, Icon, proj, teamStats);
         }
     }
 }

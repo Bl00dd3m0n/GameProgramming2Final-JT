@@ -16,7 +16,7 @@ namespace _0x46696E616C.Util.Input
     public enum Controls { Select, Interact, ZoomIn, ZoomOut, Deselect, Up, Down, Left, Right }
     public class InputDefinitions
     {
-        
+
         Dictionary<Controls, MouseKeyboardBindings> inputs;
         public Dictionary<Controls, MouseKeyboardBindings> Input { get { return inputs; } set { inputs = value; } }
         [JsonIgnore]
@@ -33,14 +33,28 @@ namespace _0x46696E616C.Util.Input
         [JsonIgnore]
         SaveJson<InputDefinitions> JsonControls;
         static bool StartedLoad;
-        public InputDefinitions(Game game) : this()
+
+        private static InputDefinitions inputDef
+        {
+            get;
+            set;
+        }
+
+        public static InputDefinitions CreateInput(Game game)
+        {
+            if (inputDef == null)
+                inputDef = new InputDefinitions(game);
+            return inputDef;
+        }
+
+        protected InputDefinitions(Game game) : this()
         {
             input = new MouseKeyboard(game);
             input.Initialize();
             StartedLoad = false;
         }
 
-        public InputDefinitions()
+        protected InputDefinitions()
         {
             if (!StartedLoad) // Prevents this from getting called when a new instance of input definitions is called
             {

@@ -29,7 +29,7 @@ namespace SaveManager
             XmlSerializer ser = new XmlSerializer(typeof(T), types);
             using (MemoryStream ms = new MemoryStream())
             {
-                using (StreamWriter writer = new StreamWriter(ms, Encoding.UTF32))
+                using (StreamWriter writer = new StreamWriter(ms, Encoding.UTF8))
                 {
                     ser.Serialize(writer, value);
                     byte[] utf8EncodedXml = ms.ToArray();

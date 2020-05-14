@@ -24,7 +24,7 @@ using WorldManager.TileHandlerLibrary;
 
 namespace _0x46696E616C.CommandPattern
 {
-    class CommandComponent : GameComponent, ICommandComponent, IBuildingObserver, ITechObserver
+    public class CommandComponent : GameComponent, ICommandComponent, IBuildingObserver, ITechObserver
     {
         Wallet resources;
         internal List<IUnit> SelectedUnits;
@@ -44,30 +44,32 @@ namespace _0x46696E616C.CommandPattern
         public Texture2D SpawnMarker;
         private Building spawnMarkerBuilding;
         public bool IsGameOver { get; private set; }
+        internal Stats TeamStats { get; private set; }
 
-        public CommandComponent(Game game, Wallet startingResources) : base(game)
+        /// <summary>
+        /// Test Constructor to easily get units
+        /// </summary>
+        /// <param name="game"></param>
+        /// <param name="startingResources"></param>
+        public CommandComponent(Game game, WorldHandler world) : this(game, new Wallet(), world)
         {
-            toBuild = new List<Building>();
-            resources = startingResources;
-            ID++;
-            this.Team = ID;
-            spawnMarkerBuilding = null;
         }
         /// <summary>
         /// Test Constructor to easily get units
         /// </summary>
         /// <param name="game"></param>
         /// <param name="startingResources"></param>
-        public CommandComponent(Game game, Wallet startingResources, List<IUnit> units, WorldHandler world) : base(game)
+        public CommandComponent(Game game, Wallet startingResources, WorldHandler world) : base(game)
         {
             toBuild = new List<Building>();
             resources = startingResources;
-            this.SelectedUnits = units.ToList();
             resourceStringList = new List<string>();
             ID++;
             this.Team = ID;
             this.world = world;
             IsGameOver = false;
+            SelectedUnits = new List<IUnit>();
+            TeamStats = new Stats(new List<Stat>() { new Health("Health", 0), new MeleeDamage("Damage", 0), new Range("Range", 0), new HarvestPower("Harvest Power", 0), new BuildPower("Harvest Power", 0), new InventorySpace("InventorySpace", 0), });
         }
         /// <summary>
         /// set a spawn point if the spawnmarker isn't null otherwise set the spawn marker
@@ -124,23 +126,32 @@ namespace _0x46696E616C.CommandPattern
                 {
                     if (unit is Civilian && target is IHarvestable)
                     {
-                        ((Civilian)unit).Harvest(target);
+                        ((Civilian)unit).Harvest(target, world);
                     }
                     else
                     {
                         if (unit is Civilian)
                         {
-                            ((Civilian)unit).Attack(target);
+                            ((Civilian)unit).Attack(target, world);
                         }
                         else if (unit is OffensiveUnits)
                         {
-                            ((OffensiveUnits)unit).Attack(target);
+                            ((OffensiveUnits)unit).Attack(target, world);
                         }
                     }
 
                 }
             }
         }
+        internal void TempStartGame()
+        {
+            IsGameOver = false;
+        }
+        internal void EndGame()
+        {
+            IsGameOver = true;
+        }
+
         /// <summary>
         /// Checks the cost of a building
         /// </summary>
@@ -171,7 +182,7 @@ namespace _0x46696E616C.CommandPattern
             {
                 if (unit is BasicUnit && ((BasicUnit)unit).TeamAssociation == this.Team)
                 {
-                    ((BasicUnit)unit).Move(Position);
+                    ((BasicUnit)unit).Move(Position, world);
                 }
             }
         }
@@ -187,11 +198,11 @@ namespace _0x46696E616C.CommandPattern
                 {
                     if (unit is Civilian)
                     {
-                        ((Civilian)unit).Garrison(building);
+                        ((Civilian)unit).Garrison(building,world);
                     }
                     else if (unit is OffensiveUnits)
                     {
-                        ((OffensiveUnits)unit).Garrison(building);
+                        ((OffensiveUnits)unit).Garrison(building, world);
                     }
                 }
             }
@@ -211,7 +222,7 @@ namespace _0x46696E616C.CommandPattern
                 if (wh.Place(SelectedBuild, Position))
                 {
                     SelectedBuild.UpdatePosition(Game.GraphicsDevice, Position);
-                    SelectedBuild.PlacedTile();
+                    SelectedBuild.PlacedTile(Game.GraphicsDevice);
 
 
 
@@ -222,7 +233,7 @@ namespace _0x46696E616C.CommandPattern
                         {
                             if (unit is Civilian)
                             {
-                                ((Civilian)unit).Build(SelectedBuild);
+                                ((Civilian)unit).Build(SelectedBuild, world);
                                 ((Civilian)unit).QueueBuild(SelectedBuild);
                             }
                         }
@@ -251,7 +262,7 @@ namespace _0x46696E616C.CommandPattern
             seconds %= 60;
             if (minutes > 60)
             {
-                hours = minutes/60;
+                hours = minutes / 60;
                 minutes %= 60;
             }
             if (hours > 0)
@@ -265,7 +276,7 @@ namespace _0x46696E616C.CommandPattern
             {
                 if (unit is BasicUnit)
                 {
-                    ((BasicUnit)unit).Update(gameTime);
+                    ((BasicUnit)unit).Update(gameTime, world);
                 }
             }
             timer += gameTime.ElapsedGameTime.Milliseconds;
@@ -282,7 +293,7 @@ namespace _0x46696E616C.CommandPattern
             CleanList();
             if (world.GetTiles(Team).Where(l => l is Building).Count() <= 0 && world.GetUnits(Team).Count <= 0)
             {
-                IsGameOver = true;
+                //IsGameOver = true;
             }
             base.Update(gameTime);
         }
@@ -294,21 +305,21 @@ namespace _0x46696E616C.CommandPattern
             for (int i = 0; i < toBuild.Count; i++)
             {
                 toBuild[i].healthBar.UpdateHealth(toBuild[i], Game.GraphicsDevice);
-                toBuild[i].Construct(); //TODO implement worker proficiency at repairing/building here(More workers/better tech should speed this process up)
+                toBuild[i].Construct();
                 if (toBuild[i].CurrentHealth >= toBuild[i].TotalHealth)
                 {
                     if (toBuild[i].HasTag("Wood Collector"))
                     {
                         for (int j = 0; j < toBuild[i].GarrisonedUnits.Count; j++)
                         {
-                            ((Civilian)toBuild[i].GarrisonedUnits[j]).Harvest(world.FindNearest("Wood", toBuild[i].GarrisonedUnits[j].Position));
+                            ((Civilian)toBuild[i].GarrisonedUnits[j]).Harvest(world.FindNearest("Wood", toBuild[i].GarrisonedUnits[j].Position), world);
                         }
                     }
                     else if (toBuild[i].HasTag("Iron Collector"))
                     {
                         for (int j = 0; j < toBuild[i].GarrisonedUnits.Count; j++)
                         {
-                            ((Civilian)toBuild[i].GarrisonedUnits[j]).Harvest(world.FindNearest("Iron", toBuild[i].GarrisonedUnits[j].Position));
+                            ((Civilian)toBuild[i].GarrisonedUnits[j]).Harvest(world.FindNearest("Iron", toBuild[i].GarrisonedUnits[j].Position), world);
                         }
                     }
                     toBuild[i].Subscribe((ITechObserver)this);
@@ -337,20 +348,38 @@ namespace _0x46696E616C.CommandPattern
         /// </summary>
         /// <param name="build"></param>
         /// <param name="unit"></param>
-        public void Train(Building build, IUnit unit)
+        public void Train(Building building, IUnit unit)
         {
-            if (unit is BasicUnit)
+            Wallet wallet = resources.Withdraw(unit.Cost);
+            if (wallet != null)
             {
-                unit = ((BasicUnit)unit).NewInstace(0, unit.Position);
-            } 
-            build.trainingQueue.Enqueue((IQueueable<TextureValue>)unit);
+                if (building.trainingQueue.Count < 10) // Cap training
+                {
+                    if (unit is BasicUnit)
+                    {
+                        unit = ((BasicUnit)unit).NewInstace(0, unit.Position);
+                    }
+                    building.trainingQueue.Enqueue((IQueueable<TextureValue>)unit);
+                }
+            }
+        }
+        public void Learn(Building building, ITech tech)
+        {
+            Wallet wallet = resources.Withdraw(((Technology)tech).Cost);
+            if (wallet != null)
+            {
+                if (building.trainingQueue.Count < 10) // Cap training
+                {
+                    building.trainingQueue.Enqueue((IQueueable<TextureValue>)tech);
+                }
+            }
         }
         /// <summary>
         /// Actual training update loop - returns the units that are at full health(AKA fully trained)
         /// </summary>
         private void Train()
         {
-            if (resources.Count(new Energy()) > 0)//Shut off energy if out of power
+            if (resources.Count(new Energy()) > 0)//Shut off training if out of power
             {
                 Building[] buildings = world.GetTiles(Team).Where(l => l is Building).Cast<Building>().ToArray();
                 for (int i = 0; i < buildings.Length; i++)
@@ -361,7 +390,7 @@ namespace _0x46696E616C.CommandPattern
 
                         if (item is BasicUnit)
                         {
-                            ((BasicUnit)item).Move(buildings[i].GetSpawn());
+                            ((BasicUnit)item).Move(buildings[i].GetSpawn(), world);
                             world.AddMob((BasicUnit)item);
                         }
                     }
@@ -376,7 +405,7 @@ namespace _0x46696E616C.CommandPattern
             Building[] buildings = world.GetTiles(Team).Where(l => l is Building).Cast<Building>().ToArray();
             foreach (Building building in buildings)
             {
-                if (building is IResourceCharge)
+                if (building is IResourceCharge && building.built)
                 {
                     for (int i = 0; i < ((IResourceCharge)building).ChargeTypes.Count; i++)
                     {
@@ -394,7 +423,7 @@ namespace _0x46696E616C.CommandPattern
             Building[] buildings = world.GetTiles(Team).Where(l => l is Building).Cast<Building>().ToArray();
             foreach (Building building in buildings)
             {
-                if (building is IProductionCenter)
+                if (building is IProductionCenter && building.built)
                 {
                     for (int i = 0; i < ((IProductionCenter)building).productionTypes.Count; i++)
                     {
@@ -420,35 +449,24 @@ namespace _0x46696E616C.CommandPattern
         /// <param name="building"></param>
         internal void Repair(Building building)
         {
-            toBuild.Add(building);
+            if (!toBuild.Contains(building))
+            {
+                toBuild.Add(building);
+            }
             foreach (IUnit unit in SelectedUnits)
             {
                 if (unit is Civilian)
                 {
-                    ((Civilian)unit).Build(building);
+                    ((Civilian)unit).Build(building, world);
                 }
             }
         }
 
         public void Update(ITech tech)
         {
-            List<Building> buildings = world.GetTiles(Team).Where(l => l is Building).Cast<Building>().ToList();
-            foreach (IUnit unit in world.GetUnits(Team))
+            if (tech is StatTech)
             {
-                if (unit.stats[tech.technology] != null)
-                {
-                    if (tech is StatTech)
-                    {
-                        unit.stats[tech.technology] += (Stat)tech;
-                    }
-                }
-            }
-            foreach (Building build in buildings)
-            {
-                if (!buildings.Contains(build))
-                {
-                    buildings.Add(build);
-                }
+                TeamStats[((StatTech)tech).Upgrade.GetType()].Value = TeamStats[((StatTech)tech).Upgrade.GetType()] + ((StatTech)tech).Upgrade.Value;
             }
         }
     }

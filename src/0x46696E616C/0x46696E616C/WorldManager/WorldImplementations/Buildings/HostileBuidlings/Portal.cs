@@ -5,6 +5,7 @@ using _0x46696E616C.Units.Attacks;
 using _0x46696E616C.WorldManager.ConcreteImplementations.Resources;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MobHandler.HostileMobManager;
 using NationBuilder.TileHandlerLibrary;
 using System;
 using System.Collections.Generic;
@@ -19,22 +20,24 @@ namespace _0x46696E616C.WorldManager.WorldImplementations.Buildings.HostileBuidl
 {
     class Portal : Building
     {
-        public Portal(TextureValue texture, Vector2 position, TextureValue icon, WorldHandler world, ProjectileManager proj) : base(texture, position, icon, world, proj)
+        WaveManager wave;
+        public Portal(TextureValue texture, Vector2 position, TextureValue icon, ProjectileManager proj, Stats teamStats, WaveManager wave) : base(texture, position, icon, proj, teamStats)
         {
             energyCost = 0;
             name = "Portal";
             Position = position;
             Size = new Vector2(4, 4);
             stats.Add(new Health("Health", 5000));
-            CurrentHealth = 5000;
+            currentHealth = 5000;
             tags.Add("Portal");
             healthBar = new HealthBar(new Rectangle(new Point((int)position.X, (int)position.Y - 1), new Point((int)(Size.X * 16), (int)(Size.Y))));
             BuildingDescription = "The Portal summons waves";
+            this.wave = wave;
         }
 
-        public override Building NewInstace( TextureValue tex, Vector2 position, TextureValue Icon)
+        public override Building NewInstace(TextureValue tex, Vector2 position, TextureValue Icon)
         {
-            return new Portal(tex, position, Icon, world,proj);
+            return new Portal(tex, position, Icon,proj,stats, wave);
         }
 
         public override void AddQueueable(IQueueable<TextureValue> item)
@@ -44,6 +47,7 @@ namespace _0x46696E616C.WorldManager.WorldImplementations.Buildings.HostileBuidl
 
         public override void Damage(float amount)
         {
+            if (!wave.StartSpawn) wave.StartSpawn = true;
             base.Damage(amount);
             //TODO implement destruction a way to destroy it....requires more than just flat damage
         }

@@ -13,9 +13,11 @@ namespace UIProject
     public class Button : Component
     {
         public bool Clicked { get; set; }
+        public float clickedTimer;
         public virtual void Click(Game game)
         {
             Clicked = true;
+            clickedTimer = 0.5f;
         }
         #region constructors
         public Button(GraphicsDevice gd) : this() { graphics = gd; }

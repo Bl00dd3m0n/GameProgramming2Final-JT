@@ -37,7 +37,7 @@ namespace NationBuilder.TileHandlerLibrary
             this.Position = position;
             this.tileColor = color;
         }
-        public Tile PlacedTile()
+        public virtual Tile PlacedTile(GraphicsDevice gd)
         {
             placed = true;
             return this;

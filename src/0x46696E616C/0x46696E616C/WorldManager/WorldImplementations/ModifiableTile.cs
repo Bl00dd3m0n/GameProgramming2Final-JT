@@ -37,14 +37,15 @@ namespace WorldManager.TileHandlerLibrary
             }
             set
             {
-                if (CurrentHealth <= TotalHealth || CurrentHealth - value < CurrentHealth)//Doesn't let you build past full health
+                if (CurrentHealth < TotalHealth || value < CurrentHealth)//Doesn't let you build past full health
                 {
                     currentHealth = value;
+                    if (currentHealth >= TotalHealth && !built)
+                    {
+                        built = true;
+                    }
                 }
-                else if (currentHealth >= TotalHealth && !built)
-                {
-                    built = true;
-                }
+
             }
         }
 
@@ -57,10 +58,12 @@ namespace WorldManager.TileHandlerLibrary
         protected List<string> tags;
 
         public bool built { get; protected set; }
+        public Stats TeamStats { get; private set; }
 
-        public ModifiableTile(TextureValue texture, Vector2 position, Color color) : base(texture, position, color)
+        public ModifiableTile(TextureValue texture, Vector2 position, Stats teamStats, Color color) : base(texture, position, color)
         {
             stats = new Stats();
+            this.TeamStats = teamStats;
             built = false;
             MapWatcher = new List<IMapObserver>();
             healthBar = new HealthBar(new Rectangle(this.Position.ToPoint() - new Point(0, (int)(this.Size.Y * 16 + 1)), Size.ToPoint()));
@@ -127,14 +130,32 @@ namespace WorldManager.TileHandlerLibrary
             }
             else
             {
-                base.UpdatePosition(gd, position);
-                if (healthBar.Health == null)
+                if (!placed)
                 {
-                    healthBar = new HealthBar(new Rectangle(new Point((int)position.X, (int)position.Y - 1), new Point((int)(Size.X * 16), (int)(5))));
+                    base.UpdatePosition(gd, position);
+                    if (healthBar.Health == null)
+                    {
+                        healthBar = new HealthBar(new Rectangle(new Point((int)position.X, (int)position.Y - 1), new Point((int)(Size.X * 16), (int)(5))));
+
+                    }
+                    healthBar.Position = position;
                 }
-                healthBar.UpdateHealth(this, gd);
-                healthBar.Position = position;
+
             }
+            if(healthBar != null)
+            {
+                healthBar.UpdateHealth(this, gd);
+            }
+        }
+        public override Tile PlacedTile(GraphicsDevice gd)
+        {
+            if (healthBar.Health == null)
+            {
+                healthBar = new HealthBar(new Rectangle(new Point((int)Position.X, (int)Position.Y - 1), new Point((int)(Size.X * 16), (int)(5))));
+            }
+            healthBar.UpdateHealth(this, gd);
+            healthBar.Position = Position;
+            return base.PlacedTile(gd);
         }
         //checks if the tile has the tag
         public bool HasTag(string v)

@@ -1,0 +1,29 @@
+Final Notes:
+
+Features Added:
+- Added an updating panel so the unit UI details is kept up to date
+- Win/Loss page
+Changes:
+- Just refresh the world instead of creating a new instance of the game in an attempt to fix memory issues(in case it was holding on to another instance of the game)
+- Kept ahold of the components instead of loading a new menu
+- Added UI to show when the user clicks, as well as tool tips to give an idea of what you can do with the target.
+- Fixed a garrison bug with move where the unit wasn't leaving garrison after you moved it.(Added the reset unit function to the move function)
+- Capped Training to 10 to create a cleaner UI for the traning display
+- Decorator for Components
+  - Stat component - used to save stats for units
+- Made mobs only follow a moving unit if the distance is ten tiles in an attempt to make the game less laggy when lots of hostile mobs spawn.
+Things I did not get to:
+- Number tweaks to make the game more balanced
+- Cross platform support
+- Multiplayer
+- Saving the game
+- Some sort of tutorial
+- Dequeuing training units
+
+Bugs:
+- Units don't always go to the ideal space and sometimes walk under/into tiles causing them not to build/mine.
+- Memory leak, traced it back to the world generation but couldn't figure out what was causing it to leak.
+- Hopefully those are the only issues....large amounts of units haven't been tested yet....got this wrapped up late so did not get to limit test the game.
+
+Controls:
+- Check settings
