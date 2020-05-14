@@ -353,11 +353,14 @@ namespace _0x46696E616C.CommandPattern
             Wallet wallet = resources.Withdraw(unit.Cost);
             if (wallet != null)
             {
-                if (unit is BasicUnit)
+                if (building.trainingQueue.Count < 10) // Cap training
                 {
-                    unit = ((BasicUnit)unit).NewInstace(0, unit.Position);
+                    if (unit is BasicUnit)
+                    {
+                        unit = ((BasicUnit)unit).NewInstace(0, unit.Position);
+                    }
+                    building.trainingQueue.Enqueue((IQueueable<TextureValue>)unit);
                 }
-                building.trainingQueue.Enqueue((IQueueable<TextureValue>)unit);
             }
         }
         public void Learn(Building building, ITech tech)
@@ -365,7 +368,10 @@ namespace _0x46696E616C.CommandPattern
             Wallet wallet = resources.Withdraw(((Technology)tech).Cost);
             if (wallet != null)
             {
-                building.trainingQueue.Enqueue((IQueueable<TextureValue>)tech);
+                if (building.trainingQueue.Count < 10) // Cap training
+                {
+                    building.trainingQueue.Enqueue((IQueueable<TextureValue>)tech);
+                }
             }
         }
         /// <summary>
@@ -460,7 +466,7 @@ namespace _0x46696E616C.CommandPattern
         {
             if (tech is StatTech)
             {
-                TeamStats[((StatTech)tech).Upgrade.GetType()] += ((StatTech)tech).Upgrade;
+                TeamStats[((StatTech)tech).Upgrade.GetType()].Value = TeamStats[((StatTech)tech).Upgrade.GetType()] + ((StatTech)tech).Upgrade.Value;
             }
         }
     }

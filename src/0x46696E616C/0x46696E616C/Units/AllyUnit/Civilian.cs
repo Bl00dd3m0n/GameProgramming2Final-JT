@@ -169,7 +169,11 @@ namespace _0x46696E616C.CommandPattern
         /// <param name="Position"></param>
         public override void Move(Vector2 Position, WorldHandler world)
         {
-            if (world.GetUnit(Position) == null && world.GetTile(Position) == null) Target = null;  
+            if (world.GetUnit(Position) == null && world.GetTile(Position) == null)
+            {
+                ResetUnit();
+                Target = null;
+            }
             base.Move(Position, world);
         }
         /// <summary>

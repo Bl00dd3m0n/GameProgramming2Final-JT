@@ -54,7 +54,7 @@ namespace _0x46696E616C.UIComponents
             if (tile != null)
             {
                 if (tile is ReferenceTile) tile = ((ReferenceTile)tile).tile;
-                if (tile.TeamAssociation != CommandComponent.ID) //HACK if I add multiple players this might change but ID's at the moment this will work
+                if (tile != null && tile.TeamAssociation != CommandComponent.ID) //HACK if I add multiple players this might change but ID's at the moment this will work
                 {
                     if (tile is IHarvestable) currentCursorTexture = TextureValue.HarvestPower;
                     else currentCursorTexture = TextureValue.Damage;

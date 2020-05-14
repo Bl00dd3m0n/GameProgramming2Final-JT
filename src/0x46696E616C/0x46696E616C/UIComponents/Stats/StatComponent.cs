@@ -12,11 +12,13 @@ namespace _0x46696E616C.UIComponents.Stats
     class StatComponent : Component
     {
         public Component component { get; private set; }
-        public Stat stat { get; private set; }
-        public StatComponent(Component component, Stat stat)
+        public Type statType { get; private set; }
+        public float value;
+        public StatComponent(Component component, Type stat, float value)
         {
             this.component = component;
-            this.stat = stat;
+            this.statType = stat;
+            this.value = value;
         }
     }
 }

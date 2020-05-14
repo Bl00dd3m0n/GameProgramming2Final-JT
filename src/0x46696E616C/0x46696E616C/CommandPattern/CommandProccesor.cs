@@ -267,7 +267,13 @@ namespace _0x46696E616C.CommandPattern
                     com = new ImageBoxHealth(tile.healthBar.Health, new Vector2(227, 359 + 32), new Point((int)com.Scale, 1), Color.White, tile);
                     com.Scale = 2;
                     EntityDetails.AddComponent(com);
-                    com = new StatComponent(new Label(new Vector2(224, 359 + 46), $"{tile.CurrentHealth}/{tile.TotalHealth}", Color.White), tile.stats[typeof(Health)]);
+                    if (tile.TeamStats != null)
+                    {
+                        com = new StatComponent(new Label(new Vector2(224, 359 + 46), $"{tile.CurrentHealth}/{tile.TotalHealth}", Color.White), tile.stats[typeof(Health)].GetType(), tile.stats[typeof(Health)].Value + tile.stats[typeof(Health)].Value);
+                    } else
+                    {
+                        com = new StatComponent(new Label(new Vector2(224, 359 + 46), $"{tile.CurrentHealth}/{tile.TotalHealth}", Color.White), tile.stats[typeof(Health)].GetType(), tile.stats[typeof(Health)].Value);
+                    }
                 }
                 else
                 {
@@ -287,7 +293,14 @@ namespace _0x46696E616C.CommandPattern
                             display += $" ({stat.Value.ToString()})";
                         }
                     }
-                    com = new StatComponent(new Label(new Vector2(330, y - 8), display, Color.White), tile.stats[i]);
+                    if (tile.TeamStats != null)
+                    {
+                        com = new StatComponent(new Label(new Vector2(330, y - 8), display, Color.White), tile.stats[i].GetType(), tile.stats[i].Value + tile.TeamStats[i].Value);
+                    }
+                    else
+                    {
+                        com = new StatComponent(new Label(new Vector2(330, y - 8), display, Color.White), tile.stats[i].GetType(), tile.stats[i].Value);
+                    }
                     com.Scale = 1;
                 }
                 com.drawComponent = true;
