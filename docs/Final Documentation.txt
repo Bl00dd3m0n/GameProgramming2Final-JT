@@ -1,0 +1,8 @@
+Game Name:
+0x46696E616C
+Game Description Short:
+It's a poorly designed RTS with enemy waves instead of an AI that builds a base and attacks you.
+Game Description Long:
+The game requires you to build a base and train units to defend from enemy waves that infinitely scale. Eventually you should be able to attack the portals and kill them to win the game. The idea is that you have to manage your resources and time properly.
+Genre:
+RTS

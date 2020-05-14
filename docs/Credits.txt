@@ -1,0 +1,5 @@
+Credits:
+ -I used opensimplex noise for procedural map generation to allow for a more natural look for the map.
+ -https://github.com/lmas/opensimplex
+ -Textures were made in Gimp
+ -Made in Monogame
