@@ -94,7 +94,7 @@ namespace MainMenu
             {
                 GenerateStyleSheet("SettingsPage");
             }
-            if (File.Exists("EndScreen.ss"))
+            if (!File.Exists("EndScreen.ss"))
             {
                 GenerateStyleSheet("EndScreen");
             }
