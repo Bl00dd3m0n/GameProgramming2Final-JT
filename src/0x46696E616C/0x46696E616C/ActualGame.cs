@@ -45,6 +45,13 @@ namespace _0x46696E616C
         CollisionHandler collision;
         WorldHandler world;
         public bool InProgress { get; private set; }
+        /// <summary>
+        /// 0 = in game
+        /// 1 = Won
+        /// 2 = Lost
+        /// </summary>
+        public int WinValue { get; set; }
+
         private bool newGame;
         public ActualGame(Game game, string World) : base(game)
         {
@@ -60,6 +67,7 @@ namespace _0x46696E616C
 
         private void SetUpGame()
         {
+            WinValue = 0;
             if (world != null)
             {
                 world.ResetWorld(Game);
@@ -174,8 +182,10 @@ namespace _0x46696E616C
                 collision.Update(gameTime);
                 overlay.Update(gameTime);
             }
-            if (InProgress && (cc.IsGameOver /*|| wave.Won*/))
+            if (InProgress && (cc.IsGameOver || wave.Won))
             {
+                if (cc.IsGameOver) WinValue = 2;
+                else if (cc.IsGameOver) WinValue = 1;
                 InProgress = false;
                 CommandComponent.ID = 0;
                 world.Clear();

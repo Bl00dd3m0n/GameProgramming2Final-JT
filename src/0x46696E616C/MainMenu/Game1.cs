@@ -21,6 +21,8 @@ namespace MainMenu
         SpriteBatch spriteBatch;
         Texture2D mainMenuBackground;
         Texture2D settingMenuBackground;
+        Texture2D lostPage;
+        Texture2D wonPage;
         Texture2D Cursor;
         Canvas canv;
         MouseKeyboard mK;
@@ -42,7 +44,7 @@ namespace MainMenu
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            Pages = new StyleSheet[] { new StyleSheet(), new StyleSheet() };
+            Pages = new StyleSheet[] { new StyleSheet(), new StyleSheet(), new StyleSheet() };//Main Menu, Settings Page, End screen
         }
 
         /// <summary>
@@ -72,6 +74,8 @@ namespace MainMenu
 
             mainMenuBackground = this.Content.Load<Texture2D>("MainMenu");
             settingMenuBackground = this.Content.Load<Texture2D>("SettingsPage");
+            lostPage = this.Content.Load<Texture2D>("LossPage");
+            wonPage = this.Content.Load<Texture2D>("WinPage");
             Cursor = this.Content.Load<Texture2D>("Cursor");
             inputDef = InputDefinitions.CreateInput(this);
 
@@ -89,6 +93,10 @@ namespace MainMenu
             if (!File.Exists("SettingsPage.ss"))
             {
                 GenerateStyleSheet("SettingsPage");
+            }
+            if (File.Exists("EndScreen.ss"))
+            {
+                GenerateStyleSheet("EndScreen");
             }
             LoadCanvas("MainMenu.ss", 0);
             currentPage = "Main Menu";
@@ -130,6 +138,17 @@ namespace MainMenu
             ss.SaveStyleSheet(canv.Components, "SettingsPage.ss");
             canv.RemoveAllComponents();
         }
+        private void EndScreen()
+        {
+            var settings = new PageButton(GraphicsDevice, new Vector2(200, 160), new Point(400, 50), Color.LightGreen, "Main Menu", this, "MainMenu.ss", 1);
+            var exitButton = new ExitButton(GraphicsDevice, new Vector2(200, 230), new Point(400, 50), Color.LightGreen, "Exit", this);
+            settings.Scale = 1;
+            exitButton.Scale = 1;
+            canv.AddComponent(settings);
+            canv.AddComponent(exitButton);
+            ss.SaveStyleSheet(canv.Components, "EndScreen.ss");
+            canv.RemoveAllComponents();
+        }
         private void GenerateStyleSheet(string Path)
         {
             switch (Path)
@@ -140,8 +159,13 @@ namespace MainMenu
                 case "SettingsPage":
                     SettingsPage();
                     break;
+                case "EndScreen":
+                    EndScreen();
+                    break;
             }
         }
+
+
         #endregion
         /// <summary>
         /// UnloadContent will be called once per game and is the place to unload
@@ -185,6 +209,7 @@ namespace MainMenu
                     }
                     else if (button is PageButton)
                     {
+                        currentPage = button.Text;
                         LoadCanvas(((PageButton)button).path, ((PageButton)button).PageOrder);
                     }
                 }
@@ -223,11 +248,19 @@ namespace MainMenu
                 }
                 if (currentPage == "Main Menu")
                 {
-                    spriteBatch.Draw(mainMenuBackground, new Vector2(0), Color.White);
+                    spriteBatch.Draw(mainMenuBackground, new Vector2(), Color.White);
                 }
-                else
+                else if(currentPage == "Settings")
                 {
-                    spriteBatch.Draw(settingMenuBackground, new Vector2(0), Color.White);
+                    spriteBatch.Draw(settingMenuBackground, new Vector2(), Color.White);
+                }
+                else if(PlayedGame.WinValue == 1)
+                {
+                    spriteBatch.Draw(wonPage, new Vector2(), Color.White);
+                }
+                else if(PlayedGame.WinValue == 2)
+                {
+                    spriteBatch.Draw(lostPage, new Vector2(), Color.White);
                 }
                 canv.Draw(spriteBatch);
                 spriteBatch.Draw(Cursor, Mouse.GetState().Position.ToVector2(), null, Color.Red, 0, Vector2.Zero, 0.25f, SpriteEffects.None, 0);
@@ -238,6 +271,8 @@ namespace MainMenu
             {
                 if (PlayedGame != null && !PlayedGame.InProgress)
                 {
+                    currentPage = "";
+                    LoadCanvas("EndScreen.ss", 2);
                     startGame = false;
                 }
                 else if (PlayedGame != null && startGame)
